@@ -1,0 +1,7 @@
+[submodule "MLX42"]
+	path = MLX42
+	url = git@github.com:codam-coding-college/MLX42.git
+[submodule "libft"]
+	path = libft
+	url = git@github.com:Chr-ss/libft.git
+	branch = static_libft_cub3d
