@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   cub3d.h                                            :+:    :+:            */
+/*   cub3D.h                                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: crasche <crasche@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/05 13:49:31 by crasche       #+#    #+#                 */
-/*   Updated: 2024/08/05 14:08:11 by crasche       ########   odam.nl         */
+/*   Updated: 2024/08/05 14:56:41 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,18 @@
 // libft authorised
 # include "../lib/libft/include/libft.h"
 // MLX42
-# include "../lib/mlx/include/MLX42/MLX42.h"
+# include "../lib/MLX42/include/MLX42/MLX42.h"
+
+typedef	struct	s_map
+{
+	char	*filename;
+	char	*read;
+
+}	t_map;
 
 typedef	struct	s_data
 {
 	t_map	*map;
-
 }	t_data;
 
 // marcos

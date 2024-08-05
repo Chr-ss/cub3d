@@ -9,18 +9,17 @@ SRC			=	$(shell find $(SRCDIR) -iname "*.c")
 OBJDIR		=	.build
 OBJ			=	$(SRC:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
-SUBMOD		=	$(LIBFTPATH)/Makefile	$(MLXDIR)/CMakeLists.txt
+MLXDIR		:=	lib/MLX42
+MLXBUILD	:=	$(MLXDIR)/build
+MLXA		:=	$(MLXBUILD)/libmlx42.a
 
-MLXDIR		=	lib/MLX42
-MLXBUILD	=	$(MLXDIR)/build
-MLXA		=	$(MLXBUILD)/libmlx42.a
+LIBFTDIR	:=	lib/libft
+LIBFT		:=	$(LIBFTDIR)/libft.a
 
-LIBFTDIR	=	lib/libft
-LIBFT		=	$(LIBFTPATH)/libft.a
+SUBMOD		:=	$(LIBFTDIR)/Makefile	$(MLXDIR)/CMakeLists.txt
 
-
-MLXFLAGS	=	-ldl -lglfw -pthread -lm
-LIB			=	$(LIBFT)	$(MLXA)	$(MLXFLAGS)
+MLXFLAGS	:=	-ldl -lglfw -pthread -lm
+LIB			:=	$(LIBFT)	$(MLXA)	$(MLXFLAGS)
 
 all:		$(SUBMOD)	$(MLXA)	$(LIBFT)	$(NAME)
 
