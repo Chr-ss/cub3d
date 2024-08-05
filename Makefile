@@ -9,13 +9,22 @@ SRC			=	$(shell find $(SRCDIR) -iname "*.c")
 OBJDIR		=	.build
 OBJ			=	$(SRC:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
-LIBFT		=	libft/libft.a
-SUBMOD_FLAG	=	libft/Makefile
+SUBMOD		=	$(LIBFTPATH)/Makefile	$(MLXDIR)/CMakeLists.txt
+
+MLXDIR		=	lib/MLX42
+MLXBUILD	=	$(MLXDIR)/build
+MLXA		=	$(MLXBUILD)/libmlx42.a
+
+LIBFTDIR	=	lib/libft
+LIBFT		=	$(LIBFTPATH)/libft.a
 
 
-all:		$(NAME)
+MLXFLAGS	=	-ldl -lglfw -pthread -lm
+LIB			=	$(LIBFT)	$(MLXA)	$(MLXFLAGS)
 
-$(NAME):	$(SUBMOD_FLAG) $(LIBFT)	$(OBJ)
+all:		$(SUBMOD)	$(MLXA)	$(LIBFT)	$(NAME)
+
+$(NAME):	$(OBJ)
 			@$(CC) $(OBJ) $(LIBFT) -o $(NAME)
 			@printf "$(CREATED)" $@ $(CUR_DIR)
 
@@ -24,9 +33,15 @@ $(OBJDIR)/%.o:	$(SRCDIR)/%.c
 			@$(CC) $(CFLAGS) -c $< -o $@
 			@printf "$(UPDATED)" $@ $(CUR_DIR)
 
-$(SUBMOD_FLAG):
+$(SUBMOD):
 			git	submodule	init
 			git	submodule	update
+
+$(MLXA):
+			@cd $(MLXDIR)
+			@cmake -S $(MLXDIR) -B $(MLXBUILD)
+			@make -sC $(MLXBUILD) -j4
+			@cd ..
 
 $(LIBFT):
 			@$(MAKE) --no-print-directory -C $(@D) all
