@@ -1,33 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   cub3d.h                                            :+:    :+:            */
+/*   map.h                                              :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: crasche <crasche@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2024/08/05 13:49:31 by crasche       #+#    #+#                 */
-/*   Updated: 2024/08/05 13:56:12 by crasche       ########   odam.nl         */
+/*   Created: 2024/08/05 14:06:03 by crasche       #+#    #+#                 */
+/*   Updated: 2024/08/05 14:18:44 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CUB3D_H
-# define CUB3D_H
 
-// authorised external functions:
-# include <math.h>
-# include <stdlib.h>
-# include <stdio.h>
-# include <unistd.h>
-# include <string.h>
+#ifndef MAP_H
+# define MAP_H
 
-// libft authorised
-# include "../lib/libft/include/libft.h"
-// MLX42
-# include "../lib/mlx/include/MLX42/MLX42.h"
+# include "cub3D.h"
 
-// marcos
-# include <errno.h>
-# include <fcntl.h>
-# include <errno.h>
+typedef	struct	s_map
+{
+	char	*filename;
+	char	*read;
 
-#endif // CUB3D_H
+}	t_map;
+
+#endif // MAP_H
