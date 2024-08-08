@@ -9,16 +9,19 @@ SRC			=	$(shell find $(SRCDIR) -iname "*.c")
 OBJDIR		=	.build
 OBJ			=	$(SRC:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
-MLXDIR		:=	lib/MLX42
-MLXBUILD	:=	$(MLXDIR)/build
-MLXA		:=	$(MLXBUILD)/libmlx42.a
+# MLXDIR		:=	lib/MLX42
+# MLXBUILD	:=	$(MLXDIR)/build
+# MLXA		:=	$(MLXBUILD)/libmlx42.a
+
+MLIBXDIR	:=	lib/minilibx-linux
+MLIBXDIR	:=	lib/minilibx-linux
 
 LIBFTDIR	:=	lib/libft
 LIBFT		:=	$(LIBFTDIR)/libft.a
 
-SUBMOD		:=	$(LIBFTDIR)/Makefile	$(MLXDIR)/CMakeLists.txt
+SUBMOD		:=	$(LIBFTDIR)/Makefile	#	$(MLXDIR)/CMakeLists.txt
 
-MLXFLAGS	:=	-ldl -lglfw -pthread -lm
+# MLXFLAGS	:=	-ldl -lglfw -pthread -lm
 LIB			:=	$(LIBFT)	$(MLXA)	$(MLXFLAGS)
 
 all:		$(SUBMOD)	$(MLXA)	$(LIBFT)	$(NAME)
@@ -36,11 +39,11 @@ $(SUBMOD):
 			git	submodule	init
 			git	submodule	update
 
-$(MLXA):
-			@cd $(MLXDIR)
-			@cmake -S $(MLXDIR) -B $(MLXBUILD)
-			@make -sC $(MLXBUILD) -j4
-			@cd ..
+# $(MLXA):
+# 			@cd $(MLXDIR)
+# 			@cmake -S $(MLXDIR) -B $(MLXBUILD)
+# 			@make -sC $(MLXBUILD) -j4
+# 			@cd ..
 
 $(LIBFT):
 			@$(MAKE) --no-print-directory -C $(@D) all
