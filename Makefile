@@ -1,7 +1,7 @@
 NAME		=	cub3D
 RM			=	rm -rf
 CC			=	cc
-CFLAGS		=	-Wall -Werror -Wextra #-Wunused -Wuninitialized -Wunreachable-code -g3 # -MMD -fsanitize=address # -Ofast
+CFLAGS		=	-Wall -Werror -Wextra -g #-Wunused -Wuninitialized -Wunreachable-code -g3 # -MMD -fsanitize=address # -Ofast
 
 SRCDIR		=	src
 SRC			=	$(shell find $(SRCDIR) -iname "*.c")
@@ -22,6 +22,12 @@ LIBFT		:=	$(LIBFTDIR)/libft.a
 SUBMOD		:=	$(LIBFTDIR)/Makefile	#	$(MLXDIR)/CMakeLists.txt
 
 # MLXFLAGS	:=	-ldl -lglfw -pthread -lm
+# // The flag (-O3 -ffast-math) is used for optimization.
+# // The flag (-framework) is used to specify the required frameworks.
+# // the flag (-lglfw) is for linking the glfw library
+# // the flag (-L) is for the path to the glfw library
+# // the flag (-o) is for the name of the executable file
+
 LIB			:=	$(LIBFT)	$(MLXA)	$(MLXFLAGS)
 
 all:		$(SUBMOD)	$(MLXA)	$(LIBFT)	$(NAME)
