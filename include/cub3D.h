@@ -6,7 +6,7 @@
 /*   By: crasche <crasche@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/05 13:49:31 by crasche       #+#    #+#                 */
-/*   Updated: 2024/08/13 18:34:28 by crasche       ########   odam.nl         */
+/*   Updated: 2024/08/14 14:45:06 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,24 +28,39 @@
 # include "../lib/minilibx-linux/mlx.h"
 # include "../lib/minilibx-linux/mlx_int.h"
 
-typedef	struct	s_map
+typedef	struct	s_payer
+{
+	int		x_pos;
+	int		y_pos;
+	char	direction;
+}	t_player;
+
+
+typedef	struct	s_map_read
 {
 	char	*filename;
 	int		fd;
 	char	*read;
-	char	**map;
-	char	*n_tex;
-	char	*e_tex;
-	char	*s_tex;
-	char	*w_tex;
-	char	*f_col;
-	char	*c_col;
+}	t_map_read;
 
+typedef	struct	s_map
+{
+	t_map_read	map_read;
+	char		**map;
+	int			x_max;
+	int			y_max;
+	char		*n_tex;
+	char		*e_tex;
+	char		*s_tex;
+	char		*w_tex;
+	char		*f_col;
+	char		*c_col;
 }	t_map;
 
 typedef	struct	s_data
 {
-	t_map	*map;
+	t_map		map;
+	t_player	player;
 }	t_data;
 
 // marcos
