@@ -52,4 +52,7 @@ Mkfile.old
 dkms.conf
 
 # lib
-lib/*
+lib/
+
+cub3D
+.vscode
