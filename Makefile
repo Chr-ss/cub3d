@@ -13,8 +13,8 @@ OBJ			=	$(SRC:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 # MLXBUILD	:=	$(MLXDIR)/build
 # MLXA		:=	$(MLXBUILD)/libmlx42.a
 
-MLIBXDIR	:=	lib/minilibx-linux
-MLIBXDIR	:=	lib/minilibx-linux
+LIBXDIR	:=	lib/minilibx-linux
+LIBX	:=	$(LIBXDIR)/libmlx_Linux.a
 
 LIBFTDIR	:=	lib/libft
 LIBFT		:=	$(LIBFTDIR)/libft.a
@@ -26,19 +26,22 @@ SUBMOD		:=	$(LIBFTDIR)/Makefile	#	$(MLXDIR)/CMakeLists.txt
 # // The flag (-framework) is used to specify the required frameworks.
 # // the flag (-lglfw) is for linking the glfw library
 # // the flag (-L) is for the path to the glfw library
-# // the flag (-o) is for the name of the executable file
+# // the flag (-o) is for the name of the executable file-lmlx_Linux
 
-LIB			:=	$(LIBFT)	$(MLXA)	$(MLXFLAGS)
+LIBXFLAGS	:=	-Lmlx_linux  -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
+LIBXFLAGS_O	:=	-Imlx
 
-all:		$(SUBMOD)	$(MLXA)	$(LIBFT)	$(NAME)
+LIB			:=	$(LIBFT)
+
+all:		$(SUBMOD)	$(LIBFT)	$(NAME)
 
 $(NAME):	$(OBJ)
-			@$(CC) $(OBJ) $(LIBFT) -o $(NAME)
+			@$(CC) $(OBJ) $(LIBX) $(LIBFT) $(LIBXFLAGS) -o $(NAME)
 			@printf "$(CREATED)" $@ $(CUR_DIR)
 
 $(OBJDIR)/%.o:	$(SRCDIR)/%.c
 			@mkdir -p $(@D)
-			@$(CC) $(CFLAGS) -c $< -o $@
+			@$(CC) $(CFLAGS) $(LIBXFLAGS_O) -c $< -o $@
 			@printf "$(UPDATED)" $@ $(CUR_DIR)
 
 $(SUBMOD):
