@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   main.c                                             :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: crasche <crasche@student.codam.nl>           +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/08/05 13:49:00 by crasche       #+#    #+#                 */
-/*   Updated: 2024/08/14 15:00:02 by crasche       ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/05 13:49:00 by crasche           #+#    #+#             */
+/*   Updated: 2024/09/05 19:11:42 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,17 +97,17 @@ void	map_meta(t_data *data, t_map *map)
 	i = 0;
 	while (map->map[i])
 	{
-		if (!ft_strncmp(map->map[i], "NO", 2))
+		if (!ft_strncmp(map->map[i], "NO ", 3))
 			map_meta_copy(data, map->map[i], &map->n_tex, 2);
-		else if (!ft_strncmp(map->map[i], "SO", 2))
+		else if (!ft_strncmp(map->map[i], "SO ", 3))
 			map_meta_copy(data, map->map[i], &map->s_tex, 2);
-		else if (!ft_strncmp(map->map[i], "WE", 2))
+		else if (!ft_strncmp(map->map[i], "WE ", 3))
 			map_meta_copy(data, map->map[i], &map->w_tex, 2);
-		else if (!ft_strncmp(map->map[i], "EA", 2))
+		else if (!ft_strncmp(map->map[i], "EA ", 3))
 			map_meta_copy(data, map->map[i], &map->e_tex, 2);
-		else if (!ft_strncmp(map->map[i], "F", 1))
+		else if (!ft_strncmp(map->map[i], "F ", 2))
 			map_meta_copy(data, map->map[i], &map->f_col, 1);
-		else if (!ft_strncmp(map->map[i], "C", 1))
+		else if (!ft_strncmp(map->map[i], "C ", 2))
 			map_meta_copy(data, map->map[i], &map->c_col, 1);
 		else
 		{
@@ -139,7 +139,10 @@ void	map_read(t_data *data, t_map *map)
 		if (readbyt == -1)
 			error ("Error, read error for map", data);
 		old = map->map_read.read;
-		map->map_read.read = ft_strjoin(map->map_read.read, buf);
+		if (!map->map_read.read)
+			map->map_read.read = ft_strdup(buf);
+		else
+			map->map_read.read = ft_strjoin(map->map_read.read, buf);
 		free(old);
 		if (!map->map_read.read)
 			error ("Error, read malloc", data);
@@ -194,12 +197,26 @@ void	map_fill(t_data *data, t_map *map)
 	}
 }
 
+int	check_extension(char *str)
+{
+	int	i;
+
+	i = 0;
+	while(str[i] && str[i] != '.')
+		i++;
+	if(!ft_strncmp(&str[i], ".cub", ft_strlen(&str[i])))
+		return (0);
+	return (1);
+}
+
 int	map_init(t_data *data, t_map *map)
 {
+	if (!check_extension(map->map_read.filename))
+		error("Error, not .cub file", data);
 	map->map_read.fd = open(map->map_read.filename, O_RDONLY);
 	if (map->map_read.fd == -1)
 		error("Error, unable to open map", data);
-	map->map_read.read = ft_calloc(0, 0);
+	map->map_read.read = NULL; //what if there is a problem with malloc?
 	map_read(data, map);
 	if (close(map->map_read.fd) == -1)
 		error("Error, unable to close map", data);
@@ -250,8 +267,6 @@ void	map_parse_meta(t_data *data)
 		error("Error, missing floor color", data);
 	if (!data->map.c_col)
 		error("Error, missing ceiling color", data);
-	if (!data->player.direction)
-		error("Error, missing player position", data);
 }
 
 void	map_parse(t_data *data, char **map)
@@ -260,6 +275,7 @@ void	map_parse(t_data *data, char **map)
 	int	j;
 
 	i = 0;
+	map_parse_meta(data);
 	while (map[i])
 	{
 		j = 0;
@@ -276,7 +292,19 @@ void	map_parse(t_data *data, char **map)
 		}
 		i++;
 	}
-	map_parse_meta(data);
+	if (!data->player.direction)
+		error("Error, missing player position", data);
+}
+
+void	rgb_check(t_data *data, t_map *map)
+{
+	(void )data;
+	acces()
+	//ft_split on comma
+	//atoi each number
+	map->f_col
+	map->
+	
 }
 
 int	main(int argc, char **argv)
@@ -290,6 +318,7 @@ int	main(int argc, char **argv)
 		error("To many arguments.", &data);
 	data.map.map_read.filename = argv[1];
 	map_init(&data, &data.map);
+	rgb_check(&data, &data.map);
 	map_parse(&data, data.map.map);
 	map_print(&data, &data.map);
 	free_all(&data);
