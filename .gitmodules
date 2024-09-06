@@ -1,7 +1,0 @@
-[submodule "lib/libft"]
-	path = lib/libft
-	url = git@github.com:Chr-ss/libft.git
-	branch = static_libft_cub3d
-[submodule "lib/minilibx_mac"]
-	path = lib/minilibx_mac
-	url = git@github.com:42Paris/minilibx-linux.git
