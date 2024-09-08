@@ -13,20 +13,17 @@
 #ifndef CUB3D_H
 # define CUB3D_H
 
-// authorised external functions:
+// external functions:
 # include <math.h>
 # include <stdlib.h>
 # include <stdio.h>
 # include <unistd.h>
 # include <string.h>
 
-// libft authorised
+// libft
 # include "../lib/libft/include/libft.h"
-// MLX42
-// # include "../lib/MLX42/include/MLX42/MLX42.h"
 // minilibx
 # include "../lib/minilibx/mlx.h"
-# include "../lib/minilibx/mlx_int.h"
 
 typedef	struct	s_payer
 {
@@ -34,7 +31,6 @@ typedef	struct	s_payer
 	int		y_pos;
 	char	direction;
 }	t_player;
-
 
 typedef	struct	s_map_read
 {

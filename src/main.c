@@ -204,6 +204,8 @@ int	check_extension(char *str)
 	i = 0;
 	while(str[i] && str[i] != '.')
 		i++;
+	if (ft_strlen(&str[i]) > 4)
+		return (1);
 	if(!ft_strncmp(&str[i], ".cub", ft_strlen(&str[i])))
 		return (0);
 	return (1);
@@ -211,7 +213,7 @@ int	check_extension(char *str)
 
 int	map_init(t_data *data, t_map *map)
 {
-	if (!check_extension(map->map_read.filename))
+	if (check_extension(map->map_read.filename))
 		error("Error, not .cub file", data);
 	map->map_read.fd = open(map->map_read.filename, O_RDONLY);
 	if (map->map_read.fd == -1)
@@ -322,5 +324,12 @@ int	main(int argc, char **argv)
 	map_parse(&data, data.map.map);
 	map_print(&data, &data.map);
 	free_all(&data);
+	void	*mlx;
+	void	*mlx_win;
+
+	mlx = mlx_init();
+	mlx_win = mlx_new_window(mlx, 1920, 1080, "Hello world!");
+	mlx_loop(mlx);
+	(void)mlx_win;
 	return (0);
 }

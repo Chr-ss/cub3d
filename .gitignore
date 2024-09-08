@@ -55,3 +55,4 @@ dkms.conf
 lib
 cub3D
 .vscode
+.DS_Store

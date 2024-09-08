@@ -1,7 +1,7 @@
 NAME		=	cub3D
 RM			=	rm -rf
 CC			=	cc
-CFLAGS		=	-Wall -Werror -Wextra -g #-Wunused -Wuninitialized -Wunreachable-code -g3 # -MMD -fsanitize=address # -Ofast
+CFLAGS		=	-Wall -Werror -Wextra #-g #-Wunused -Wuninitialized -Wunreachable-code -g3 # -MMD -fsanitize=address # -Ofast
 
 SRCDIR		=	src
 SRC			=	$(shell find $(SRCDIR) -iname "*.c")
@@ -13,18 +13,26 @@ LIBXDIR	:=	lib/minilibx
 LIBFTDIR	:=	lib/libft
 LIBFT		:=	$(LIBFTDIR)/libft.a
 
+# -Lmlx  -L/usr/local/bin -Imlx -lXext -lX11 -lm -lz
+
 ifeq ($(shell uname -s),Linux)
 	OS_TYPE		:=	LINUX
 	LIBXDIR_SUB	:=	lib/minilibx_linux
 	LIBX		:=	$(LIBXDIR)/libmlx_Linux.a
+	LIBXFLAGS	:=	-Lmlx_linux  -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
+	LIBXFLAGS_O	:=	-Imlx
 else ifeq ($(shell uname -s),Darwin)
 	OS_TYPE		:= MACOS
 	LIBXDIR_SUB	:=	lib/minilibx-mac-osx
-	LIBX		:=	$(LIBXDIR)/minilibx-mac-osx.a
+	LIBX		:=	$(LIBXDIR)/libmlx.a
+	LIBXFLAGS	:=	-I /usr/local/bin/X11/include -g -L /usr/local/bin/X11 -framework OpenGL -framework AppKit -lmlx
+	LIBXFLAGS_O	:=	-Imlx
 else
 	OS_TYPE		:= Linux
 	LIBXDIR_SUB	:=	lib/minilibx_linux
 	LIBX		:=	$(LIBXDIR)/libmlx_Linux.a
+	LIBXFLAGS	:=	-Lmlx_linux  -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
+	LIBXFLAGS_O	:=	-Imlx
 endif
 
 SUBMOD		:=	$(LIBFTDIR)/Makefile	$(LIBXDIR_SUB)/Makefile
@@ -36,8 +44,6 @@ SUBMOD		:=	$(LIBFTDIR)/Makefile	$(LIBXDIR_SUB)/Makefile
 # // the flag (-L) is for the path to the glfw library
 # // the flag (-o) is for the name of the executable file-lmlx_Linux
 
-LIBXFLAGS	:=	-Lmlx_linux  -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
-LIBXFLAGS_O	:=	-Imlx
 
 all:		$(SUBMOD)	$(LIBX)	$(LIBFT)	$(NAME)
 
