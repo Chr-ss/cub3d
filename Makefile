@@ -39,7 +39,7 @@ SUBMOD		:=	$(LIBFTDIR)/Makefile	$(LIBXDIR_SUB)/Makefile
 LIBXFLAGS	:=	-Lmlx_linux  -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
 LIBXFLAGS_O	:=	-Imlx
 
-all:		$(SUBMOD)	$(LIBXDIR)	$(LIBFT)	$(NAME)
+all:		$(SUBMOD)	$(LIBX)	$(LIBFT)	$(NAME)
 
 $(NAME):	$(OBJ)
 			@$(CC) $(OBJ) $(LIBX) $(LIBFT) $(LIBXFLAGS) -o $(NAME)
@@ -54,10 +54,10 @@ $(SUBMOD):
 			git	submodule	init
 			git	submodule	update
 
-$(LIBXDIR):
+$(LIBX):
 			$(shell cp -r $(LIBXDIR_SUB) $(LIBXDIR))
-			@$(MAKE) --no-print-directory -C $(@D) all
-			@printf "$(MADE)" $@ $(dir $(abspath $(LIBXDIR)))
+			make -C $(LIBXDIR) all
+			printf "$(MADE)" $@ $(dir $(abspath $(LIBXDIR)))
 
 $(LIBFT):
 			@$(MAKE) --no-print-directory -C $(@D) all
