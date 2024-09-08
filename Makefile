@@ -39,9 +39,7 @@ SUBMOD		:=	$(LIBFTDIR)/Makefile	$(LIBXDIR_SUB)/Makefile
 LIBXFLAGS	:=	-Lmlx_linux  -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
 LIBXFLAGS_O	:=	-Imlx
 
-LIB			:=	$(LIBFT)
-
-all:		$(SUBMOD)	$(LIBFT)	$(NAME)
+all:		$(SUBMOD)	$(LIBXDIR)	$(LIBFT)	$(NAME)
 
 $(NAME):	$(OBJ)
 			@$(CC) $(OBJ) $(LIBX) $(LIBFT) $(LIBXFLAGS) -o $(NAME)
@@ -55,13 +53,9 @@ $(OBJDIR)/%.o:	$(SRCDIR)/%.c
 $(SUBMOD):
 			git	submodule	init
 			git	submodule	update
-			$(cp $(LIBXDIR_SUB) $(LIBXDIR))
 
-# $(MLXA):
-# 			@cd $(MLXDIR)
-# 			@cmake -S $(MLXDIR) -B $(MLXBUILD)
-# 			@make -sC $(MLXBUILD) -j4
-# 			@cd ..
+$(LIBXDIR):
+			$(shell cp -r $(LIBXDIR_SUB) $(LIBXDIR))
 
 $(LIBFT):
 			@$(MAKE) --no-print-directory -C $(@D) all
@@ -81,7 +75,7 @@ info-%:
 	$(info $($*))
 
 .PHONY: all clean fclean re
-.SILENT:
+# .SILENT:
 
 # ----------------------------------- colors --------------------------------- #
 
