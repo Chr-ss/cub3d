@@ -6,11 +6,11 @@
 /*   By: crasche <crasche@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/08 20:27:39 by crasche       #+#    #+#                 */
-/*   Updated: 2024/09/08 20:27:58 by crasche       ########   odam.nl         */
+/*   Updated: 2024/09/08 20:44:16 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/cub3D.h"
+#include "../../include/cub3D.h"
 
 void	freenull(void **to_free)
 {

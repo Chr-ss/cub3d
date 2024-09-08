@@ -6,25 +6,11 @@
 /*   By: andmadri <andmadri@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/05 13:49:00 by crasche       #+#    #+#                 */
-/*   Updated: 2024/09/08 20:40:19 by crasche       ########   odam.nl         */
+/*   Updated: 2024/09/08 20:47:01 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
-
-int	check_extension(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i] && str[i] != '.')
-		i++;
-	if (ft_strlen(&str[i]) > 4)
-		return (1);
-	if (!ft_strncmp(&str[i], ".cub", ft_strlen(&str[i])))
-		return (0);
-	return (1);
-}
 
 int	main(int argc, char **argv)
 {

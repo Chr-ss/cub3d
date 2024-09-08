@@ -6,11 +6,11 @@
 /*   By: crasche <crasche@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/08 20:26:53 by crasche       #+#    #+#                 */
-/*   Updated: 2024/09/08 20:27:29 by crasche       ########   odam.nl         */
+/*   Updated: 2024/09/08 20:44:21 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/cub3D.h"
+#include "../../include/cub3D.h"
 
 void	map_parse_wallcheck(t_data *data, char **map, int i, int j)
 {

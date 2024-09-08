@@ -1,7 +1,7 @@
 NAME		=	cub3D
 RM			=	rm -rf
 CC			=	cc
-CFLAGS		=	-Wall -Werror -Wextra #-g #-Wunused -Wuninitialized -Wunreachable-code -g3 # -MMD -fsanitize=address # -Ofast
+CFLAGS		=	-Wall -Werror -Wextra -g -fsanitize=address # -MMD  # -Ofast
 
 SRCDIR		=	src
 SRC			=	$(shell find $(SRCDIR) -iname "*.c")
@@ -12,8 +12,6 @@ OBJ			=	$(SRC:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 LIBXDIR	:=	lib/minilibx
 LIBFTDIR	:=	lib/libft
 LIBFT		:=	$(LIBFTDIR)/libft.a
-
-# -Lmlx  -L/usr/local/bin -Imlx -lXext -lX11 -lm -lz
 
 ifeq ($(shell uname -s),Linux)
 	OS_TYPE		:=	LINUX
@@ -48,7 +46,7 @@ SUBMOD		:=	$(LIBFTDIR)/Makefile	$(LIBXDIR_SUB)/Makefile
 all:		$(SUBMOD)	$(LIBX)	$(LIBFT)	$(NAME)
 
 $(NAME):	$(OBJ)
-			@$(CC) $(OBJ) $(LIBX) $(LIBFT) $(LIBXFLAGS) -o $(NAME)
+			@$(CC) $(OBJ) $(LIBX) $(LIBFT) $(LIBXFLAGS) $(CFLAGS) -o $(NAME)
 			@printf "$(CREATED)" $@ $(CUR_DIR)
 
 $(OBJDIR)/%.o:	$(SRCDIR)/%.c

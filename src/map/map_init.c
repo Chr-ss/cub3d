@@ -6,11 +6,11 @@
 /*   By: crasche <crasche@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/08 20:28:42 by crasche       #+#    #+#                 */
-/*   Updated: 2024/09/08 20:39:40 by crasche       ########   odam.nl         */
+/*   Updated: 2024/09/08 20:44:23 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/cub3D.h"
+#include "../../include/cub3D.h"
 
 void	map_fill(t_data *data, t_map *map)
 {

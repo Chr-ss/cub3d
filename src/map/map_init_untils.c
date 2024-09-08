@@ -6,11 +6,25 @@
 /*   By: crasche <crasche@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/08 20:31:41 by crasche       #+#    #+#                 */
-/*   Updated: 2024/09/08 20:38:01 by crasche       ########   odam.nl         */
+/*   Updated: 2024/09/08 20:45:35 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/cub3D.h"
+#include "../../include/cub3D.h"
+
+int	check_extension(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] && str[i] != '.')
+		i++;
+	// if (ft_strlen(&str[i]) > 4)
+	// 	return (1);
+	if (!ft_strncmp(&str[i], ".cub", ft_strlen(&str[i])))
+		return (0);
+	return (1);
+}
 
 void	map_meta_copy(t_data *data, char *line, char **meta, int prefix)
 {
