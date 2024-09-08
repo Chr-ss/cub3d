@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/05 13:49:00 by crasche           #+#    #+#             */
-/*   Updated: 2024/09/05 19:11:42 by andmadri         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   main.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: andmadri <andmadri@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/08/05 13:49:00 by crasche       #+#    #+#                 */
+/*   Updated: 2024/09/08 19:23:28 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -296,16 +296,16 @@ void	map_parse(t_data *data, char **map)
 		error("Error, missing player position", data);
 }
 
-void	rgb_check(t_data *data, t_map *map)
-{
-	(void )data;
-	acces()
-	//ft_split on comma
-	//atoi each number
-	map->f_col
-	map->
-	
-}
+// void	rgb_check(t_data *data, t_map *map)
+// {
+// 	(void )data;
+// 	acces()
+// 	//ft_split on comma
+// 	//atoi each number
+// 	map->f_col
+// 	map->
+
+// }
 
 int	main(int argc, char **argv)
 {
@@ -318,7 +318,7 @@ int	main(int argc, char **argv)
 		error("To many arguments.", &data);
 	data.map.map_read.filename = argv[1];
 	map_init(&data, &data.map);
-	rgb_check(&data, &data.map);
+	// rgb_check(&data, &data.map);
 	map_parse(&data, data.map.map);
 	map_print(&data, &data.map);
 	free_all(&data);

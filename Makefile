@@ -9,6 +9,10 @@ SRC			=	$(shell find $(SRCDIR) -iname "*.c")
 OBJDIR		=	.build
 OBJ			=	$(SRC:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
+LIBXDIR	:=	lib/minilibx
+LIBFTDIR	:=	lib/libft
+LIBFT		:=	$(LIBFTDIR)/libft.a
+
 ifeq ($(shell uname -s),Linux)
 	OS_TYPE		:=	LINUX
 	LIBXDIR_SUB	:=	lib/minilibx_linux
@@ -22,10 +26,6 @@ else
 	LIBXDIR_SUB	:=	lib/minilibx_linux
 	LIBX		:=	$(LIBXDIR)/libmlx_Linux.a
 endif
-
-LIBXDIR	:=	lib/minilibx
-LIBFTDIR	:=	lib/libft
-LIBFT		:=	$(LIBFTDIR)/libft.a
 
 SUBMOD		:=	$(LIBFTDIR)/Makefile	$(LIBXDIR_SUB)/Makefile
 
@@ -56,6 +56,8 @@ $(SUBMOD):
 
 $(LIBXDIR):
 			$(shell cp -r $(LIBXDIR_SUB) $(LIBXDIR))
+			@$(MAKE) --no-print-directory -C $(@D) all
+			@printf "$(MADE)" $@ $(dir $(abspath $(LIBXDIR)))
 
 $(LIBFT):
 			@$(MAKE) --no-print-directory -C $(@D) all
