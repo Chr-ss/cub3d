@@ -9,17 +9,25 @@ SRC			=	$(shell find $(SRCDIR) -iname "*.c")
 OBJDIR		=	.build
 OBJ			=	$(SRC:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
-# MLXDIR		:=	lib/MLX42
-# MLXBUILD	:=	$(MLXDIR)/build
-# MLXA		:=	$(MLXBUILD)/libmlx42.a
+ifeq ($(shell uname -s),Linux)
+	OS_TYPE		:=	LINUX
+	LIBXDIR_SUB	:=	lib/minilibx_linux
+	LIBX		:=	$(LIBXDIR)/libmlx_Linux.a
+else ifeq ($(shell uname -s),Darwin)
+	OS_TYPE		:= MACOS
+	LIBXDIR_SUB	:=	lib/minilibx-mac-osx
+	LIBX		:=	$(LIBXDIR)/minilibx-mac-osx.a
+else
+	OS_TYPE		:= Linux
+	LIBXDIR_SUB	:=	lib/minilibx_linux
+	LIBX		:=	$(LIBXDIR)/libmlx_Linux.a
+endif
 
-LIBXDIR	:=	lib/minilibx-linux
-LIBX	:=	$(LIBXDIR)/libmlx_Linux.a
-
+LIBXDIR	:=	lib/minilibx
 LIBFTDIR	:=	lib/libft
 LIBFT		:=	$(LIBFTDIR)/libft.a
 
-SUBMOD		:=	$(LIBFTDIR)/Makefile	#	$(MLXDIR)/CMakeLists.txt
+SUBMOD		:=	$(LIBFTDIR)/Makefile	$(LIBXDIR_SUB)/Makefile
 
 # MLXFLAGS	:=	-ldl -lglfw -pthread -lm
 # // The flag (-O3 -ffast-math) is used for optimization.
@@ -47,6 +55,7 @@ $(OBJDIR)/%.o:	$(SRCDIR)/%.c
 $(SUBMOD):
 			git	submodule	init
 			git	submodule	update
+			$(cp $(LIBXDIR_SUB) $(LIBXDIR))
 
 # $(MLXA):
 # 			@cd $(MLXDIR)
@@ -94,3 +103,4 @@ REMOVED	:= \t$(RED)$(BOLD)REMOVED %s (%s) $(RESET)\n
 MADE	:= \t$(GREEN)$(BOLD)MAKE -C %s (%s) $(RESET)\n
 CREATED	:= \t$(GREEN)$(BOLD)CREATED %s (%s) $(RESET)\n
 UPDATED	:= \t$(BLUE)$(BOLD)CREATED OR UPDATED %s (%s) $(RESET)\n
+SET		:= \t$(BLUE)$(BOLD)SET OPERATING SYSTEM$(RESET)\n

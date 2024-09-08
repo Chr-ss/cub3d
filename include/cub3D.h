@@ -6,7 +6,7 @@
 /*   By: crasche <crasche@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/05 13:49:31 by crasche       #+#    #+#                 */
-/*   Updated: 2024/08/14 14:45:06 by crasche       ########   odam.nl         */
+/*   Updated: 2024/09/08 19:05:44 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@
 // MLX42
 // # include "../lib/MLX42/include/MLX42/MLX42.h"
 // minilibx
-# include "../lib/minilibx-linux/mlx.h"
-# include "../lib/minilibx-linux/mlx_int.h"
+# include "../lib/minilibx/mlx.h"
+# include "../lib/minilibx/mlx_int.h"
 
 typedef	struct	s_payer
 {
