@@ -6,27 +6,30 @@
 /*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:49:31 by crasche           #+#    #+#             */
-/*   Updated: 2024/09/07 14:11:43 by andmadri         ###   ########.fr       */
+/*   Updated: 2024/09/09 17:07:51 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-// authorised external functions:
+// external functions:
 # include <math.h>
 # include <stdlib.h>
 # include <stdio.h>
 # include <unistd.h>
 # include <string.h>
 
-// libft authorised
+// libft
 # include "../lib/libft/include/libft.h"
-// MLX42
-// # include "../lib/MLX42/include/MLX42/MLX42.h"
 // minilibx
-# include "../lib/minilibx_linux/mlx.h"
-# include "../lib/minilibx_linux/mlx_int.h"
+# include "../lib/minilibx/mlx.h"
+
+# define X 0
+# define Y 1
+
+# define BASE_FOV 60
+
 
 typedef	struct s_minilx
 {
@@ -41,6 +44,10 @@ typedef	struct	s_payer
 	int		x_pos;
 	int		y_pos;
 	char	direction;
+	float	pos[2];
+	float	direct[2];
+	float	plane[2];
+	int		fov;
 }	t_player;
 
 typedef	struct	s_map_read
@@ -87,5 +94,34 @@ typedef	struct	s_data
 
 # define DYNSTR 8
 # define READBUF 1024
+
+
+
+// map/map_init_utils.c
+int		check_extension(char *str);
+void	map_clear(t_data *data, t_map *map);
+void	map_clear_line(t_data *data, t_map *map, int i);
+void	map_meta_copy(t_data *data, char *line, char **meta, int prefix);
+
+// map/map_init.c
+int		map_init(t_data *data, t_map *map);
+void	map_read(t_data *data, t_map *map);
+void	map_split(t_data *data, t_map *map);
+void	map_meta(t_data *data, t_map *map);
+void	map_fill(t_data *data, t_map *map);
+
+// map/map_parsing.c
+void	map_parse(t_data *data, char **map);
+void	map_parse_meta(t_data *data);
+void	map_parse_player(t_data *data, char **map, int i, int j);
+void	map_parse_wallcheck(t_data *data, char **map, int i, int j);
+
+// map/map_print.c
+void	map_print(t_data *data, t_map *map);
+
+// utils/error_free.c
+void	freenull(void **to_free);
+void	error(char *msg, t_data *data);
+void	free_all(t_data *data);
 
 #endif // CUB3D_H
