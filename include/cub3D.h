@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   cub3D.h                                            :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: crasche <crasche@student.codam.nl>           +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/08/05 13:49:31 by crasche       #+#    #+#                 */
-/*   Updated: 2024/08/14 14:45:06 by crasche       ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   cub3D.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/05 13:49:31 by crasche           #+#    #+#             */
+/*   Updated: 2024/09/07 14:11:43 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,16 @@
 // MLX42
 // # include "../lib/MLX42/include/MLX42/MLX42.h"
 // minilibx
-# include "../lib/minilibx-linux/mlx.h"
-# include "../lib/minilibx-linux/mlx_int.h"
+# include "../lib/minilibx_linux/mlx.h"
+# include "../lib/minilibx_linux/mlx_int.h"
+
+typedef	struct s_minilx
+{
+	void	*mlx;
+	void	*mlx_window;
+	int		size_x;
+	int		size_y;
+}	t_minilx;
 
 typedef	struct	s_payer
 {
@@ -35,7 +43,6 @@ typedef	struct	s_payer
 	char	direction;
 }	t_player;
 
-
 typedef	struct	s_map_read
 {
 	char	*filename;
@@ -43,9 +50,19 @@ typedef	struct	s_map_read
 	char	*read;
 }	t_map_read;
 
+typedef struct s_color
+{
+	char	**floor;
+	char	**ceiling;
+	int		f[4];
+	int		c[4];
+}	t_color;
+
+
 typedef	struct	s_map
 {
 	t_map_read	map_read;
+	t_color		color;
 	char		**map;
 	int			x_max;
 	int			y_max;

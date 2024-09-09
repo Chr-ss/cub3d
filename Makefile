@@ -13,7 +13,7 @@ OBJ			=	$(SRC:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 # MLXBUILD	:=	$(MLXDIR)/build
 # MLXA		:=	$(MLXBUILD)/libmlx42.a
 
-LIBXDIR	:=	lib/minilibx-linux
+LIBXDIR	:=	lib/minilibx_linux
 LIBX	:=	$(LIBXDIR)/libmlx_Linux.a
 
 LIBFTDIR	:=	lib/libft

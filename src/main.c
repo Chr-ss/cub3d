@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:49:00 by crasche           #+#    #+#             */
-/*   Updated: 2024/09/05 19:11:42 by andmadri         ###   ########.fr       */
+/*   Updated: 2024/09/07 14:17:41 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -296,20 +296,61 @@ void	map_parse(t_data *data, char **map)
 		error("Error, missing player position", data);
 }
 
-void	rgb_check(t_data *data, t_map *map)
+void	turn_to_int(char **array_c, int	*array_i)
 {
-	(void )data;
-	acces()
-	//ft_split on comma
-	//atoi each number
-	map->f_col
-	map->
-	
+	int	i;
+
+	i = 0;
+	while(array_c && array_c[i])
+	{
+		array_i[i] = ft_atoi(array_c[i]);
+		i++;
+	}
+	array_i[i] = NULL; //are integer arrays null terminated?
+}
+
+void	free_dbl_array(char **array)
+{
+	int	i;
+
+	i = 0;
+	while (array[i])
+	{
+		free(array[i]);
+		i++;
+	}
+	free(array);
+}
+
+void	rgb_check(t_map *map, t_color *color)
+{
+	color->floor = ft_split(map->f_col, ",");
+	if (!color->floor)
+		exit(1); //free everything!
+	color->ceiling= ft_split(map->c_col, ",");
+	if (!color->ceiling)
+	{
+		free_dbl_array(color->ceiling);
+		exit(1); //free everything!
+	}
+	turn_to_int(color->floor, color->f);
+	turn_to_int(color->ceiling, color->c);
+	free_dbl_array(color->floor);
+	free_dbl_array(color->ceiling);
+}
+
+int	mlx_finish(t_minilx *milx)
+{
+	mlx_destroy_window(milx->mlx, milx->mlx_window);
+	mlx_destroy_display(milx->mlx);
+	free(milx->mlx);
+	return(0);
 }
 
 int	main(int argc, char **argv)
 {
-	t_data	data;
+	t_data		data;
+	t_minilx	milx;
 
 	init(&data);
 	if (argc <= 1)
@@ -318,9 +359,21 @@ int	main(int argc, char **argv)
 		error("To many arguments.", &data);
 	data.map.map_read.filename = argv[1];
 	map_init(&data, &data.map);
-	rgb_check(&data, &data.map);
+	// rgb_check(&data.map, &data.color);
 	map_parse(&data, data.map.map);
 	map_print(&data, &data.map);
-	free_all(&data);
+	exit(1);
+
+
+	milx.mlx = mlx_init();
+	if (!milx.mlx)
+		return (EXIT_FAILURE); //maybe do it somewhere else or free something
+	mlx_get_screen_size(milx.mlx, &milx.size_x, &milx.size_y);
+	milx.mlx_window = mlx_new_window(milx.mlx, milx.size_x, milx.size_y, "CUBE3D");
+	if (!milx.mlx_window)
+		return (free(milx.mlx), EXIT_FAILURE); //maybe free_all data
+	mlx_hook(milx.mlx_window, 17, 0L, &mlx_finish, &milx);
+	free_all(&data); //it should go here?
+	mlx_loop(milx.mlx);
 	return (0);
 }
