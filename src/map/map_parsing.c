@@ -26,10 +26,33 @@ void	map_parse_wallcheck(t_data *data, char **map, int i, int j)
 
 void	map_parse_player(t_data *data, char **map, int i, int j)
 {
-	data->player.x_pos = i;
-	data->player.y_pos = j;
-	data->player.direction = map[i][j];
+	data->player.fov = BASE_FOV;
+	data->player.pos[X] = i;
+	data->player.pos[Y] = j;
+	if (map[i][j] == 'N')
+	{
+		data->player.direct[X] = 0;
+		data->player.direct[Y] = -1;
+	}
+	else if (map[i][j] =='S')
+	{
+		data->player.direct[X] = 0;
+		data->player.direct[Y] = 1;
+	}
+	else if (map[i][j] == 'E')
+	{
+		data->player.direct[X] = 1;
+		data->player.direct[Y] = 0;
+	}
+	else if (map[i][j] == 'W')
+	{
+		data->player.direct[X] = -1;
+		data->player.direct[Y] = 0;
+	}
+	// data->player.plane[X] = ??;
+	// data->player.plane[Y] = ??;
 	map[i][j] = '0';
+
 	map_parse_wallcheck(data, map, i, j);
 }
 
@@ -72,6 +95,6 @@ void	map_parse(t_data *data, char **map)
 		}
 		i++;
 	}
-	if (!data->player.direction)
+	if (!data->player.pos[0])
 		error("Error, missing player position", data);
 }

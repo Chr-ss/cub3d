@@ -25,11 +25,20 @@
 // minilibx
 # include "../lib/minilibx/mlx.h"
 
+# define X 0
+# define Y 1
+
+# define BASE_FOV 60
+
 typedef	struct	s_payer
 {
 	int		x_pos;
 	int		y_pos;
 	char	direction;
+	float	pos[2];
+	float	direct[2];
+	float	plane[2];
+	int		fov;
 }	t_player;
 
 typedef	struct	s_map_read
