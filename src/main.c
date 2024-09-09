@@ -6,11 +6,26 @@
 /*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:49:00 by crasche           #+#    #+#             */
-/*   Updated: 2024/09/09 12:26:43 by andmadri         ###   ########.fr       */
+/*   Updated: 2024/09/09 13:56:54 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
+
+int	mlx_finish(t_minilx *milx)
+{
+	mlx_destroy_display(milx->mlx);
+	mlx_destroy_window(milx->mlx, milx->mlx_window);
+	free(milx->mlx);
+	exit(0);
+}
+
+int	key_press(int keycode, t_minilx *milx)
+{
+	if (keycode == 0xff1b)
+		mlx_finish(milx);
+	return (0);
+}
 
 int	main(int argc, char **argv)
 {
@@ -34,9 +49,9 @@ int	main(int argc, char **argv)
 	milx.mlx_window = mlx_new_window(milx.mlx, milx.size_x, milx.size_y, "CUBE3D");
 	if (!milx.mlx_window)
 		return (free(milx.mlx), EXIT_FAILURE); //maybe free_all data
-	// mlx_hook(milx.mlx_window, 17, 0L, &mlx_finish, &milx);
+	mlx_hook(milx.mlx_window, 17, 0L, &mlx_finish, &milx);
+	mlx_hook(milx.mlx_window, 2, 1L << 0, &key_press, &milx);
 	free_all(&data); //it should go here?
 	mlx_loop(milx.mlx);
-	free_all(&data);
 	return (0);
 }

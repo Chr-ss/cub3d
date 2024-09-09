@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   map_init_untils.c                                  :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: crasche <crasche@student.codam.nl>           +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/09/08 20:31:41 by crasche       #+#    #+#                 */
-/*   Updated: 2024/09/08 20:45:35 by crasche       ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   map_init_untils.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/08 20:31:41 by crasche           #+#    #+#             */
+/*   Updated: 2024/09/09 13:53:14 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,9 @@ int	check_extension(char *str)
 {
 	int	i;
 
-	i = 0;
+	i = 1;
 	while (str[i] && str[i] != '.')
 		i++;
-	// if (ft_strlen(&str[i]) > 4)
-	// 	return (1);
 	if (!ft_strncmp(&str[i], ".cub", ft_strlen(&str[i])))
 		return (0);
 	return (1);
@@ -71,9 +69,10 @@ void	map_clear(t_data *data, t_map *map)
 		if (!map->map[i][j])
 			map_clear_line(data, map, i);
 		len = ft_strlen(map->map[i]);
-		if (len > map->y_max)
-			map->y_max = len;
+		printf("the length represents x: %i\n", len);
+		if (len > map->x_max)
+			map->x_max = len;
 		i++;
 	}
-	map->x_max = i - 1;
+	map->y_max = i;
 }
