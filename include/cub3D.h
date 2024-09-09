@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:49:31 by crasche           #+#    #+#             */
-/*   Updated: 2024/09/09 12:26:20 by andmadri         ###   ########.fr       */
+/*   Updated: 2024/09/09 17:11:54 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,13 @@
 // libft
 # include "../lib/libft/include/libft.h"
 // minilibx
-# include "../lib/minilibx_linux/mlx.h"
-# include "../lib/minilibx_linux/mlx_int.h"
+# include "../lib/minilibx/mlx.h"
+
+# define X 0
+# define Y 1
+
+# define BASE_FOV 60
+
 
 typedef	struct s_minilx
 {
@@ -39,6 +44,10 @@ typedef	struct	s_payer
 	int		x_pos;
 	int		y_pos;
 	char	direction;
+	float	pos[2];
+	float	direct[2];
+	float	plane[2];
+	int		fov;
 }	t_player;
 
 typedef	struct	s_map_read

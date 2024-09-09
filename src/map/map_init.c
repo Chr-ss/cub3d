@@ -20,16 +20,16 @@ void	map_fill(t_data *data, t_map *map)
 	i = 0;
 	while (map->map[i])
 	{
-		if ((int) ft_strlen(map->map[i]) != map->y_max)
+		if ((int) ft_strlen(map->map[i]) != map->x_max)
 		{
 			old = map->map[i];
-			map->map[i] = ft_calloc(map->y_max + 1, sizeof(char));
+			map->map[i] = ft_calloc(map->x_max + 1, sizeof(char));
 			if (!map->map[i])
 			{
 				freenull((void **) &old);
 				error("Error, malloc map_fill", data);
 			}
-			memset(map->map[i], ' ', map->y_max);
+			ft_memset(map->map[i], ' ', map->x_max);
 			ft_strlcpy(map->map[i], old, ft_strlen(old) + 1);
 			map->map[i][ft_strlen(old)] = ' ';
 			freenull((void **) &old);
