@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/05 13:49:00 by crasche       #+#    #+#                 */
-/*   Updated: 2024/09/11 21:20:57 by crasche       ########   odam.nl         */
+/*   Updated: 2024/09/11 21:24:51 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,21 @@ void	draw_minimap(t_data *data, t_minilx *milx)
 	(void)data;
 }
 
+int	mlx_finish(t_minilx *milx)
+{
+	mlx_destroy_display(milx->mlx);
+	mlx_destroy_window(milx->mlx, milx->mlx_window);
+	free(milx->mlx);
+	exit(0);
+}
+
+int	key_press(int keycode, t_minilx *milx)
+{
+	if (keycode == 0xff1b)
+		mlx_finish(milx);
+	return (0);
+}
+
 int	main(int argc, char **argv)
 {
 	t_data		data;
@@ -157,7 +172,6 @@ int	main(int argc, char **argv)
 		error("To many arguments.", &data);
 	data.map.map_read.filename = argv[1];
 	map_init(&data, &data.map);
-	// rgb_check(&data, &data.map);
 	map_parse(&data, data.map.map);
 	map_print(&data, &data.map);
 

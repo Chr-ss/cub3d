@@ -6,7 +6,7 @@
 /*   By: crasche <crasche@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/05 13:49:31 by crasche       #+#    #+#                 */
-/*   Updated: 2024/09/11 20:37:57 by crasche       ########   odam.nl         */
+/*   Updated: 2024/09/11 21:25:24 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,29 @@ typedef	struct s_minilx
 	int		size_y;
 }	t_minilx;
 
+# define X 0
+# define Y 1
+
+# define BASE_FOV 60
+
+
+typedef	struct s_minilx
+{
+	void	*mlx;
+	void	*mlx_window;
+	int		size_x;
+	int		size_y;
+}	t_minilx;
+
 typedef	struct	s_payer
 {
 	int		x_pos;
 	int		y_pos;
 	char	direction;
+	float	pos[2];
+	float	direct[2];
+	float	plane[2];
+	int		fov;
 }	t_player;
 
 typedef	struct	s_map_read
@@ -55,9 +73,19 @@ typedef	struct	s_map_read
 	char	*read;
 }	t_map_read;
 
+typedef struct s_color
+{
+	char	**floor;
+	char	**ceiling;
+	int		f[4];
+	int		c[4];
+}	t_color;
+
+
 typedef	struct	s_map
 {
 	t_map_read	map_read;
+	t_color		color;
 	char		**map;
 	int			x_max;
 	int			y_max;
