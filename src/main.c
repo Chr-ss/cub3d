@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/05 13:49:00 by crasche       #+#    #+#                 */
-/*   Updated: 2024/09/11 21:24:51 by crasche       ########   odam.nl         */
+/*   Updated: 2024/09/12 01:32:19 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	mlx_finish(t_minilx *milx)
 {
-	// mlx_destroy_display(milx->mlx);
+	mlx_destroy_display(milx->mlx);
 	mlx_destroy_window(milx->mlx, milx->mlx_window);
 	free(milx->mlx);
 	exit(0);
@@ -25,6 +25,14 @@ int	key_press(int keycode, t_minilx *milx)
 	if (keycode == 0xff1b)
 		mlx_finish(milx);
 	return (0);
+}
+
+void	img_mlx_pixel_put(t_minilx_img *img, int x, int y, int color)
+{
+	char	*dst;
+
+	dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
+	*(unsigned int*)dst = color;
 }
 
 int	create_trgb(int t, int r, int g, int b)
@@ -47,13 +55,18 @@ void	draw_map_square(t_data *data, t_minilx *milx, int y, int x, int color)
 		pixel_y = (y * sq_size);
 		while (++pixel_y < sq_size + (y * sq_size))
 		{
-			mlx_pixel_put(milx->mlx, milx->mlx_window, pixel_x, pixel_y, color);
+			img_mlx_pixel_put(&(milx->mini[DRAW]), pixel_x, pixel_y, color);
 		}
 	}
 }
 
-void	draw_map(t_data *data, t_minilx *milx)
+void	draw_map(void *param)
 {
+	t_data		*data;
+	t_minilx	*milx;
+
+	data = (t_data *) param;
+	milx = &data->milx;
 	int	x;
 	int	y;
 
@@ -63,7 +76,7 @@ void	draw_map(t_data *data, t_minilx *milx)
 		y = -1;
 		while (++y < MINI_MAP)
 		{
-			mlx_pixel_put(milx->mlx, milx->mlx_window, x, y, create_trgb(100, 24, 24, 24));
+			img_mlx_pixel_put(&(milx->mini[DRAW]), x, y, create_trgb(100, 24, 24, 24));
 		}
 	}
 	t_map *map = &(data->map);
@@ -90,7 +103,7 @@ void draw_player_line(t_minilx *milx, int x_start, int x_end, int y, int color)
 {
 	while (x_start <= x_end)
 	{
-		mlx_pixel_put(milx->mlx, milx->mlx_window, x_start, y, color);
+		img_mlx_pixel_put(&(milx->mini[DRAW]), x_start, y, color);
 		x_start++;
 	}
 }
@@ -117,53 +130,149 @@ void	draw_player(t_minilx *milx, int color, int radius)
 	}
 }
 
-void draw_pov_line(t_minilx *milx, int x0, int y0, float vx, float vy, int length, int color) {
-    float magnitude = sqrt(vx * vx + vy * vy);
-    vx /= magnitude;
-    vy /= magnitude;
+void draw_pov_line(t_minilx *milx, int x0, int y0, float vx, float vy, int length, int color)
+{
+	float magnitude = sqrt(vx * vx + vy * vy);
+	vx /= magnitude;
+	vy /= magnitude;
 
-    float x = x0;
-    float y = y0;
+	float x = x0;
+	float y = y0;
 
-    for (int i = 0; i < length; i++) {
-		mlx_pixel_put(milx->mlx, milx->mlx_window, (int)round(x), (int)round(y), color);
-        // draw_pixel((int)round(x), (int)round(y)); // Draw the nearest pixel
-        x += vx;  // Step in the x direction
-        y += vy;  // Step in the y direction
-    }
+	for (int i = 0; i < length; i++)
+	{
+		img_mlx_pixel_put(&(milx->mini[DRAW]), (int)round(x), (int)round(y), color);
+		x += vx;
+		y += vy;
+	}
 }
 
 void	draw_pov(t_data *data, t_minilx *milx, int color, int size)
 {
-	draw_pov_line(milx, MINI_MAP / 2, MINI_MAP / 2, data->player.direction[X], data->player.direction[Y], size, color);
+	// printf("POV: %fx%f, %fx%f\n", data->player.pos[X], data->player.pos[Y], data->player.direct[X], data->player.direct[Y]);
+	draw_pov_line(milx, MINI_MAP / 2, MINI_MAP / 2, data->player.direct[X], data->player.direct[Y], size, color);
 }
 
-void	draw_minimap(t_data *data, t_minilx *milx)
+void	draw_border(t_minilx *milx, int color, int size)
 {
-	draw_pov(data, milx, create_trgb(0, 20, 80, 200), 10);
-	draw_player(milx, create_trgb(0, 20, 80, 200), 10);
-	(void)data;
+	int	x;
+	int	y;
+
+	y = 0;
+	while (y <= MINI_MAP)
+	{
+		x = MINI_MAP;
+		while (x < MINI_MAP + size)
+		{
+			img_mlx_pixel_put(&(milx->mini[DRAW]), x, y, color);
+			x++;
+		}
+		y++;
+	}
+	y = MINI_MAP;
+	while (y <= MINI_MAP + size)
+	{
+		x = 0;
+		while (x < MINI_MAP + size)
+		{
+			img_mlx_pixel_put(&(milx->mini[DRAW]), x, y, color);
+			x++;
+		}
+		y++;
+	}
 }
 
-int	mlx_finish(t_minilx *milx)
+void	draw_clear(t_minilx *milx)
 {
-	mlx_destroy_display(milx->mlx);
-	mlx_destroy_window(milx->mlx, milx->mlx_window);
-	free(milx->mlx);
-	exit(0);
+	int	x;
+	int	y;
+
+	y = 0;
+	while (y < MINI_MAP + 20)
+	{
+		x = 0;
+		while (x < MINI_MAP + 20)
+		{
+			img_mlx_pixel_put(&(milx->mini[DRAW]), x, y, 0);
+			x++;
+		}
+		y++;
+	}
 }
 
-int	key_press(int keycode, t_minilx *milx)
+int	draw_minimap_switch_display(void *param)
 {
-	if (keycode == 0xff1b)
-		mlx_finish(milx);
+	t_minilx_img	buffer;
+	t_data			*data;
+
+	data = (t_data *) param;
+	buffer = data->milx.mini[DRAW];
+	data->milx.mini[DRAW] = data->milx.mini[DISPLAY];
+	data->milx.mini[DISPLAY] = buffer;
+	mlx_put_image_to_window(data->milx.mlx, data->milx.mlx_window, data->milx.mini[DISPLAY].img, 0, 0);
 	return (0);
+}
+
+int	draw_minimap(void *param)
+{
+	t_data		*data;
+	t_minilx	*milx;
+
+	data = (t_data *) param;
+	milx = &data->milx;
+	draw_clear(milx);
+	draw_border(milx, create_trgb(0, 55, 55, 55), 10);
+	draw_player(milx, create_trgb(0, 20, 80, 200), 10);
+	draw_pov(data, milx, create_trgb(0, 255, 0, 255), 30);
+	draw_minimap_switch_display(data);
+	return (0);
+}
+
+// W 119, A 97, S 115, D 100
+int	key_hook_wasd(int keycode, void *param)
+{
+	t_data *data;
+
+	data = (t_data *)param;
+	if (keycode == 119)
+	{
+		data->player.pos[X] += data->player.direct[X];
+		data->player.pos[Y] += data->player.direct[Y];
+	}
+	else if (keycode == 115)
+	{
+		data->player.pos[X] -= data->player.direct[X];
+		data->player.pos[Y] -= data->player.direct[Y];
+	}
+	else if (keycode == 97)
+	{
+		data->player.direct[X] = data->player.direct[X] * cos(-0.1) - data->player.direct[Y] * sin(-0.1);
+		data->player.direct[Y] = data->player.direct[X] * sin(-0.1) + data->player.direct[Y] * cos(-0.1);
+		data->player.direct[X] /= sqrt(data->player.direct[X] * data->player.direct[X] + data->player.direct[Y] * data->player.direct[Y]);
+		data->player.direct[Y] /= sqrt(data->player.direct[X] * data->player.direct[X] + data->player.direct[Y] * data->player.direct[Y]);
+	}
+	else if (keycode == 100)
+	{
+		data->player.direct[X] = data->player.direct[X] * cos(0.1) - data->player.direct[Y] * sin(0.1);
+		data->player.direct[Y] = data->player.direct[X] * sin(0.1) + data->player.direct[Y] * cos(0.1);
+		data->player.direct[X] /= sqrt(data->player.direct[X] * data->player.direct[X] + data->player.direct[Y] * data->player.direct[Y]);
+		data->player.direct[Y] /= sqrt(data->player.direct[X] * data->player.direct[X] + data->player.direct[Y] * data->player.direct[Y]);
+	}
+	printf("\tPOS: %f %f\tVIEW: %f %f\n", data->player.pos[X], data->player.pos[Y], data->player.direct[X], data->player.direct[Y]);
+	return (0);
+}
+
+void	image(t_data *data)
+{
+	data->milx.mini[0].img = mlx_new_image(data->milx.mlx, MINI_MAP + 50, MINI_MAP + 50);
+	data->milx.mini[1].img = mlx_new_image(data->milx.mlx, MINI_MAP + 50, MINI_MAP + 50);
+	data->milx.mini[0].addr = mlx_get_data_addr(data->milx.mini[0].img, &data->milx.mini[0].bits_per_pixel, &data->milx.mini[0].line_length, &data->milx.mini[0].endian);
+	data->milx.mini[1].addr = mlx_get_data_addr(data->milx.mini[1].img, &data->milx.mini[1].bits_per_pixel, &data->milx.mini[1].line_length, &data->milx.mini[1].endian);
 }
 
 int	main(int argc, char **argv)
 {
 	t_data		data;
-	t_minilx	milx;
 
 	ft_bzero(&data, sizeof(t_data));
 	if (argc <= 1)
@@ -175,20 +284,21 @@ int	main(int argc, char **argv)
 	map_parse(&data, data.map.map);
 	map_print(&data, &data.map);
 
-	milx.mlx = mlx_init();
-	if (!milx.mlx)
+	data.milx.mlx = mlx_init();
+	if (!data.milx.mlx)
 		return (EXIT_FAILURE); //maybe do it somewhere else or free something
 	// mlx_get_screen_size(milx.mlx, &milx.size_x, &milx.size_y);
-	milx.size_x = 1920;
-	milx.size_y = 1080;
-	milx.mlx_window = mlx_new_window(milx.mlx, milx.size_x, milx.size_y, "CUBE3D");
-	if (!milx.mlx_window)
-		return (free(milx.mlx), EXIT_FAILURE); //maybe free_all data
-	// draw_map(&data, &milx);
-	draw_minimap(&data, &milx);
-	mlx_hook(milx.mlx_window, 17, 0L, &mlx_finish, &milx); // closing the window with x in window
-	mlx_hook(milx.mlx_window, 2, 1L << 0, &key_press, &milx); // closing the window with ESC
-	mlx_loop(milx.mlx);
+	data.milx.size_x = 800;
+	data.milx.size_y = 800;
+	data.milx.mlx_window = mlx_new_window(data.milx.mlx, data.milx.size_x, data.milx.size_y, "CUBE3D");
+	if (!data.milx.mlx_window)
+		return (free(data.milx.mlx), free_all(&data), EXIT_FAILURE); //maybe free_all data
+	image(&data);
+	mlx_loop_hook(data.milx.mlx, draw_minimap, (void *)&data);
+	mlx_hook(data.milx.mlx_window, 17, 0L, &mlx_finish, &data.milx); // closing the window with x in window
+	mlx_hook(data.milx.mlx_window, 2, 1L << 0, &key_press, &data.milx); // closing the window with ESC
+	mlx_key_hook(data.milx.mlx_window, key_hook_wasd, (void *)&data);
+	mlx_loop(data.milx.mlx);
 	free_all(&data); //it should go here?/
 	return (0);
 }

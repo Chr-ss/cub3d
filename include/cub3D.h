@@ -6,7 +6,7 @@
 /*   By: crasche <crasche@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/05 13:49:31 by crasche       #+#    #+#                 */
-/*   Updated: 2024/09/11 21:25:24 by crasche       ########   odam.nl         */
+/*   Updated: 2024/09/12 01:31:04 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,33 +33,41 @@
 # define MINI_MAP 300
 # define MINI_MAP_GRID 11
 
-typedef	struct s_minilx
-{
-	void	*mlx;
-	void	*mlx_window;
-	int		size_x;
-	int		size_y;
-}	t_minilx;
-
 # define X 0
 # define Y 1
+
+# define DRAW 0
+# define DISPLAY 1
+
+# define M_PI 3.14159265358979323846
 
 # define BASE_FOV 60
 
 
+typedef	struct s_minilx_img
+{
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+	int		offset;
+}	t_minilx_img;
+
 typedef	struct s_minilx
 {
-	void	*mlx;
-	void	*mlx_window;
-	int		size_x;
-	int		size_y;
+	void			*mlx;
+	void			*mlx_window;
+	int				size_x;
+	int				size_y;
+	t_minilx_img	mini[2];
 }	t_minilx;
 
 typedef	struct	s_payer
 {
-	int		x_pos;
-	int		y_pos;
-	char	direction;
+	// int		x_pos;
+	// int		y_pos;
+	// char	direction;
 	float	pos[2];
 	float	direct[2];
 	float	plane[2];
@@ -101,6 +109,7 @@ typedef	struct	s_data
 {
 	t_map		map;
 	t_player	player;
+	t_minilx	milx;
 }	t_data;
 
 // marcos
