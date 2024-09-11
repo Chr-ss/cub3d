@@ -25,6 +25,21 @@
 // minilibx
 # include "../lib/minilibx/mlx.h"
 
+# define X 0
+# define Y 1
+
+# define BASE_FOV 60
+
+# define MINI_MAP 300
+
+typedef	struct s_minilx
+{
+	void	*mlx;
+	void	*mlx_window;
+	int		size_x;
+	int		size_y;
+}	t_minilx;
+
 typedef	struct	s_payer
 {
 	int		x_pos;

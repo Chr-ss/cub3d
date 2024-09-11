@@ -22,8 +22,9 @@ ifeq ($(shell uname -s),Linux)
 else ifeq ($(shell uname -s),Darwin)
 	OS_TYPE		:= MACOS
 	LIBXDIR_SUB	:=	lib/minilibx-mac-osx
-	LIBX		:=	$(LIBXDIR)/libmlx.a
-	LIBXFLAGS	:=	-I /usr/local/bin/X11/include -g -L /usr/local/bin/X11 -framework OpenGL -framework AppKit -lmlx
+	LIBX		:=	$(LIBXDIR)/libmlx.dylib
+	LIBXFLAGS	:=	-L ./lib/minilibx -I /usr/local/include -L /usr/local/lib -framework OpenGL -framework AppKit -lmlx
+# LIBXFLAGS	:=	-L ./lib/minilibx -I /usr/local/bin -g -L /usr/local/bin/X11 -framework OpenGL -framework AppKit -lmlx
 	LIBXFLAGS_O	:=	-Imlx
 else
 	OS_TYPE		:= Linux
