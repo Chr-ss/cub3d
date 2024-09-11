@@ -1,7 +1,7 @@
 NAME		=	cub3D
 RM			=	rm -rf
 CC			=	cc
-CFLAGS		=	-Wall -Werror -Wextra -g -fsanitize=address # -MMD  # -Ofast
+CFLAGS		=	-Wall -Werror -Wextra -g #-fsanitize=address # -MMD  # -Ofast
 
 SRCDIR		=	src
 SRC			=	$(shell find $(SRCDIR) -iname "*.c")

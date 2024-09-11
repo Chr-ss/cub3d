@@ -6,7 +6,7 @@
 /*   By: crasche <crasche@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/05 13:49:31 by crasche       #+#    #+#                 */
-/*   Updated: 2024/09/08 20:45:16 by crasche       ########   odam.nl         */
+/*   Updated: 2024/09/11 20:37:57 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # define BASE_FOV 60
 
 # define MINI_MAP 300
+# define MINI_MAP_GRID 11
 
 typedef	struct s_minilx
 {
