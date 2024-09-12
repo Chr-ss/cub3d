@@ -1,59 +1,59 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   map_parsing.c                                      :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: crasche <crasche@student.codam.nl>           +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/09/08 20:26:53 by crasche       #+#    #+#                 */
-/*   Updated: 2024/09/08 20:44:21 by crasche       ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   map_parsing.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/08 20:26:53 by crasche           #+#    #+#             */
+/*   Updated: 2024/09/12 17:18:02 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3D.h"
 
-void	map_parse_wallcheck(t_data *data, char **map, int i, int j)
+void	map_parse_wallcheck(t_data *data, char **map, int y, int x)
 {
-	if (i == 0 || (i && map[i - 1][j] == ' '))
+	if (y == 0 || (y && map[y - 1][x] == ' '))
 		error("Error, unclosed map", data);
-	if (j == 0 || (j && map[i][j - 1] == ' '))
+	if (x == 0 || (x && map[y][x - 1] == ' '))
 		error("Error, unclosed map", data);
-	if (!map[i + 1] || (map[i + 1] && map[i + 1][j] == ' '))
+	if (!map[y + 1] || (map[y + 1] && map[y + 1][x] == ' '))
 		error("Error, unclosed map", data);
-	if (map[i][j + 1] == '\0' || map[i][j + 1] == ' ')
+	if (map[y][x + 1] == '\0' || map[y][x + 1] == ' ')
 		error("Error, unclosed map", data);
 }
 
-void	map_parse_player(t_data *data, char **map, int i, int j)
+void	map_parse_player(t_data *data, char **map, int x, int y)
 {
 	data->player.fov = BASE_FOV;
-	data->player.pos[X] = i;
-	data->player.pos[Y] = j;
-	if (map[i][j] == 'N')
+	data->player.pos[X] = x + 0.5;
+	data->player.pos[Y] = y + 0.5;
+	if (map[y][x] == 'N')
 	{
 		data->player.direct[X] = 0;
 		data->player.direct[Y] = -1;
 	}
-	else if (map[i][j] =='S')
+	else if (map[y][x] =='S')
 	{
 		data->player.direct[X] = 0;
 		data->player.direct[Y] = 1;
 	}
-	else if (map[i][j] == 'E')
+	else if (map[y][x] == 'E')
 	{
 		data->player.direct[X] = 1;
 		data->player.direct[Y] = 0;
 	}
-	else if (map[i][j] == 'W')
+	else if (map[y][x] == 'W')
 	{
 		data->player.direct[X] = -1;
 		data->player.direct[Y] = 0;
 	}
 	// data->player.plane[X] = ??;
 	// data->player.plane[Y] = ??;
-	map[i][j] = '0';
+	map[y][x] = '0';
 
-	map_parse_wallcheck(data, map, i, j);
+	map_parse_wallcheck(data, map, y, x);
 }
 
 void	map_parse_meta(t_data *data)
@@ -74,26 +74,26 @@ void	map_parse_meta(t_data *data)
 
 void	map_parse(t_data *data, char **map)
 {
-	int	i;
-	int	j;
+	int	y;
+	int	x;
 
-	i = 0;
+	y = 0;
 	map_parse_meta(data);
-	while (map[i])
+	while (map[y])
 	{
-		j = 0;
-		while (map[i][j])
+		x = 0;
+		while (map[y][x])
 		{
-			if (map[i][j] == '0')
-				map_parse_wallcheck(data, map, i, j);
-			else if (map[i][j] == 'N' || map[i][j] == 'E' \
-				|| map[i][j] == 'S' || map[i][j] == 'W')
-				map_parse_player(data, map, i, j);
-			else if (map[i][j] != '1' && map[i][j] != ' ')
+			if (map[y][x] == '0')
+				map_parse_wallcheck(data, map, y, x);
+			else if (map[y][x] == 'N' || map[y][x] == 'E' \
+				|| map[y][x] == 'S' || map[y][x] == 'W')
+				map_parse_player(data, map, x, y);
+			else if (map[y][x] != '1' && map[y][x] != ' ')
 				error("Error, invalid char in map", data);
-			j++;
+			x++;
 		}
-		i++;
+		y++;
 	}
 	if (!data->player.pos[0])
 		error("Error, missing player position", data);

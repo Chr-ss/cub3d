@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   main.c                                             :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: andmadri <andmadri@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/08/05 13:49:00 by crasche       #+#    #+#                 */
-/*   Updated: 2024/09/12 01:32:19 by crasche       ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/05 13:49:00 by crasche           #+#    #+#             */
+/*   Updated: 2024/09/12 17:03:10 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,63 +40,124 @@ int	create_trgb(int t, int r, int g, int b)
 	return (t << 24 | r << 16 | g << 8 | b);
 }
 
-void	draw_map_square(t_data *data, t_minilx *milx, int y, int x, int color)
+// void	draw_map_square(t_data *data, t_minilx *milx, int y, int x, int color)
+// {
+// 	int	pixel_x;
+// 	int	pixel_y;
+// 	int	sq_size;
+
+// 	sq_size = MINI_MAP / data->map.x_max;
+// 	if (sq_size > (MINI_MAP / data->map.y_max))
+// 		sq_size = MINI_MAP / data->map.y_max;
+// 	pixel_x = (x * sq_size);
+// 	while (++pixel_x < sq_size + (x * sq_size))
+// 	{
+// 		pixel_y = (y * sq_size);
+// 		while (++pixel_y < sq_size + (y * sq_size))
+// 		{
+// 			img_mlx_pixel_put(&(milx->mini[DRAW]), pixel_x, pixel_y, color);
+// 		}
+// 	}
+// }
+
+// void	draw_map(void *param)
+// {
+// 	t_data		*data;
+// 	t_minilx	*milx;
+
+// 	data = (t_data *) param;
+// 	milx = &data->milx;
+// 	int	x;
+// 	int	y;
+
+// 	x = -1;
+// 	while (++x < MINI_MAP)
+// 	{
+// 		y = -1;
+// 		while (++y < MINI_MAP)
+// 		{
+// 			img_mlx_pixel_put(&(milx->mini[DRAW]), x, y, create_trgb(100, 24, 24, 24));
+// 		}
+// 	}
+// 	t_map *map = &(data->map);
+// 	y = 0;
+// 	while (map->map[y])
+// 	{
+// 		x = 0;
+// 		while (map->map[y][x])
+// 		{
+// 			if (map->map[y][x] == ' ')
+// 				draw_map_square(data, milx, y, x, create_trgb(0, 22, 22, 22));
+// 			else if (map->map[y][x] == '1')
+// 				draw_map_square(data, milx, y, x, create_trgb(0, 88, 77, 66));
+// 			else if (map->map[y][x] == '0')
+// 				draw_map_square(data, milx, y, x, create_trgb(0, 155, 125, 98));
+// 			x++;
+// 		}
+// 		y++;
+// 	}
+// 	(void)data;
+// }
+
+void	draw_map(t_data *data, t_minilx *milx, int tile_size)
 {
-	int	pixel_x;
-	int	pixel_y;
-	int	sq_size;
-
-	sq_size = MINI_MAP / data->map.x_max;
-	if (sq_size > (MINI_MAP / data->map.y_max))
-		sq_size = MINI_MAP / data->map.y_max;
-	pixel_x = (x * sq_size);
-	while (++pixel_x < sq_size + (x * sq_size))
-	{
-		pixel_y = (y * sq_size);
-		while (++pixel_y < sq_size + (y * sq_size))
-		{
-			img_mlx_pixel_put(&(milx->mini[DRAW]), pixel_x, pixel_y, color);
-		}
-	}
-}
-
-void	draw_map(void *param)
-{
-	t_data		*data;
-	t_minilx	*milx;
-
-	data = (t_data *) param;
-	milx = &data->milx;
+	int	map_x;
+	int	map_y;
 	int	x;
 	int	y;
 
-	x = -1;
-	while (++x < MINI_MAP)
-	{
-		y = -1;
-		while (++y < MINI_MAP)
-		{
-			img_mlx_pixel_put(&(milx->mini[DRAW]), x, y, create_trgb(100, 24, 24, 24));
-		}
-	}
-	t_map *map = &(data->map);
+	map_x = data->player.pos[X] * tile_size - (MINI_MAP / 2);
+	map_y = data->player.pos[Y] * tile_size - (MINI_MAP /2);
 	y = 0;
-	while (map->map[y])
+	while (y < MINI_MAP)
 	{
 		x = 0;
-		while (map->map[y][x])
+		while (x < MINI_MAP)
 		{
-			if (map->map[y][x] == ' ')
-				draw_map_square(data, milx, y, x, create_trgb(0, 22, 22, 22));
-			else if (map->map[y][x] == '1')
-				draw_map_square(data, milx, y, x, create_trgb(0, 88, 77, 66));
-			else if (map->map[y][x] == '0')
-				draw_map_square(data, milx, y, x, create_trgb(0, 155, 125, 98));
+			if(((float)map_y + y)/tile_size >= 0 && ((float)map_x + x)/tile_size >= 0 && (map_x + x)/tile_size < data->map.x_max && (map_y + y)/tile_size < data->map.y_max)
+			{
+				// printf("%i %i\n", (map_x + x)/tile_size, (map_y + y)/tile_size);
+				if	(data->map.map[(map_y + y)/tile_size][(map_x + x)/tile_size] == '1')
+					img_mlx_pixel_put(&(milx->mini[DRAW]), x, y, create_trgb(0, 0, 0, 0));
+				else if (data->map.map[(map_y + y)/tile_size][(map_x + x)/tile_size] == '0')
+					img_mlx_pixel_put(&(milx->mini[DRAW]), x, y, create_trgb(0, 255, 255, 255));
+				else
+					img_mlx_pixel_put(&(milx->mini[DRAW]), x, y, create_trgb(0, 0, 0, 0));
+				
+			}
 			x++;
 		}
 		y++;
 	}
-	(void)data;
+}
+
+void	draw_border(t_minilx *milx, int color, int size)
+{
+	int	x;
+	int	y;
+
+	y = 0;
+	while (y <= MINI_MAP)
+	{
+		x = MINI_MAP;
+		while (x < MINI_MAP + size)
+		{
+			img_mlx_pixel_put(&(milx->mini[DRAW]), x, y, color);
+			x++;
+		}
+		y++;
+	}
+	y = MINI_MAP;
+	while (y <= MINI_MAP + size)
+	{
+		x = 0;
+		while (x < MINI_MAP + size)
+		{
+			img_mlx_pixel_put(&(milx->mini[DRAW]), x, y, color);
+			x++;
+		}
+		y++;
+	}
 }
 
 void draw_player_line(t_minilx *milx, int x_start, int x_end, int y, int color)
@@ -130,6 +191,7 @@ void	draw_player(t_minilx *milx, int color, int radius)
 	}
 }
 
+
 void draw_pov_line(t_minilx *milx, int x0, int y0, float vx, float vy, int length, int color)
 {
 	float magnitude = sqrt(vx * vx + vy * vy);
@@ -151,35 +213,6 @@ void	draw_pov(t_data *data, t_minilx *milx, int color, int size)
 {
 	// printf("POV: %fx%f, %fx%f\n", data->player.pos[X], data->player.pos[Y], data->player.direct[X], data->player.direct[Y]);
 	draw_pov_line(milx, MINI_MAP / 2, MINI_MAP / 2, data->player.direct[X], data->player.direct[Y], size, color);
-}
-
-void	draw_border(t_minilx *milx, int color, int size)
-{
-	int	x;
-	int	y;
-
-	y = 0;
-	while (y <= MINI_MAP)
-	{
-		x = MINI_MAP;
-		while (x < MINI_MAP + size)
-		{
-			img_mlx_pixel_put(&(milx->mini[DRAW]), x, y, color);
-			x++;
-		}
-		y++;
-	}
-	y = MINI_MAP;
-	while (y <= MINI_MAP + size)
-	{
-		x = 0;
-		while (x < MINI_MAP + size)
-		{
-			img_mlx_pixel_put(&(milx->mini[DRAW]), x, y, color);
-			x++;
-		}
-		y++;
-	}
 }
 
 void	draw_clear(t_minilx *milx)
@@ -213,6 +246,17 @@ int	draw_minimap_switch_display(void *param)
 	return (0);
 }
 
+int	is_wall(t_data *data, int x, int y)
+{
+	int map_x = x / TILE_SIZE;
+	int map_y = y /TILE_SIZE;
+	
+	printf("I am here\n");
+	if (map_x >= data->map.x_max || map_x < 0 || map_y < 0 || map_y >= data->map.y_max)
+		return (1);
+	return (0);
+}
+
 int	draw_minimap(void *param)
 {
 	t_data		*data;
@@ -222,10 +266,9 @@ int	draw_minimap(void *param)
 	milx = &data->milx;
 	draw_clear(milx);
 	draw_border(milx, create_trgb(0, 55, 55, 55), 10);
+	draw_map(data, milx, TILE_SIZE);
 	draw_player(milx, create_trgb(0, 20, 80, 200), 10);
-	draw_pov(data, milx, create_trgb(0, 255, 0, 255), 30);
-	// draw map from player pos with ofset to 0x0
-	// 
+	draw_pov(data, milx, create_trgb(0, 255, 0, 255), 40);
 	draw_minimap_switch_display(data);
 	return (0);
 }
@@ -234,19 +277,31 @@ int	draw_minimap(void *param)
 // W 13, A 0, S 1, D 2
 int	key_hook_wasd(int keycode, void *param)
 {
-	t_data *data;
+	t_data	*data;
+	float	new_x;
+	float	new_y;
 
 	data = (t_data *)param;
-	printf("KEY:%d ", keycode);
+	// printf("KEY:%d ", keycode);
 	if (keycode == 119 || keycode == 13)
 	{
-		data->player.pos[X] += data->player.direct[X];
-		data->player.pos[Y] += data->player.direct[Y];
+		new_x = data->player.pos[X] + data->player.direct[X];
+		new_y = data->player.pos[Y] + data->player.direct[Y];
+		if (!is_wall(data, new_x, new_y))
+		{
+			data->player.pos[X] = new_x;
+			data->player.pos[Y] = new_y;
+		}
 	}
 	else if (keycode == 115 || keycode == 1)
 	{
-		data->player.pos[X] -= data->player.direct[X];
-		data->player.pos[Y] -= data->player.direct[Y];
+		new_x = data->player.pos[X] - data->player.direct[X];
+		new_y = data->player.pos[Y] - data->player.direct[Y];
+		if (!is_wall(data, new_x, new_y))
+		{
+			data->player.pos[X] = new_x;
+			data->player.pos[Y] = new_y;
+		}
 	}
 	else if (keycode == 97 || keycode == 0)
 	{
