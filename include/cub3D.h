@@ -39,7 +39,11 @@
 # define DRAW 0
 # define DISPLAY 1
 
+# define TURN_STEP 0.1
+
+#ifndef M_PI
 # define M_PI 3.14159265358979323846
+#endif
 
 # define BASE_FOV 60
 

@@ -14,7 +14,7 @@
 
 int	mlx_finish(t_minilx *milx)
 {
-	mlx_destroy_display(milx->mlx);
+	// mlx_destroy_display(milx->mlx);
 	mlx_destroy_window(milx->mlx, milx->mlx_window);
 	free(milx->mlx);
 	exit(0);
@@ -224,39 +224,43 @@ int	draw_minimap(void *param)
 	draw_border(milx, create_trgb(0, 55, 55, 55), 10);
 	draw_player(milx, create_trgb(0, 20, 80, 200), 10);
 	draw_pov(data, milx, create_trgb(0, 255, 0, 255), 30);
+	// draw map from player pos with ofset to 0x0
+	// 
 	draw_minimap_switch_display(data);
 	return (0);
 }
 
 // W 119, A 97, S 115, D 100
+// W 13, A 0, S 1, D 2
 int	key_hook_wasd(int keycode, void *param)
 {
 	t_data *data;
 
 	data = (t_data *)param;
-	if (keycode == 119)
+	printf("KEY:%d ", keycode);
+	if (keycode == 119 || keycode == 13)
 	{
 		data->player.pos[X] += data->player.direct[X];
 		data->player.pos[Y] += data->player.direct[Y];
 	}
-	else if (keycode == 115)
+	else if (keycode == 115 || keycode == 1)
 	{
 		data->player.pos[X] -= data->player.direct[X];
 		data->player.pos[Y] -= data->player.direct[Y];
 	}
-	else if (keycode == 97)
+	else if (keycode == 97 || keycode == 0)
 	{
 		data->player.direct[X] = data->player.direct[X] * cos(-0.1) - data->player.direct[Y] * sin(-0.1);
 		data->player.direct[Y] = data->player.direct[X] * sin(-0.1) + data->player.direct[Y] * cos(-0.1);
-		data->player.direct[X] /= sqrt(data->player.direct[X] * data->player.direct[X] + data->player.direct[Y] * data->player.direct[Y]);
-		data->player.direct[Y] /= sqrt(data->player.direct[X] * data->player.direct[X] + data->player.direct[Y] * data->player.direct[Y]);
+		// data->player.direct[X] /= sqrt(data->player.direct[X] * data->player.direct[X] + data->player.direct[Y] * data->player.direct[Y]);
+		// data->player.direct[Y] /= sqrt(data->player.direct[X] * data->player.direct[X] + data->player.direct[Y] * data->player.direct[Y]);
 	}
-	else if (keycode == 100)
+	else if (keycode == 100 || keycode == 2)
 	{
 		data->player.direct[X] = data->player.direct[X] * cos(0.1) - data->player.direct[Y] * sin(0.1);
 		data->player.direct[Y] = data->player.direct[X] * sin(0.1) + data->player.direct[Y] * cos(0.1);
-		data->player.direct[X] /= sqrt(data->player.direct[X] * data->player.direct[X] + data->player.direct[Y] * data->player.direct[Y]);
-		data->player.direct[Y] /= sqrt(data->player.direct[X] * data->player.direct[X] + data->player.direct[Y] * data->player.direct[Y]);
+		// data->player.direct[X] /= sqrt(data->player.direct[X] * data->player.direct[X] + data->player.direct[Y] * data->player.direct[Y]);
+		// data->player.direct[Y] /= sqrt(data->player.direct[X] * data->player.direct[X] + data->player.direct[Y] * data->player.direct[Y]);
 	}
 	printf("\tPOS: %f %f\tVIEW: %f %f\n", data->player.pos[X], data->player.pos[Y], data->player.direct[X], data->player.direct[Y]);
 	return (0);
