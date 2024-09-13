@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:49:31 by crasche           #+#    #+#             */
-/*   Updated: 2024/09/12 16:37:19 by andmadri         ###   ########.fr       */
+/*   Updated: 2024/09/13 22:28:58 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <string.h>
+# include <stdbool.h>
 
 // libft
 # include "../lib/libft/include/libft.h"
@@ -48,6 +49,18 @@
 
 # define BASE_FOV 60
 
+typedef	struct s_raycaster
+{
+	float	direction[2];
+	float	position[2];
+	float	length[2];
+	float	step_size[2];
+	float	step[2];
+	float	intersect[2];
+	float	final_distance;
+	bool	wall_found;
+}	t_raycaster;
+
 
 typedef	struct s_minilx_img
 {
@@ -63,8 +76,8 @@ typedef	struct s_minilx
 {
 	void			*mlx;
 	void			*mlx_window;
-	int				size_x;
-	int				size_y;
+	int				screen_length;
+	int				screen_width;
 	t_minilx_img	mini[2];
 }	t_minilx;
 
@@ -114,6 +127,7 @@ typedef	struct	s_data
 {
 	t_map		map;
 	t_player	player;
+	t_raycaster	ray;
 	t_minilx	milx;
 }	t_data;
 

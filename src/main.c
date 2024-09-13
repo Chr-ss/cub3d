@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:49:00 by crasche           #+#    #+#             */
-/*   Updated: 2024/09/12 17:03:10 by andmadri         ###   ########.fr       */
+/*   Updated: 2024/09/13 23:15:13 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,64 +40,111 @@ int	create_trgb(int t, int r, int g, int b)
 	return (t << 24 | r << 16 | g << 8 | b);
 }
 
-// void	draw_map_square(t_data *data, t_minilx *milx, int y, int x, int color)
+// int	inbounds(float	x, float y, t_map map)
 // {
-// 	int	pixel_x;
-// 	int	pixel_y;
-// 	int	sq_size;
-
-// 	sq_size = MINI_MAP / data->map.x_max;
-// 	if (sq_size > (MINI_MAP / data->map.y_max))
-// 		sq_size = MINI_MAP / data->map.y_max;
-// 	pixel_x = (x * sq_size);
-// 	while (++pixel_x < sq_size + (x * sq_size))
-// 	{
-// 		pixel_y = (y * sq_size);
-// 		while (++pixel_y < sq_size + (y * sq_size))
-// 		{
-// 			img_mlx_pixel_put(&(milx->mini[DRAW]), pixel_x, pixel_y, color);
-// 		}
-// 	}
+// 	if (x >= 0 && y >= 0 &&  x < map.x_max && y <  x > map.y_max)
+// 		return (1);
+// 	return (0);
 // }
 
-// void	draw_map(void *param)
-// {
-// 	t_data		*data;
-// 	t_minilx	*milx;
 
-// 	data = (t_data *) param;
-// 	milx = &data->milx;
-// 	int	x;
-// 	int	y;
+void draw_pov_line(t_minilx *milx, int x0, int y0, float vx, float vy, int length, int color)
+{
+	float magnitude = sqrt(vx * vx + vy * vy);
+	vx /= magnitude;
+	vy /= magnitude;
 
-// 	x = -1;
-// 	while (++x < MINI_MAP)
-// 	{
-// 		y = -1;
-// 		while (++y < MINI_MAP)
-// 		{
-// 			img_mlx_pixel_put(&(milx->mini[DRAW]), x, y, create_trgb(100, 24, 24, 24));
-// 		}
-// 	}
-// 	t_map *map = &(data->map);
-// 	y = 0;
-// 	while (map->map[y])
-// 	{
-// 		x = 0;
-// 		while (map->map[y][x])
-// 		{
-// 			if (map->map[y][x] == ' ')
-// 				draw_map_square(data, milx, y, x, create_trgb(0, 22, 22, 22));
-// 			else if (map->map[y][x] == '1')
-// 				draw_map_square(data, milx, y, x, create_trgb(0, 88, 77, 66));
-// 			else if (map->map[y][x] == '0')
-// 				draw_map_square(data, milx, y, x, create_trgb(0, 155, 125, 98));
-// 			x++;
-// 		}
-// 		y++;
-// 	}
-// 	(void)data;
-// }
+	float x = x0;
+	float y = y0;
+
+	for (int i = 0; i < length; i++)
+	{
+		img_mlx_pixel_put(&(milx->mini[DRAW]), (int)round(x), (int)round(y), color);
+		x += vx;
+		y += vy;
+	}
+}
+
+void	step_direction(float *ray_dir, float *ray_step)
+{
+	if (ray_dir[X] >= 0)
+	{
+		ray_step[X] = 1;
+	}
+	if (ray_dir[X] < 0)
+	{
+		ray_step[X] = -1;
+	}
+	if (ray_dir[Y] >= 0)
+	{
+		ray_step[Y] = 1;
+	}
+	if (ray_dir[Y] < 0)
+	{
+		ray_step[Y] = -1;
+	}
+}
+
+void	draw_pov(t_data *data, t_minilx *milx, int color, int length)
+{
+	// printf("POV: %fx%f, %fx%f\n", data->player.pos[X], data->player.pos[Y], data->player.direct[X], data->player.direct[Y]);
+	draw_pov_line(milx, MINI_MAP / 2, MINI_MAP / 2, data->player.direct[X], data->player.direct[Y], length, color);
+}
+
+void	ray_caster(t_data *data, t_minilx *milx)
+{
+	t_raycaster	ray;
+	t_player	player;
+	int			x;
+	int			plane_zone;
+
+	x = 0;
+	ray = data->ray;
+	ray.position[X] = player.pos[X];
+	ray.position[Y] = player.pos[Y];
+
+	while(x < milx->screen_width)
+	{
+		ray.wall_found = false;
+		plane_zone = 2 * (x / milx->screen_width) - 1;
+		ray.direction[X] = player.direct[X] + player.plane[X] * plane_zone; //problem with direction vector
+		ray.direction[Y] = player.direct[Y] + player.plane[Y] * plane_zone;//problem with direction vector
+		ray.step_size[X] = sqrt(1 + (ray.direction[Y] / ray.direction[X]) * (ray.direction[Y] / ray.direction[X]));
+		ray.step_size[Y] = sqrt(1 + (ray.direction[X] / ray.direction[Y]) * (ray.direction[X] / ray.direction[Y]));
+		step_direction(ray.direction, ray.step);
+		printf("%f %f\n", ray.direction[Y] / ray.direction[X], ray.direction[X] / ray.direction[Y]);
+		exit(1);
+		ray.length[X] = ray.position[X] * ray.step_size[X];
+		ray.length[Y] =  ray.position[Y] * ray.step_size[Y]; //what if the player is not in the exact grid intersection
+		while(!ray.wall_found)
+		{
+			 printf("Ray Position: (%f, %f)\n", ray.position[X], ray.position[Y]);
+            printf("Ray Lengths: X = %f, Y = %f\n", ray.length[X], ray.length[Y]);
+			if(ray.length[X] < ray.length[Y])
+			{
+				ray.position[X] += ray.step[X];
+				ray.final_distance = ray.length[X];
+				ray.length[X] += ray.step_size[X];
+			}
+			else
+			{
+				ray.position[Y] += ray.step[Y];
+				ray.final_distance = ray.length[Y];
+				ray.length[Y] += ray.step_size[Y];
+			}
+			// if (inbounds(ray.position[X], ray.position[Y], data->map))
+			if (ray.position[X] >= 0 && ray.position[Y] >= 0 && ray.position[X] < data->map.x_max && ray.position[Y] < data->map.y_max)
+			{
+				if (data->map.map[(int)ray.position[Y]][(int)ray.position[X]] == 1)
+					ray.wall_found = true;
+			}
+		}
+		ray.intersect[X] = player.pos[X] + ray.direction[X] * ray.final_distance;
+		ray.intersect[Y] = player.pos[Y] + ray.direction[Y] * ray.final_distance;
+		draw_pov_line(milx, MINI_MAP / 2, MINI_MAP / 2, ray.intersect[X], ray.intersect[Y], ray.final_distance, create_trgb(0, 255, 0, 0));
+		x++;
+	}
+}
 
 void	draw_map(t_data *data, t_minilx *milx, int tile_size)
 {
@@ -114,9 +161,8 @@ void	draw_map(t_data *data, t_minilx *milx, int tile_size)
 		x = 0;
 		while (x < MINI_MAP)
 		{
-			if(((float)map_y + y)/tile_size >= 0 && ((float)map_x + x)/tile_size >= 0 && (map_x + x)/tile_size < data->map.x_max && (map_y + y)/tile_size < data->map.y_max)
+			if((float)(map_x + x)/tile_size >= 0 && (float)(map_y + y)/tile_size >= 0 && (map_x + x)/tile_size < data->map.x_max && (map_y + y)/tile_size < data->map.y_max)
 			{
-				// printf("%i %i\n", (map_x + x)/tile_size, (map_y + y)/tile_size);
 				if	(data->map.map[(map_y + y)/tile_size][(map_x + x)/tile_size] == '1')
 					img_mlx_pixel_put(&(milx->mini[DRAW]), x, y, create_trgb(0, 0, 0, 0));
 				else if (data->map.map[(map_y + y)/tile_size][(map_x + x)/tile_size] == '0')
@@ -168,6 +214,7 @@ void draw_player_line(t_minilx *milx, int x_start, int x_end, int y, int color)
 		x_start++;
 	}
 }
+
 void	draw_player(t_minilx *milx, int color, int radius)
 {
 	int	center;
@@ -189,30 +236,6 @@ void	draw_player(t_minilx *milx, int color, int radius)
 		else
 			decision += 2 * (y - radius--) + 1;
 	}
-}
-
-
-void draw_pov_line(t_minilx *milx, int x0, int y0, float vx, float vy, int length, int color)
-{
-	float magnitude = sqrt(vx * vx + vy * vy);
-	vx /= magnitude;
-	vy /= magnitude;
-
-	float x = x0;
-	float y = y0;
-
-	for (int i = 0; i < length; i++)
-	{
-		img_mlx_pixel_put(&(milx->mini[DRAW]), (int)round(x), (int)round(y), color);
-		x += vx;
-		y += vy;
-	}
-}
-
-void	draw_pov(t_data *data, t_minilx *milx, int color, int size)
-{
-	// printf("POV: %fx%f, %fx%f\n", data->player.pos[X], data->player.pos[Y], data->player.direct[X], data->player.direct[Y]);
-	draw_pov_line(milx, MINI_MAP / 2, MINI_MAP / 2, data->player.direct[X], data->player.direct[Y], size, color);
 }
 
 void	draw_clear(t_minilx *milx)
@@ -251,7 +274,6 @@ int	is_wall(t_data *data, int x, int y)
 	int map_x = x / TILE_SIZE;
 	int map_y = y /TILE_SIZE;
 	
-	printf("I am here\n");
 	if (map_x >= data->map.x_max || map_x < 0 || map_y < 0 || map_y >= data->map.y_max)
 		return (1);
 	return (0);
@@ -268,7 +290,8 @@ int	draw_minimap(void *param)
 	draw_border(milx, create_trgb(0, 55, 55, 55), 10);
 	draw_map(data, milx, TILE_SIZE);
 	draw_player(milx, create_trgb(0, 20, 80, 200), 10);
-	draw_pov(data, milx, create_trgb(0, 255, 0, 255), 40);
+	ray_caster(data, milx);
+	// draw_pov(data, milx, create_trgb(0, 255, 0, 255), 40);
 	draw_minimap_switch_display(data);
 	return (0);
 }
@@ -346,10 +369,10 @@ int	main(int argc, char **argv)
 	data.milx.mlx = mlx_init();
 	if (!data.milx.mlx)
 		return (EXIT_FAILURE); //maybe do it somewhere else or free something
-	// mlx_get_screen_size(milx.mlx, &milx.size_x, &milx.size_y);
-	data.milx.size_x = 800;
-	data.milx.size_y = 800;
-	data.milx.mlx_window = mlx_new_window(data.milx.mlx, data.milx.size_x, data.milx.size_y, "CUBE3D");
+	mlx_get_screen_size(data.milx.mlx, &data.milx.screen_length, &data.milx.screen_width);
+	// data.milx.screen_length = 800;
+	// data.milx.screen_width = 800;
+	data.milx.mlx_window = mlx_new_window(data.milx.mlx, data.milx.screen_width, data.milx.screen_length, "CUBE3D");
 	if (!data.milx.mlx_window)
 		return (free(data.milx.mlx), free_all(&data), EXIT_FAILURE); //maybe free_all data
 	image(&data);
