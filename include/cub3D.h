@@ -34,6 +34,7 @@
 # define MINI_MAP 300
 # define MINI_MAP_GRID 11
 # define TILE_SIZE 30
+# define STEP_SIZE 0.2
 
 # define X 0
 # define Y 1

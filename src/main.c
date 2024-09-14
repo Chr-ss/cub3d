@@ -269,12 +269,16 @@ int	draw_minimap_switch_display(void *param)
 	return (0);
 }
 
-int	is_wall(t_data *data, int x, int y)
+int	is_wall(t_data *data, float x, float y)
 {
-	int map_x = x / TILE_SIZE;
-	int map_y = y /TILE_SIZE;
+	int map_x;
+	int map_y;
 	
-	if (map_x >= data->map.x_max || map_x < 0 || map_y < 0 || map_y >= data->map.y_max)
+	map_x = x; //round(x);
+	map_y = y; // round(y); 
+	if (x > data->map.x_max || x < 1 || y < 1 || y > data->map.y_max) // Map brounds check, includeing x=1, y=1, x=max or y=max as they have to be walls
+		return (1);
+	if (data->map.map[map_y][map_x] == '1' || data->map.map[map_y][map_x] == ' ')
 		return (1);
 	return (0);
 }
@@ -287,17 +291,17 @@ int	draw_minimap(void *param)
 	data = (t_data *) param;
 	milx = &data->milx;
 	draw_clear(milx);
-	draw_border(milx, create_trgb(0, 55, 55, 55), 10);
+	draw_border(milx, create_trgb(0, 55, 55, 55), 4);
 	draw_map(data, milx, TILE_SIZE);
 	draw_player(milx, create_trgb(0, 20, 80, 200), 10);
-	ray_caster(data, milx);
-	// draw_pov(data, milx, create_trgb(0, 255, 0, 255), 40);
+	// ray_caster(data, milx);
+	draw_pov(data, milx, create_trgb(0, 255, 0, 255), 40);
 	draw_minimap_switch_display(data);
 	return (0);
 }
 
-// W 119, A 97, S 115, D 100
-// W 13, A 0, S 1, D 2
+// WSL: W 119, A 97, S 115, D 100
+// MAC: W 13, A 0, S 1, D 2, ESC 53
 int	key_hook_wasd(int keycode, void *param)
 {
 	t_data	*data;
@@ -305,11 +309,12 @@ int	key_hook_wasd(int keycode, void *param)
 	float	new_y;
 
 	data = (t_data *)param;
-	// printf("KEY:%d ", keycode);
+	// mlx_do_key_autorepeaton(&(data->milx));
+	printf("KEY:%d ", keycode);
 	if (keycode == 119 || keycode == 13)
 	{
-		new_x = data->player.pos[X] + data->player.direct[X];
-		new_y = data->player.pos[Y] + data->player.direct[Y];
+		new_x = data->player.pos[X] + (data->player.direct[X] * STEP_SIZE);
+		new_y = data->player.pos[Y] + (data->player.direct[Y] * STEP_SIZE);
 		if (!is_wall(data, new_x, new_y))
 		{
 			data->player.pos[X] = new_x;
@@ -318,8 +323,8 @@ int	key_hook_wasd(int keycode, void *param)
 	}
 	else if (keycode == 115 || keycode == 1)
 	{
-		new_x = data->player.pos[X] - data->player.direct[X];
-		new_y = data->player.pos[Y] - data->player.direct[Y];
+		new_x = data->player.pos[X] - (data->player.direct[X] * STEP_SIZE);
+		new_y = data->player.pos[Y] - (data->player.direct[Y] * STEP_SIZE);
 		if (!is_wall(data, new_x, new_y))
 		{
 			data->player.pos[X] = new_x;
@@ -330,17 +335,20 @@ int	key_hook_wasd(int keycode, void *param)
 	{
 		data->player.direct[X] = data->player.direct[X] * cos(-0.1) - data->player.direct[Y] * sin(-0.1);
 		data->player.direct[Y] = data->player.direct[X] * sin(-0.1) + data->player.direct[Y] * cos(-0.1);
-		// data->player.direct[X] /= sqrt(data->player.direct[X] * data->player.direct[X] + data->player.direct[Y] * data->player.direct[Y]);
-		// data->player.direct[Y] /= sqrt(data->player.direct[X] * data->player.direct[X] + data->player.direct[Y] * data->player.direct[Y]);
+		data->player.direct[X] /= sqrt(data->player.direct[X] * data->player.direct[X] + data->player.direct[Y] * data->player.direct[Y]);
+		data->player.direct[Y] /= sqrt(data->player.direct[X] * data->player.direct[X] + data->player.direct[Y] * data->player.direct[Y]);
 	}
 	else if (keycode == 100 || keycode == 2)
 	{
 		data->player.direct[X] = data->player.direct[X] * cos(0.1) - data->player.direct[Y] * sin(0.1);
 		data->player.direct[Y] = data->player.direct[X] * sin(0.1) + data->player.direct[Y] * cos(0.1);
-		// data->player.direct[X] /= sqrt(data->player.direct[X] * data->player.direct[X] + data->player.direct[Y] * data->player.direct[Y]);
-		// data->player.direct[Y] /= sqrt(data->player.direct[X] * data->player.direct[X] + data->player.direct[Y] * data->player.direct[Y]);
+		data->player.direct[X] /= sqrt(data->player.direct[X] * data->player.direct[X] + data->player.direct[Y] * data->player.direct[Y]);
+		data->player.direct[Y] /= sqrt(data->player.direct[X] * data->player.direct[X] + data->player.direct[Y] * data->player.direct[Y]);
 	}
+	else if (keycode == 53) // ESC quit for mac
+		mlx_finish(&(data->milx));
 	printf("\tPOS: %f %f\tVIEW: %f %f\n", data->player.pos[X], data->player.pos[Y], data->player.direct[X], data->player.direct[Y]);
+	// mlx_do_key_autorepeatoff(&(data->milx));
 	return (0);
 }
 
