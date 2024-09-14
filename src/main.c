@@ -94,32 +94,84 @@ void	draw_pov(t_data *data, t_minilx *milx, int color, int length)
 void	ray_caster(t_data *data, t_minilx *milx)
 {
 	t_raycaster	ray;
-	t_player	player;
-	int			x;
-	int			plane_zone;
+	t_player	*player;
+	int		x;
+	float		plane_zone;
 
 	x = 0;
+	ft_bzero(&ray, sizeof(t_raycaster));
 	ray = data->ray;
-	ray.position[X] = player.pos[X];
-	ray.position[Y] = player.pos[Y];
-
+	player = &data->player;
+	data->player.plane[X] = 0.66;
+	data->player.plane[Y] = 0;
+	ray.position[X] = player->pos[X];
+	ray.position[Y] = player->pos[Y];
+	// printf("%d\n", milx->screen_width);
 	while(x < milx->screen_width)
 	{
 		ray.wall_found = false;
-		plane_zone = 2 * (x / milx->screen_width) - 1;
-		ray.direction[X] = player.direct[X] + player.plane[X] * plane_zone; //problem with direction vector
-		ray.direction[Y] = player.direct[Y] + player.plane[Y] * plane_zone;//problem with direction vector
-		ray.step_size[X] = sqrt(1 + (ray.direction[Y] / ray.direction[X]) * (ray.direction[Y] / ray.direction[X]));
-		ray.step_size[Y] = sqrt(1 + (ray.direction[X] / ray.direction[Y]) * (ray.direction[X] / ray.direction[Y]));
+		plane_zone = 2 * ((float)x / (float)milx->screen_width) - 1; // find a range in -1 and 1 of screenray
+		// if (plane_zone <= 1)
+		// 	printf("%f\n", plane_zone);
+		ray.direction[X] = player->direct[X] + (player->plane[X] * plane_zone); //problem with direction vector
+		ray.direction[Y] = player->direct[Y] + (player->plane[Y] * plane_zone); //problem with direction vector
+
+		ray.step_size[X] = sqrt(1 + (ray.direction[Y] / ray.direction[X]) * (ray.direction[Y] / ray.direction[X])); // 1 = dx wich is set to 1, (dy/dx) squared
+		ray.step_size[Y] = sqrt(1 + (ray.direction[X] / ray.direction[Y]) * (ray.direction[X] / ray.direction[Y])); // 1 = dy wich is set to 1, (dx/dy) squared
+
 		step_direction(ray.direction, ray.step);
-		printf("%f %f\n", ray.direction[Y] / ray.direction[X], ray.direction[X] / ray.direction[Y]);
-		exit(1);
-		ray.length[X] = ray.position[X] * ray.step_size[X];
-		ray.length[Y] =  ray.position[Y] * ray.step_size[Y]; //what if the player is not in the exact grid intersection
+
+		// printf("StepX:%f StepY:%f\n", ray.step_size[X], ray.step_size[Y]);
+		// printf("%f %f\n", ray.direction[Y] / ray.direction[X], ray.direction[X] / ray.direction[Y]);
+		// exit(1); 0, 0 
+		// return ; starting_pos + (step_count * step_size)
+
+		// new_x = data->player->pos[X] - (data->player->direct[X] * STEP_SIZE);
+		// new_y = data->player->pos[Y] - (data->player->direct[Y] * STEP_SIZE);
+
+		// pos1 = pos + direct * X
+		//pos1 - pos = direct * x
+
+		// pos1 = ((int)ray.position[X] + ray.step[X]) --> where it intersects with the grid
+		// pos = ray.position[X] --> player pos
+		// direct = ray.direction[X] --> where we move, directional
+		// start_len_x = X --> how far to the intersect
+		// x = (pos1-pos) / direct
+
+		// (pos1 + (pos * step)) / dirc = X
+		
+		// printf("START: Ray Position: (%f, %f)\n", ray.position[X], ray.position[Y]);
+		// printf("START: Ray Lengths: X = %f, Y = %f\n", ray.length[X], ray.length[Y]);
+		int start_len_x;
+		int start_len_y;
+		if (ray.step[X] == 1)
+			start_len_x = (((int)ray.position[X] + 1) + (ray.position[X] * ray.step[X])) / ray.direction[X]; // ray.position[X] + (rang to first hit / ray.step_size[X]); //this is as if we are starting from (0, 0)
+		else 
+			start_len_x = (((int)ray.position[X]) + (ray.position[X] * ray.step[X])) / ray.direction[X]; // ray.position[X] + (rang to first hit / ray.step_size[X]); //this is as if we are starting from (0, 0)
+		if (ray.step[Y] == 1)
+			start_len_y = (((int)ray.position[Y] + 1) + (ray.position[Y] * ray.step[Y])) / ray.direction[Y]; //  ray.position[Y] * ray.step_size[Y]; //what if the player is not in the exact grid intersection
+		else
+			start_len_y = (((int)ray.position[Y]) + (ray.position[Y] * ray.step[Y])) / ray.direction[Y]; //  ray.position[Y] * ray.step_size[Y]; //what if the player is not in the exact grid intersection
+		
+		if (start_len_x < start_len_y)
+		{
+			ray.length[X] = start_len_x / ray.step_size[X];
+			ray.length[Y] = start_len_x / ray.step_size[Y];
+			ray.position[X] += ray.step[X];
+		}
+		else 
+		{
+			ray.length[X] = start_len_y / ray.step_size[X];
+			ray.length[Y] = start_len_y / ray.step_size[Y];
+			ray.position[Y] += ray.step[Y];
+		}
+		// printf("BASE: Ray Position: (%f, %f)\n", ray.position[X], ray.position[Y]);
+		// printf("BASE: Ray Lengths: X = %f, Y = %f\n", ray.length[X], ray.length[Y]);
+	// return ;
 		while(!ray.wall_found)
 		{
-			 printf("Ray Position: (%f, %f)\n", ray.position[X], ray.position[Y]);
-            printf("Ray Lengths: X = %f, Y = %f\n", ray.length[X], ray.length[Y]);
+			// printf("Ray Position: (%f, %f)\n", ray.position[X], ray.position[Y]);
+			// printf("Ray Lengths: X = %f, Y = %f\n", ray.length[X], ray.length[Y]);
 			if(ray.length[X] < ray.length[Y])
 			{
 				ray.position[X] += ray.step[X];
@@ -135,13 +187,21 @@ void	ray_caster(t_data *data, t_minilx *milx)
 			// if (inbounds(ray.position[X], ray.position[Y], data->map))
 			if (ray.position[X] >= 0 && ray.position[Y] >= 0 && ray.position[X] < data->map.x_max && ray.position[Y] < data->map.y_max)
 			{
-				if (data->map.map[(int)ray.position[Y]][(int)ray.position[X]] == 1)
+				if (data->map.map[(int)ray.position[Y]][(int)ray.position[X]] == '1')
 					ray.wall_found = true;
 			}
+			else 
+			{
+				ray.position[X] -= 1;
+				ray.position[Y] -= 1;
+				ray.wall_found = true;
+			}
 		}
-		ray.intersect[X] = player.pos[X] + ray.direction[X] * ray.final_distance;
-		ray.intersect[Y] = player.pos[Y] + ray.direction[Y] * ray.final_distance;
-		draw_pov_line(milx, MINI_MAP / 2, MINI_MAP / 2, ray.intersect[X], ray.intersect[Y], ray.final_distance, create_trgb(0, 255, 0, 0));
+		ray.intersect[X] = player->pos[X] + ray.direction[X] * ray.final_distance;
+		ray.intersect[Y] = player->pos[Y] + ray.direction[Y] * ray.final_distance;
+		printf("%f, %f\n", ray.direction[Y] / ray.final_distance, ray.final_distance);
+
+		draw_pov_line(milx, MINI_MAP / 2, MINI_MAP / 2, ray.direction[X], ray.direction[Y], (int)((ray.direction[Y] / ray.final_distance) * TILE_SIZE), create_trgb(0, 255, 0, 0));
 		x++;
 	}
 }
@@ -294,8 +354,8 @@ int	draw_minimap(void *param)
 	draw_border(milx, create_trgb(0, 55, 55, 55), 4);
 	draw_map(data, milx, TILE_SIZE);
 	draw_player(milx, create_trgb(0, 20, 80, 200), 10);
-	// ray_caster(data, milx);
-	draw_pov(data, milx, create_trgb(0, 255, 0, 255), 40);
+	ray_caster(data, milx);
+	// draw_pov(data, milx, create_trgb(0, 255, 0, 255), 40);
 	draw_minimap_switch_display(data);
 	return (0);
 }
@@ -377,9 +437,9 @@ int	main(int argc, char **argv)
 	data.milx.mlx = mlx_init();
 	if (!data.milx.mlx)
 		return (EXIT_FAILURE); //maybe do it somewhere else or free something
-	mlx_get_screen_size(data.milx.mlx, &data.milx.screen_length, &data.milx.screen_width);
-	// data.milx.screen_length = 800;
-	// data.milx.screen_width = 800;
+	// mlx_get_screen_size(data.milx.mlx, &data.milx.screen_length, &data.milx.screen_width);
+	data.milx.screen_length = 800;
+	data.milx.screen_width = 1200;
 	data.milx.mlx_window = mlx_new_window(data.milx.mlx, data.milx.screen_width, data.milx.screen_length, "CUBE3D");
 	if (!data.milx.mlx_window)
 		return (free(data.milx.mlx), free_all(&data), EXIT_FAILURE); //maybe free_all data
