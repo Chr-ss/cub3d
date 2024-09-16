@@ -165,4 +165,36 @@ void	freenull(void **to_free);
 void	error(char *msg, t_data *data);
 void	free_all(t_data *data);
 
+// minimap/draw_misc.c
+void	draw_minimap_player_line(t_minilx *milx, int x_start, int x_end, int y, int color);
+void	draw_minimap_player(t_minilx *milx, int color, int radius);
+void	draw_minimap_border(t_minilx *milx, int color, int size);
+void	draw_minimap_clear(t_minilx *milx);
+
+// minimap/draw_tiles.c
+void	draw_minimap_tiles(t_data *data, t_minilx *milx, int tile_size);
+
+// minimap/hooks_image.c
+int		draw_minimap_switch_img(void *param);
+int		draw_minimap(void *param);
+
+// mlx/hooks.c
+int		finish_mlx(t_minilx *milx);
+void	hooks_mlx(t_data *data);
+
+// mlx/image.c
+void	init_image(t_data *data);
+
+// mlx/key_hooks.c
+int		is_wall(t_data *data, float x, float y);
+int		key_hook_ad(int keycode, void *param);
+int		key_hook_ws(int keycode, void *param);
+int		key_hook_esc(int keycode, void *param);
+int		key_hook_esc_mac(int keycode, void *param);
+int	key_hook(int keycode, void *param);
+
+// mlx/utils.c
+void	img_mlx_pixel_put(t_minilx_img *img, int x, int y, int color);
+int		create_trgb(int t, int r, int g, int b);
+
 #endif // CUB3D_H
