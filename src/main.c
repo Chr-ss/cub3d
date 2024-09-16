@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:49:00 by crasche           #+#    #+#             */
-/*   Updated: 2024/09/13 23:15:13 by andmadri         ###   ########.fr       */
+/*   Updated: 2024/09/16 12:30:56 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,91 +76,107 @@ void	step_direction(t_raycaster *ray)
 	if (ray->direction[X] >= 0)
 	{
 		ray->step[X] = 1;
-		ray->length[X] = (((float)ray->r_pos[X] + 1) - ray->r_start[X]) * ray->step_size;
+		ray->length[X] = (((float)ray->r_pos[X] + 1) - ray->r_start[X]) * ray->step_size[X];
 	}
 	if (ray->direction[X] < 0)
 	{
 		ray->step[X] = -1;
-		ray->length[X] = (ray->r_start[X] - (float)ray->r_pos[X]) * ray->step_size;
+		ray->length[X] = (ray->r_start[X] - (float)ray->r_pos[X]) * ray->step_size[X];
 	}
 	if (ray->direction[Y] >= 0)
 	{
 		ray->step[Y] = 1;
-		ray->length[Y] = (((float)ray->r_pos[Y] + 1) - ray->r_start[Y]) * ray->step_size;
+		ray->length[Y] = (((float)ray->r_pos[Y] + 1) - ray->r_start[Y]) * ray->step_size[Y];
 	}
 	if (ray->direction[Y] < 0)
 	{
 		ray->step[Y] = -1;
-		ray->length[Y] = (ray->r_start[Y] - (float)ray->r_pos[Y]) * ray->step_size;
+		ray->length[Y] = (ray->r_start[Y] - (float)ray->r_pos[Y]) * ray->step_size[Y];
 	}
 }
+
 
 
 void	ray_caster(t_data *data, t_minilx *milx)
 {
-	t_raycaster	*ray;
-	t_player	*player;
-	int		x;
-	float		plane_zone;
-	int	cube_size;
+	t_raycaster	ray;
+	t_player	player;
+	int			x;
+	//float		plane_scale;
+	//float		plane_magnitude;
+	int			cube_size;
+	(void) milx;
 	
 	x = 0;
 	cube_size = data->map.x_max * data->map.y_max;
 	ft_bzero(&ray, sizeof(t_raycaster));
-	ray = &data->ray;
-	player = &data->player;
-	data->player.plane[X] = 0.66; //solve this
-	data->player.plane[Y] = 0; //solve this
-	ray->r_start[X] = player->pos[X];
-	ray->r_start[Y] = player->pos[Y];
-	ray->r_pos[X] = ray->r_start[X];
-	ray->r_pos[Y] = ray->r_start[X];
-	while(x < milx->screen_width)
+	ray = data->ray;
+	player = data->player;
+	// player.plane[X] = -player.direct[Y];
+	// player.plane[Y] = player.direct[X];
+	ray.r_start[X] = player.pos[X];
+	ray.r_start[Y] = player.pos[Y];
+	ray.r_pos[X] = ray.r_start[X];
+	ray.r_pos[Y] = ray.r_start[Y];
+	while(x < 1)
 	{
-		ray->wall_found = false;
-		plane_zone = 2 * ((float)x / (float)milx->screen_width) - 1; // find a range in -1 and 1 of screenray
-		ray->direction[X] = player->direct[X] + (player->plane[X] * plane_zone);
-		ray->direction[Y] = player->direct[Y] + (player->plane[Y] * plane_zone);
-		ray->step_size[X] = sqrt(1 + (ray->direction[Y] / ray->direction[X]) * (ray->direction[Y] / ray->direction[X])); // 1 = dx wich is set to 1, (dy/dx) squared
-		ray->step_size[Y] = sqrt(1 + (ray->direction[X] / ray->direction[Y]) * (ray->direction[X] / ray->direction[Y])); // 1 = dy wich is set to 1, (dx/dy) squared
-		step_direction(ray);
-		while(!ray->wall_found)
+		ray.wall_found = false;
+		// plane_scale = 2 * ((float)x / (float)milx->screen_width) - 1; // find a range in -1 and 1 of screenray
+		// plane_magnitude = tan((FOV / 2) * (M_PI / 180)); //
+		ray.direction[X] = player.direct[X]; //+ (player.plane[X] * plane_magnitude) * plane_scale;
+		ray.direction[Y] = player.direct[Y]; //+ (player.plane[Y] *plane_magnitude) * plane_scale;
+		ray.step_size[X] = sqrt(1 + (ray.direction[Y] / ray.direction[X]) * (ray.direction[Y] / ray.direction[X])); // 1 = dx wich is set to 1, (dy/dx) squared
+		ray.step_size[Y] = sqrt(1 + (ray.direction[X] / ray.direction[Y]) * (ray.direction[X] / ray.direction[Y])); // 1 = dy wich is set to 1, (dx/dy) squared
+		step_direction(&ray);
+		// printf("length_x: %f and length_y: %f\n", ray.length[X], ray.length[Y]);
+		// printf("initial_x: %i and initial_y: %i\n", ray.r_pos[X], ray.r_pos[Y]);
+		while(!ray.wall_found)
 		{
-			if(ray->length[X] < ray->length[Y])
+			if(ray.length[X] < ray.length[Y])
 			{
-				ray->r_pos[X] += ray->step[X];
-				ray->final_distance = ray->length[X];
-				ray->length[X] += ray->step_size[X];
+				ray.r_pos[X] += ray.step[X];
+				ray.final_distance = ray.length[X];
+				ray.length[X] += ray.step_size[X];
+				//printf("length_x: %f and length_y: %f\n", ray.length[X], ray.length[Y]);
 			}
 			else
 			{
-				ray->r_pos[Y] += ray->step[Y];
-				ray->final_distance = ray->length[Y];
-				ray->length[Y] += ray->step_size[Y];
+				ray.r_pos[Y] += ray.step[Y];
+				ray.final_distance = ray.length[Y];
+				ray.length[Y] += ray.step_size[Y];
+				//printf("length_x: %f and length_y: %f\n", ray.length[X], ray.length[Y]);
+				
 			}
-			// if (inbounds(ray->position[X], ray->position[Y], data->map))
-			if (ray->r_pos[X] >= 0 && ray->r_pos[Y] >= 0 && ray->r_pos[X] < data->map.x_max && ray->r_pos[Y] < data->map.y_max)
+			//printf("x: %i and y: %i\n", ray.r_pos[X], ray.r_pos[Y]);
+			if (ray.r_pos[X] >= 0 && ray.r_pos[Y] >= 0 && ray.r_pos[X] < data->map.x_max && ray.r_pos[Y] < data->map.y_max)
 			{
-				if (data->map.map[(int)ray->r_pos[Y]][(int)ray->r_pos[X]] == '1')
-					ray->wall_found = true;
+				// printf("value at [y][x] %c\n", data->map.map[ray.r_pos[Y]][ray.r_pos[X]]);
+				if (data->map.map[ray.r_pos[Y]][ray.r_pos[X]] == '1')
+				{
+					ray.wall_found = true;
+				}
 			}
-			// else 
-			// {
-			// 	ray->r_pos[X] -= 1;
-			// 	ray->r_pos[Y] -= 1;
-			// 	ray->wall_found = true;
-			// }
 		}
-		ray->intersect[X] = player->pos[X] + ray->direction[X] * ray->final_distance;
-		ray->intersect[Y] = player->pos[Y] + ray->direction[Y] * ray->final_distance;
-		//printf("%f, %f\n", ray->direction[Y] / ray->final_distance, ray->final_distance);
-		int	line_heigth = (cube_size * milx->screen_length) / ray->final_distance;
-		if (line_heigth > milx->screen_length)
-			line_heigth = milx->screen_length;
-		draw_pov_line(milx, MINI_MAP / 2, MINI_MAP / 2, ray->direction[X], ray->direction[Y], (int)((ray->direction[Y] / ray->final_distance) * TILE_SIZE), create_trgb(0, 255, 0, 0));
+		// printf("final distance: %f\n", ray.final_distance);
+		// exit (1);
+		ray.intersect[X] = ray.r_start[X] + ray.direction[X] * ray.final_distance;
+		ray.intersect[Y] = ray.r_start[Y] + ray.direction[Y] * ray.final_distance;
+		// printf("intersection: %f, intersection: %f\n", ray.intersect[X], ray.intersect[Y]);
+		// exit(1);
+		// int	line_heigth = (cube_size * milx->screen_length) / ray.final_distance;
+		// if (line_heigth > milx->screen_length)
+		// 	line_heigth = milx->screen_length;
+		draw_pov_line(milx, MINI_MAP / 2, MINI_MAP / 2, ray.direction[X], ray.direction[Y], ray.final_distance * TILE_SIZE, create_trgb(0, 255, 0, 0));
 		x++;
 	}
 }
+
+// else 
+// {
+// 	ray.r_pos[X] -= 1;
+// 	ray.r_pos[Y] -= 1;
+// 	ray.wall_found = true;
+// }
 
 void	draw_map(t_data *data, t_minilx *milx, int tile_size)
 {

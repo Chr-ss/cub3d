@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 20:26:53 by crasche           #+#    #+#             */
-/*   Updated: 2024/09/12 17:18:02 by andmadri         ###   ########.fr       */
+/*   Updated: 2024/09/16 11:57:28 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ void	map_parse_wallcheck(t_data *data, char **map, int y, int x)
 
 void	map_parse_player(t_data *data, char **map, int x, int y)
 {
-	data->player.fov = BASE_FOV;
 	data->player.pos[X] = x + 0.5;
 	data->player.pos[Y] = y + 0.5;
 	if (map[y][x] == 'N')
@@ -49,8 +48,6 @@ void	map_parse_player(t_data *data, char **map, int x, int y)
 		data->player.direct[X] = -1;
 		data->player.direct[Y] = 0;
 	}
-	// data->player.plane[X] = ??;
-	// data->player.plane[Y] = ??;
 	map[y][x] = '0';
 
 	map_parse_wallcheck(data, map, y, x);

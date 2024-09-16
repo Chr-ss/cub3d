@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:49:31 by crasche           #+#    #+#             */
-/*   Updated: 2024/09/13 22:28:58 by andmadri         ###   ########.fr       */
+/*   Updated: 2024/09/16 12:29:09 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@
 # define X 0
 # define Y 1
 
-# define BASE_FOV 60
-
 # define MINI_MAP 300
 # define MINI_MAP_GRID 11
 # define TILE_SIZE 30
@@ -48,7 +46,7 @@
 # define M_PI 3.14159265358979323846
 #endif
 
-# define BASE_FOV 60
+# define FOV 60
 
 typedef	struct s_raycaster
 {
@@ -88,7 +86,6 @@ typedef	struct	s_payer
 	float	pos[2];
 	float	direct[2];
 	float	plane[2];
-	int		fov;
 }	t_player;
 
 typedef	struct	s_map_read
