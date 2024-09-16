@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:49:00 by crasche           #+#    #+#             */
-/*   Updated: 2024/09/16 12:30:56 by andmadri         ###   ########.fr       */
+/*   Updated: 2024/09/16 19:47:49 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,11 @@ void	img_mlx_pixel_put(t_minilx_img *img, int x, int y, int color)
 {
 	char	*dst;
 
-	dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
-	*(unsigned int*)dst = color;
+	if (x >= 0 && y >= 0 && x < 3840 && y < 2160) //added this so it does not draw outside the window/screen
+	{
+		dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
+		*(unsigned int*)dst = color;
+	}
 }
 
 int	create_trgb(int t, int r, int g, int b)
@@ -40,15 +43,7 @@ int	create_trgb(int t, int r, int g, int b)
 	return (t << 24 | r << 16 | g << 8 | b);
 }
 
-// int	inbounds(float	x, float y, t_map map)
-// {
-// 	if (x >= 0 && y >= 0 &&  x < map.x_max && y <  x > map.y_max)
-// 		return (1);
-// 	return (0);
-// }
-
-
-void draw_pov_line(t_minilx *milx, int x0, int y0, float vx, float vy, int length, int color)
+void draw_pov_line(t_minilx_img *img, int x0, int y0, float vx, float vy, int length, int color)
 {
 	float magnitude = sqrt(vx * vx + vy * vy);
 	vx /= magnitude;
@@ -59,16 +54,10 @@ void draw_pov_line(t_minilx *milx, int x0, int y0, float vx, float vy, int lengt
 
 	for (int i = 0; i < length; i++)
 	{
-		img_mlx_pixel_put(&(milx->mini[DRAW]), (int)round(x), (int)round(y), color);
+		img_mlx_pixel_put(img, (int)round(x), (int)round(y), color);
 		x += vx;
 		y += vy;
 	}
-}
-
-void	draw_pov(t_data *data, t_minilx *milx, int color, int length)
-{
-	// printf("POV: %fx%f, %fx%f\n", data->player.pos[X], data->player.pos[Y], data->player.direct[X], data->player.direct[Y]);
-	draw_pov_line(milx, MINI_MAP / 2, MINI_MAP / 2, data->player.direct[X], data->player.direct[Y], length, color);
 }
 
 void	step_direction(t_raycaster *ray)
@@ -95,41 +84,36 @@ void	step_direction(t_raycaster *ray)
 	}
 }
 
-
-
 void	ray_caster(t_data *data, t_minilx *milx)
 {
 	t_raycaster	ray;
 	t_player	player;
 	int			x;
-	//float		plane_scale;
-	//float		plane_magnitude;
+	float		plane_scale;
+	float		plane_magnitude;
 	int			cube_size;
-	(void) milx;
 	
 	x = 0;
 	cube_size = data->map.x_max * data->map.y_max;
 	ft_bzero(&ray, sizeof(t_raycaster));
 	ray = data->ray;
 	player = data->player;
-	// player.plane[X] = -player.direct[Y];
-	// player.plane[Y] = player.direct[X];
+	player.plane[X] = -player.direct[Y];
+	player.plane[Y] = player.direct[X];
 	ray.r_start[X] = player.pos[X];
 	ray.r_start[Y] = player.pos[Y];
-	ray.r_pos[X] = ray.r_start[X];
-	ray.r_pos[Y] = ray.r_start[Y];
-	while(x < 1)
+	while(x < milx->screen_x)
 	{
+		ray.r_pos[X] = ray.r_start[X];
+		ray.r_pos[Y] = ray.r_start[Y];
 		ray.wall_found = false;
-		// plane_scale = 2 * ((float)x / (float)milx->screen_width) - 1; // find a range in -1 and 1 of screenray
-		// plane_magnitude = tan((FOV / 2) * (M_PI / 180)); //
-		ray.direction[X] = player.direct[X]; //+ (player.plane[X] * plane_magnitude) * plane_scale;
-		ray.direction[Y] = player.direct[Y]; //+ (player.plane[Y] *plane_magnitude) * plane_scale;
-		ray.step_size[X] = sqrt(1 + (ray.direction[Y] / ray.direction[X]) * (ray.direction[Y] / ray.direction[X])); // 1 = dx wich is set to 1, (dy/dx) squared
-		ray.step_size[Y] = sqrt(1 + (ray.direction[X] / ray.direction[Y]) * (ray.direction[X] / ray.direction[Y])); // 1 = dy wich is set to 1, (dx/dy) squared
+		plane_scale = 2 * ((float)x / (float)milx->screen_x) - 1;
+		plane_magnitude = tan((FOV / 2) * (M_PI / 180));
+		ray.direction[X] = player.direct[X] + (player.plane[X] * plane_magnitude) * plane_scale;
+		ray.direction[Y] = player.direct[Y] + (player.plane[Y] * plane_magnitude) * plane_scale;
+		ray.step_size[X] = sqrt(1 + (ray.direction[Y] / ray.direction[X]) * (ray.direction[Y] / ray.direction[X]));
+		ray.step_size[Y] = sqrt(1 + (ray.direction[X] / ray.direction[Y]) * (ray.direction[X] / ray.direction[Y]));
 		step_direction(&ray);
-		// printf("length_x: %f and length_y: %f\n", ray.length[X], ray.length[Y]);
-		// printf("initial_x: %i and initial_y: %i\n", ray.r_pos[X], ray.r_pos[Y]);
 		while(!ray.wall_found)
 		{
 			if(ray.length[X] < ray.length[Y])
@@ -137,46 +121,32 @@ void	ray_caster(t_data *data, t_minilx *milx)
 				ray.r_pos[X] += ray.step[X];
 				ray.final_distance = ray.length[X];
 				ray.length[X] += ray.step_size[X];
-				//printf("length_x: %f and length_y: %f\n", ray.length[X], ray.length[Y]);
 			}
 			else
 			{
 				ray.r_pos[Y] += ray.step[Y];
 				ray.final_distance = ray.length[Y];
 				ray.length[Y] += ray.step_size[Y];
-				//printf("length_x: %f and length_y: %f\n", ray.length[X], ray.length[Y]);
 				
 			}
-			//printf("x: %i and y: %i\n", ray.r_pos[X], ray.r_pos[Y]);
 			if (ray.r_pos[X] >= 0 && ray.r_pos[Y] >= 0 && ray.r_pos[X] < data->map.x_max && ray.r_pos[Y] < data->map.y_max)
 			{
-				// printf("value at [y][x] %c\n", data->map.map[ray.r_pos[Y]][ray.r_pos[X]]);
 				if (data->map.map[ray.r_pos[Y]][ray.r_pos[X]] == '1')
 				{
 					ray.wall_found = true;
 				}
 			}
 		}
-		// printf("final distance: %f\n", ray.final_distance);
-		// exit (1);
-		ray.intersect[X] = ray.r_start[X] + ray.direction[X] * ray.final_distance;
-		ray.intersect[Y] = ray.r_start[Y] + ray.direction[Y] * ray.final_distance;
-		// printf("intersection: %f, intersection: %f\n", ray.intersect[X], ray.intersect[Y]);
-		// exit(1);
-		// int	line_heigth = (cube_size * milx->screen_length) / ray.final_distance;
-		// if (line_heigth > milx->screen_length)
-		// 	line_heigth = milx->screen_length;
-		draw_pov_line(milx, MINI_MAP / 2, MINI_MAP / 2, ray.direction[X], ray.direction[Y], ray.final_distance * TILE_SIZE, create_trgb(0, 255, 0, 0));
+		// ray.intersect[X] = ray.r_start[X] + ray.direction[X] * ray.final_distance;
+		// ray.intersect[Y] = ray.r_start[Y] + ray.direction[Y] * ray.final_distance;
+		int	line_heigth = (cube_size * milx->screen_y) / ray.final_distance;
+		if (line_heigth > milx->screen_y)
+			line_heigth = milx->screen_y;
+		draw_pov_line(&milx->mini[DRAW], MINI_MAP / 2, MINI_MAP / 2, ray.direction[X], ray.direction[Y], ray.final_distance * TILE_SIZE, create_trgb(0, 255, 0, 0));
+		draw_pov_line(&milx->big[DRAW], x, (milx->screen_y - line_heigth / 2), ray.direction[X], ray.direction[Y], line_heigth, create_trgb(0, 255, 0, 0));
 		x++;
 	}
 }
-
-// else 
-// {
-// 	ray.r_pos[X] -= 1;
-// 	ray.r_pos[Y] -= 1;
-// 	ray.wall_found = true;
-// }
 
 void	draw_map(t_data *data, t_minilx *milx, int tile_size)
 {
@@ -288,18 +258,6 @@ void	draw_clear(t_minilx *milx)
 	}
 }
 
-int	draw_minimap_switch_display(void *param)
-{
-	t_minilx_img	buffer;
-	t_data			*data;
-
-	data = (t_data *) param;
-	buffer = data->milx.mini[DRAW];
-	data->milx.mini[DRAW] = data->milx.mini[DISPLAY];
-	data->milx.mini[DISPLAY] = buffer;
-	mlx_put_image_to_window(data->milx.mlx, data->milx.mlx_window, data->milx.mini[DISPLAY].img, 0, 0);
-	return (0);
-}
 
 int	is_wall(t_data *data, float x, float y)
 {
@@ -315,6 +273,26 @@ int	is_wall(t_data *data, float x, float y)
 	return (0);
 }
 
+
+
+int	draw_map_switch_display(void *param)
+{
+	t_minilx_img	buffer_1;
+	t_minilx_img	buffer_2;
+	t_data			*data;
+
+	data = (t_data *) param;
+	buffer_1 = data->milx.mini[DRAW];
+	buffer_2 = data->milx.big[DRAW];
+	data->milx.mini[DRAW] = data->milx.mini[DISPLAY];
+	data->milx.big[DRAW] = data->milx.big[DISPLAY];
+	data->milx.mini[DISPLAY] = buffer_1;
+	data->milx.big[DISPLAY] = buffer_2;
+	mlx_put_image_to_window(data->milx.mlx, data->milx.mlx_window, data->milx.big[DISPLAY].img, 0, 0);
+	mlx_put_image_to_window(data->milx.mlx, data->milx.mlx_window, data->milx.mini[DISPLAY].img, 0, 0);
+	return (0);
+}
+
 int	draw_minimap(void *param)
 {
 	t_data		*data;
@@ -327,8 +305,7 @@ int	draw_minimap(void *param)
 	draw_map(data, milx, TILE_SIZE);
 	draw_player(milx, create_trgb(0, 20, 80, 200), 10);
 	ray_caster(data, milx);
-	// draw_pov(data, milx, create_trgb(0, 255, 0, 255), 40);
-	draw_minimap_switch_display(data);
+	draw_map_switch_display(data);
 	return (0);
 }
 
@@ -390,6 +367,10 @@ void	image(t_data *data)
 	data->milx.mini[1].img = mlx_new_image(data->milx.mlx, MINI_MAP + 50, MINI_MAP + 50);
 	data->milx.mini[0].addr = mlx_get_data_addr(data->milx.mini[0].img, &data->milx.mini[0].bits_per_pixel, &data->milx.mini[0].line_length, &data->milx.mini[0].endian);
 	data->milx.mini[1].addr = mlx_get_data_addr(data->milx.mini[1].img, &data->milx.mini[1].bits_per_pixel, &data->milx.mini[1].line_length, &data->milx.mini[1].endian);
+	data->milx.big[0].img = mlx_new_image(data->milx.mlx, data->milx.screen_x, data->milx.screen_y);
+	data->milx.big[1].img = mlx_new_image(data->milx.mlx, data->milx.screen_x, data->milx.screen_y);
+	data->milx.big[0].addr = mlx_get_data_addr(data->milx.big[0].img, &data->milx.big[0].bits_per_pixel, &data->milx.big[0].line_length, &data->milx.big[0].endian);
+	data->milx.big[1].addr = mlx_get_data_addr(data->milx.big[1].img, &data->milx.big[1].bits_per_pixel, &data->milx.big[1].line_length, &data->milx.big[1].endian);
 }
 
 int	main(int argc, char **argv)
@@ -409,12 +390,14 @@ int	main(int argc, char **argv)
 	data.milx.mlx = mlx_init();
 	if (!data.milx.mlx)
 		return (EXIT_FAILURE); //maybe do it somewhere else or free something
-	// mlx_get_screen_size(data.milx.mlx, &data.milx.screen_length, &data.milx.screen_width);
-	data.milx.screen_length = 800;
-	data.milx.screen_width = 1200;
-	data.milx.mlx_window = mlx_new_window(data.milx.mlx, data.milx.screen_width, data.milx.screen_length, "CUBE3D");
+	mlx_get_screen_size(data.milx.mlx, &data.milx.screen_x, &data.milx.screen_y);
+	// data.milx.screen_length = 800;
+	// data.milx.screen_width = 1200;
+	data.milx.mlx_window = mlx_new_window(data.milx.mlx, data.milx.screen_x, data.milx.screen_y, "CUBE3D");
 	if (!data.milx.mlx_window)
 		return (free(data.milx.mlx), free_all(&data), EXIT_FAILURE); //maybe free_all data
+	// printf("%i %i\n", data.milx.screen_x, data.milx.screen_y);
+	// exit(1);
 	image(&data);
 	mlx_loop_hook(data.milx.mlx, draw_minimap, (void *)&data);
 	mlx_hook(data.milx.mlx_window, 17, 0L, &mlx_finish, &data.milx); // closing the window with x in window

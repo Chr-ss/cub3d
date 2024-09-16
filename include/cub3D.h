@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:49:31 by crasche           #+#    #+#             */
-/*   Updated: 2024/09/16 12:29:09 by andmadri         ###   ########.fr       */
+/*   Updated: 2024/09/16 18:43:54 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,10 @@ typedef	struct s_minilx
 {
 	void			*mlx;
 	void			*mlx_window;
-	int				screen_length;
-	int				screen_width;
+	int				screen_x;
+	int				screen_y;
 	t_minilx_img	mini[2];
+	t_minilx_img	big[2];
 }	t_minilx;
 
 typedef	struct	s_payer
