@@ -53,7 +53,8 @@
 typedef	struct s_raycaster
 {
 	float	direction[2];
-	float	position[2];
+	float	r_start[2];
+	int		r_pos[2];
 	float	length[2];
 	float	step_size[2];
 	float	step[2];
@@ -84,9 +85,6 @@ typedef	struct s_minilx
 
 typedef	struct	s_payer
 {
-	// int		x_pos;
-	// int		y_pos;
-	// char	direction;
 	float	pos[2];
 	float	direct[2];
 	float	plane[2];
