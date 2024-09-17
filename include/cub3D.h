@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:49:31 by crasche           #+#    #+#             */
-/*   Updated: 2024/09/16 18:43:54 by andmadri         ###   ########.fr       */
+/*   Updated: 2024/09/17 19:16:05 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 # define MINI_MAP 300
 # define MINI_MAP_GRID 11
 # define TILE_SIZE 30
-# define STEP_SIZE 0.2
+# define STEP_SIZE 0.1
 
 # define X 0
 # define Y 1
@@ -40,7 +40,7 @@
 # define DRAW 0
 # define DISPLAY 1
 
-# define TURN_STEP 0.1
+# define TURN_STEP 0.2
 
 #ifndef M_PI
 # define M_PI 3.14159265358979323846

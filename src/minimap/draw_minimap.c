@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   hooks_image.c                                      :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: crasche <crasche@student.codam.nl>           +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/09/08 20:38:21 by crasche       #+#    #+#                 */
-/*   Updated: 2024/09/08 20:44:17 by crasche       ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   draw_minimap.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/08 20:38:21 by crasche           #+#    #+#             */
+/*   Updated: 2024/09/17 19:32:20 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 // remove when not needed:
 void	ray_caster(t_data *data, t_minilx *milx);
+void	draw_map_floor_ciling(t_minilx *milx);
 
 int	draw_minimap_switch_img(void *param)
 {
@@ -37,7 +38,9 @@ int	draw_minimap(void *param)
 {
 	t_data		*data;
 	t_minilx	*milx;
+	static int			i;
 
+	i = 0;
 	data = (t_data *) param;
 	milx = &data->milx;
 	draw_minimap_clear(milx);

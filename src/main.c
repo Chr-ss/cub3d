@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:49:00 by crasche           #+#    #+#             */
-/*   Updated: 2024/09/16 19:47:49 by andmadri         ###   ########.fr       */
+/*   Updated: 2024/09/17 19:32:07 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,25 @@ void	step_direction(t_raycaster *ray)
 		ray->step[Y] = -1;
 		ray->length[Y] = (ray->r_start[Y] - (float)ray->r_pos[Y]) * ray->step_size[Y];
 	}
+}
+
+void	draw_line(t_minilx *milx, int x, int start_y, int line_heigth, int color)
+{
+	int	y;
+
+	y = 0;
+	while(y < line_heigth)
+	{
+		img_mlx_pixel_put(&milx->big[DRAW], x, start_y + y, color);
+		y++;
+	}
+}
+
+int	shadowing_cube(t_raycaster ray)
+{
+	if (ray.length[X] < ray.length[Y])
+		return (create_trgb(0, 222, 30, 0)); //x
+	return (create_trgb(0, 141, 19, 0)); //y
 }
 
 void	ray_caster(t_data *data, t_minilx *milx)
@@ -111,13 +130,14 @@ void	ray_caster(t_data *data, t_minilx *milx)
 				}
 			}
 		}
-		// ray.intersect[X] = ray.r_start[X] + ray.direction[X] * ray.final_distance;
-		// ray.intersect[Y] = ray.r_start[Y] + ray.direction[Y] * ray.final_distance;
-		int	line_heigth = (cube_size * milx->screen_y) / ray.final_distance;
+		float	line_heigth = milx->screen_y / ray.final_distance;
 		if (line_heigth > milx->screen_y)
 			line_heigth = milx->screen_y;
+		int	start_y =  milx->screen_y / 2 - line_heigth / 2;
 		draw_pov_line(&milx->mini[DRAW], MINI_MAP / 2, MINI_MAP / 2, ray.direction[X], ray.direction[Y], ray.final_distance * TILE_SIZE, create_trgb(0, 255, 0, 0));
-		draw_pov_line(&milx->big[DRAW], x, (milx->screen_y - line_heigth / 2), ray.direction[X], ray.direction[Y], line_heigth, create_trgb(0, 255, 0, 0));
+		draw_line(milx, x, 0, (milx->screen_y - line_heigth) / 2, create_trgb(2, 220, 100, 0)); //sky
+		draw_line(milx, x, start_y, line_heigth, shadowing_cube(ray)); //walls
+		draw_line(milx, x, milx->screen_y / 2 + line_heigth / 2, (milx->screen_y - line_heigth) / 2, create_trgb(2, 0, 102, 102)); //floor
 		x++;
 	}
 }
@@ -134,20 +154,19 @@ int	main(int argc, char **argv)
 	data.map.map_read.filename = argv[1];
 	map_init(&data, &data.map);
 	map_parse(&data, data.map.map);
-	map_print(&data, &data.map);
+	map_print(&data, &data.map); //I do not like the name
 
 	data.milx.mlx = mlx_init();
 	if (!data.milx.mlx)
 		return (free_all(&data), EXIT_FAILURE); //maybe do it somewhere else or free something
-	// mlx_get_screen_size(data.milx.mlx, &data.milx.screen_x, &data.milx.screen_y);
-	data.milx.screen_x = 900;
-	data.milx.screen_y = 600;
+	mlx_get_screen_size(data.milx.mlx, &data.milx.screen_x, &data.milx.screen_y);
+	// data.milx.screen_x = 900;
+	// data.milx.screen_y = 600;
 	data.milx.mlx_window = mlx_new_window(data.milx.mlx, data.milx.screen_x, data.milx.screen_y, "CUBE3D");
 	if (!data.milx.mlx_window)
 		return (free(data.milx.mlx), free_all(&data), EXIT_FAILURE);
 	init_image(&data);
 	hooks_mlx(&data);
-	// ray_caster(&data, &data.milx);
 	mlx_loop(data.milx.mlx);
 	free_all(&data); //it should go here?/
 	return (0);
