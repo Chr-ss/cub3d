@@ -18,7 +18,7 @@ void	draw_minimap_border(t_minilx *milx, int color, int size)
 	int	y;
 
 	y = 0;
-	while (y <= MINI_MAP)
+	while (y < MINI_MAP)
 	{
 		x = MINI_MAP;
 		while (x < MINI_MAP + size)
@@ -79,10 +79,10 @@ void	draw_minimap_clear(t_minilx *milx)
 	int	y;
 
 	y = 0;
-	while (y < MINI_MAP + 20)
+	while (y < MINI_MAP)
 	{
 		x = 0;
-		while (x < MINI_MAP + 20)
+		while (x < MINI_MAP)
 		{
 			img_mlx_pixel_put(&(milx->mini[DRAW]), x, y, 0);
 			x++;

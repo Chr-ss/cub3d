@@ -38,16 +38,14 @@ int	draw_minimap(void *param)
 {
 	t_data		*data;
 	t_minilx	*milx;
-	static int			i;
 
-	i = 0;
 	data = (t_data *) param;
 	milx = &data->milx;
 	draw_minimap_clear(milx);
 	draw_minimap_tiles(data, milx, TILE_SIZE);
 	draw_minimap_player(milx, create_trgb(0, 20, 80, 200), 10);
 	ray_caster(data, milx);
-	draw_minimap_border(milx, create_trgb(0, 55, 55, 55), 4);
+	draw_minimap_border(milx, create_trgb(0, 55, 55, 55), MINI_MAP_BORDER);
 	draw_minimap_switch_img(data);
 	return (0);
 }

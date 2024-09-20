@@ -84,10 +84,10 @@ void	ray_caster(t_data *data, t_minilx *milx)
 	int			x;
 	float		plane_scale;
 	float		plane_magnitude;
-	int			cube_size;
+	// int			cube_size;
 	
 	x = 0;
-	cube_size = data->map.x_max * data->map.y_max;
+	// cube_size = data->map.x_max * data->map.y_max;
 	ft_bzero(&ray, sizeof(t_raycaster));
 	ray = data->ray;
 	player = data->player;
@@ -159,9 +159,9 @@ int	main(int argc, char **argv)
 	data.milx.mlx = mlx_init();
 	if (!data.milx.mlx)
 		return (free_all(&data), EXIT_FAILURE); //maybe do it somewhere else or free something
-	mlx_get_screen_size(data.milx.mlx, &data.milx.screen_x, &data.milx.screen_y);
-	// data.milx.screen_x = 900;
-	// data.milx.screen_y = 600;
+	// mlx_get_screen_size(data.milx.mlx, &data.milx.screen_x, &data.milx.screen_y);
+	data.milx.screen_x = 900;
+	data.milx.screen_y = 600;
 	data.milx.mlx_window = mlx_new_window(data.milx.mlx, data.milx.screen_x, data.milx.screen_y, "CUBE3D");
 	if (!data.milx.mlx_window)
 		return (free(data.milx.mlx), free_all(&data), EXIT_FAILURE);

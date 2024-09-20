@@ -31,8 +31,11 @@
 
 # define MINI_MAP 300
 # define MINI_MAP_GRID 11
-# define TILE_SIZE 30
-# define STEP_SIZE 0.1
+# define MINI_MAP_BORDER 3
+# define TILE_SIZE MINI_MAP / 10
+
+# define STEP_SIZE 0.3
+# define TURN_STEP 0.2
 
 # define X 0
 # define Y 1
@@ -40,7 +43,6 @@
 # define DRAW 0
 # define DISPLAY 1
 
-# define TURN_STEP 0.2
 
 #ifndef M_PI
 # define M_PI 3.14159265358979323846

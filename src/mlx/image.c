@@ -15,9 +15,9 @@
 void	init_image(t_data *data)
 {
 	data->milx.mini[0].img = mlx_new_image(data->milx.mlx, \
-	MINI_MAP + 50, MINI_MAP + 50);
+	MINI_MAP + MINI_MAP_BORDER, MINI_MAP + MINI_MAP_BORDER);
 	data->milx.mini[1].img = mlx_new_image(data->milx.mlx, \
-	MINI_MAP + 50, MINI_MAP + 50);
+	MINI_MAP + MINI_MAP_BORDER, MINI_MAP + MINI_MAP_BORDER);
 	data->milx.mini[0].addr = mlx_get_data_addr(data->milx.mini[0].img, \
 	&data->milx.mini[0].bits_per_pixel, &data->milx.mini[0].line_length, \
 	&data->milx.mini[0].endian);
