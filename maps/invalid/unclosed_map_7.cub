@@ -1,0 +1,11 @@
+NO ./texture/noth
+SO ./texture/south
+WE ./texture/west
+EA ./texture/east
+
+F 220,100,0
+C 225,30,0
+
+111
+1N1
+110
