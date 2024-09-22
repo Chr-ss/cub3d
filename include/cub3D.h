@@ -34,8 +34,8 @@
 # define MINI_MAP_BORDER 3
 # define TILE_SIZE MINI_MAP / 10
 
-# define STEP_SIZE 0.3
-# define TURN_STEP 0.2
+# define STEP_SIZE 0.05
+# define TURN_STEP 0.02
 
 # define X 0
 # define Y 1
@@ -72,6 +72,9 @@ typedef	struct s_minilx_img
 	int		line_length;
 	int		endian;
 	int		offset;
+	int		max_x;
+	int		max_y;
+
 }	t_minilx_img;
 
 typedef	struct s_minilx
