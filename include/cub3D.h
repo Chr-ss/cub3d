@@ -34,8 +34,8 @@
 # define MINI_MAP_BORDER 3
 # define TILE_SIZE MINI_MAP / 10
 
-# define STEP_SIZE 0.05
-# define TURN_STEP 0.02
+# define STEP_SIZE 0.1
+# define TURN_STEP 0.1
 
 # define X 0
 # define Y 1
@@ -43,6 +43,8 @@
 # define DRAW 0
 # define DISPLAY 1
 
+# define LR 0
+# define TB 1
 
 #ifndef M_PI
 # define M_PI 3.14159265358979323846
@@ -61,6 +63,7 @@ typedef	struct s_raycaster
 	float	intersect[2];
 	float	final_distance;
 	bool	wall_found;
+	int		wall_direction;
 }	t_raycaster;
 
 

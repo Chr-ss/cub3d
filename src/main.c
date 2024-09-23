@@ -41,7 +41,7 @@ void	step_direction(t_raycaster *ray)
 		ray->step[X] = 1;
 		ray->length[X] = (((float)ray->r_pos[X] + 1) - ray->r_start[X]) * ray->step_size[X];
 	}
-	if (ray->direction[X] < 0)
+	else if (ray->direction[X] < 0)
 	{
 		ray->step[X] = -1;
 		ray->length[X] = (ray->r_start[X] - (float)ray->r_pos[X]) * ray->step_size[X];
@@ -51,13 +51,14 @@ void	step_direction(t_raycaster *ray)
 		ray->step[Y] = 1;
 		ray->length[Y] = (((float)ray->r_pos[Y] + 1) - ray->r_start[Y]) * ray->step_size[Y];
 	}
-	if (ray->direction[Y] < 0)
+	else if (ray->direction[Y] < 0)
 	{
 		ray->step[Y] = -1;
 		ray->length[Y] = (ray->r_start[Y] - (float)ray->r_pos[Y]) * ray->step_size[Y];
 	}
 }
 
+//vertical line draw 
 void	draw_line(t_minilx *milx, int x, int start_y, int line_heigth, int color)
 {
 	int	y;
@@ -77,6 +78,41 @@ int	shadowing_cube(t_raycaster ray)
 	return (create_trgb(0, 141, 19, 0)); //y
 }
 
+// void	draw_texture_line(t_data *data, t_minilx *milx, int x)
+// {
+// 		draw_line(milx, x, start_y, line_heigth, wall_color);
+// }
+
+void	draw_texture(t_data *data, t_minilx *milx, int x)
+{
+	(void)x;
+	(void)milx;
+	if(data->ray.wall_direction == TB)
+	{
+		if (data->ray.intersect[Y] > data->player.pos[Y])
+		{
+			// draw_texture_line(data, milx, x, NORTH)
+			printf("S, inter:%f, pos:%f\n", data->ray.intersect[Y], data->player.pos[Y]);
+		}
+		else
+		{
+			printf("N, inter:%f, pos:%f\n", data->ray.intersect[Y], data->player.pos[Y]);
+		}
+	}
+	else if (data->ray.wall_direction == LR)
+	{
+		if (data->ray.intersect[X] > data->player.pos[X])
+		{
+			printf("E, inter:%f, pos:%f\n", data->ray.intersect[X], data->player.pos[X]);
+		}
+		else
+		{
+			printf("W, inter:%f, pos:%f\n", data->ray.intersect[X], data->player.pos[X]);
+		}
+	}
+
+}
+
 void	ray_caster(t_data *data, t_minilx *milx)
 {
 	t_raycaster	ray;
@@ -84,19 +120,18 @@ void	ray_caster(t_data *data, t_minilx *milx)
 	int			x;
 	float		plane_scale;
 	float		plane_magnitude;
-	// int			cube_size;
 	int			wall_color;
 	
 	x = 0;
-	// cube_size = data->map.x_max * data->map.y_max;
 	ft_bzero(&ray, sizeof(t_raycaster));
-	ray = data->ray;
 	player = data->player;
 	player.plane[X] = -player.direct[Y];
 	player.plane[Y] = player.direct[X];
 	ray.r_start[X] = player.pos[X];
 	ray.r_start[Y] = player.pos[Y];
-	while(x < milx->screen_x)
+
+	x = milx->screen_x / 2; // one line
+	while(x == (milx->screen_x / 2)) // x < milx->screen_x
 	{
 		ray.r_pos[X] = ray.r_start[X];
 		ray.r_pos[Y] = ray.r_start[Y];
@@ -115,6 +150,7 @@ void	ray_caster(t_data *data, t_minilx *milx)
 				ray.r_pos[X] += ray.step[X];
 				ray.final_distance = ray.length[X];
 				ray.length[X] += ray.step_size[X];
+				ray.wall_direction = LR;
 				wall_color = create_trgb(0, 153, 0, 76);
 			}
 			else
@@ -122,16 +158,29 @@ void	ray_caster(t_data *data, t_minilx *milx)
 				ray.r_pos[Y] += ray.step[Y];
 				ray.final_distance = ray.length[Y];
 				ray.length[Y] += ray.step_size[Y];
+				ray.wall_direction = TB;
 				wall_color = create_trgb(0, 102, 0, 51);
 				
 			}
-			if (ray.r_pos[X] >= 0 && ray.r_pos[Y] >= 0 && ray.r_pos[X] < data->map.x_max && ray.r_pos[Y] < data->map.y_max)
-			{
+			// if (ray.r_pos[X] >= 0 && ray.r_pos[Y] >= 0 && ray.r_pos[X] < data->map.x_max && ray.r_pos[Y] < data->map.y_max)
+			// {
 				if (data->map.map[ray.r_pos[Y]][ray.r_pos[X]] == '1')
 				{
 					ray.wall_found = true;
 				}
-			}
+			// }
+			// else 
+			// {
+			// 	ray.wall_found = true;
+			// 	if (ray.r_pos[X] >= 0)
+			// 		ray.r_pos[X] = 0;
+			// 	if (ray.r_pos[Y] >= 0)
+			// 		ray.r_pos[Y] = 0;
+			// 	if (ray.r_pos[X] < data->map.x_max)
+			// 		ray.r_pos[X] = data->map.x_max;
+			// 	if (ray.r_pos[Y] < data->map.y_max)
+			// 		ray.r_pos[Y] = data->map.y_max;
+			// }
 		}
 		float	line_heigth = milx->screen_y / ray.final_distance;
 		if (line_heigth > milx->screen_y)
@@ -141,6 +190,13 @@ void	ray_caster(t_data *data, t_minilx *milx)
 		draw_line(milx, x, 0, (milx->screen_y - line_heigth) / 2, create_trgb(2, 220, 100, 0)); //sky
 		draw_line(milx, x, start_y, line_heigth, wall_color); //walls
 		draw_line(milx, x, milx->screen_y / 2 + line_heigth / 2, (milx->screen_y - line_heigth) / 2, create_trgb(2, 0, 102, 102)); //floor
+		ray.intersect[X] = ray.direction[X] * ray.final_distance + ray.r_start[X];
+		ray.intersect[Y] = ray.direction[Y] * ray.final_distance + ray.r_start[Y];
+
+		// get_intersect(ray, x, ray.direction[X] * ray.final_distance + ray.r_start[X], ray.direction[Y] * ray.final_distance + ray.r_start[Y]);
+
+		data->ray = ray;
+		draw_texture(data, milx, x);
 		x++;
 	}
 }
