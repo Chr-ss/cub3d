@@ -83,35 +83,35 @@ int	shadowing_cube(t_raycaster ray)
 // 		draw_line(milx, x, start_y, line_heigth, wall_color);
 // }
 
-void	draw_texture(t_data *data, t_minilx *milx, int x)
-{
-	(void)x;
-	(void)milx;
-	if(data->ray.wall_direction == TB)
-	{
-		if (data->ray.intersect[Y] > data->player.pos[Y])
-		{
-			// draw_texture_line(data, milx, x, NORTH)
-			printf("S, inter:%f, pos:%f\n", data->ray.intersect[Y], data->player.pos[Y]);
-		}
-		else
-		{
-			printf("N, inter:%f, pos:%f\n", data->ray.intersect[Y], data->player.pos[Y]);
-		}
-	}
-	else if (data->ray.wall_direction == LR)
-	{
-		if (data->ray.intersect[X] > data->player.pos[X])
-		{
-			printf("E, inter:%f, pos:%f\n", data->ray.intersect[X], data->player.pos[X]);
-		}
-		else
-		{
-			printf("W, inter:%f, pos:%f\n", data->ray.intersect[X], data->player.pos[X]);
-		}
-	}
+// void	draw_texture(t_data *data, t_minilx *milx, int x)
+// {
+// 	(void)x;
+// 	(void)milx;
+// 	if(data->ray.wall_direction == TB)
+// 	{
+// 		if (data->ray.intersect[Y] > data->player.pos[Y])
+// 		{
+// 			// draw_texture_line(data, milx, x, NORTH)
+// 			printf("S, inter:%f, pos:%f\n", data->ray.intersect[Y], data->player.pos[Y]);
+// 		}
+// 		else
+// 		{
+// 			printf("N, inter:%f, pos:%f\n", data->ray.intersect[Y], data->player.pos[Y]);
+// 		}
+// 	}
+// 	else if (data->ray.wall_direction == LR)
+// 	{
+// 		if (data->ray.intersect[X] > data->player.pos[X])
+// 		{
+// 			printf("E, inter:%f, pos:%f\n", data->ray.intersect[X], data->player.pos[X]);
+// 		}
+// 		else
+// 		{
+// 			// printf("W, inter:%f, pos:%f\n", data->ray.intersect[X], data->player.pos[X]);
+// 		}
+// 	}
 
-}
+// }
 
 void	ray_caster(t_data *data, t_minilx *milx)
 {
@@ -130,8 +130,8 @@ void	ray_caster(t_data *data, t_minilx *milx)
 	ray.r_start[X] = player.pos[X];
 	ray.r_start[Y] = player.pos[Y];
 
-	x = milx->screen_x / 2; // one line
-	while(x == (milx->screen_x / 2)) // x < milx->screen_x
+	// x = milx->screen_x / 2; // one line
+	while(x < milx->screen_x) // x < milx->screen_x
 	{
 		ray.r_pos[X] = ray.r_start[X];
 		ray.r_pos[Y] = ray.r_start[Y];
@@ -182,7 +182,7 @@ void	ray_caster(t_data *data, t_minilx *milx)
 			// 		ray.r_pos[Y] = data->map.y_max;
 			// }
 		}
-		float	line_heigth = milx->screen_y / ray.final_distance;
+		float	line_heigth = milx->screen_y / ray.final_distance; //* cos(/*ray's angle*/));
 		if (line_heigth > milx->screen_y)
 			line_heigth = milx->screen_y;
 		int	start_y =  milx->screen_y / 2 - line_heigth / 2;
@@ -196,7 +196,7 @@ void	ray_caster(t_data *data, t_minilx *milx)
 		// get_intersect(ray, x, ray.direction[X] * ray.final_distance + ray.r_start[X], ray.direction[Y] * ray.final_distance + ray.r_start[Y]);
 
 		data->ray = ray;
-		draw_texture(data, milx, x);
+		// draw_texture(data, milx, x);
 		x++;
 	}
 }
@@ -214,7 +214,6 @@ int	main(int argc, char **argv)
 	map_init(&data, &data.map);
 	map_parse(&data, data.map.map);
 	map_print(&data, &data.map); //I do not like the name
-
 	data.milx.mlx = mlx_init();
 	if (!data.milx.mlx)
 		return (free_all(&data), EXIT_FAILURE); //maybe do it somewhere else or free something
