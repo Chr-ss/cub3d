@@ -162,7 +162,7 @@ void	draw_texture(t_data *data, int x, float line_height)
 		}
 	}
 
-// }
+}
 
 void	ray_caster(t_data *data, t_minilx *milx)
 {
