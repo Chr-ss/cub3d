@@ -21,10 +21,20 @@ void	img_mlx_pixel_put(t_minilx_img *img, int x, int y, int color)
 {
 	char	*dst;
 
-
 	if (x >= 0 && y >= 0 && x < img->max_x && y < img->max_y)
 	{
 		dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
 		*(unsigned int*)dst = color;
+	}
+}
+
+void	img_get_pixel_color(t_minilx_img *img, int x, int y, unsigned int *color)
+{
+	char	*dst;
+
+	if (x >= 0 && y >= 0 && x < img->max_x && y < img->max_y)
+	{
+		dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
+		*color = *(unsigned int*)dst;
 	}
 }

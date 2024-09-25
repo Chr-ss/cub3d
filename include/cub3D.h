@@ -46,6 +46,13 @@
 # define LR 0
 # define TB 1
 
+# define NORTH 0
+# define EAST 1
+# define SOUTH 2
+# define WEST 3
+
+# define TEXTURE_RES 64
+
 #ifndef M_PI
 # define M_PI 3.14159265358979323846
 #endif
@@ -64,6 +71,7 @@ typedef	struct s_raycaster
 	float	final_distance;
 	bool	wall_found;
 	int		wall_direction;
+	float		texture_perc;
 }	t_raycaster;
 
 
@@ -115,17 +123,21 @@ typedef struct s_color
 
 typedef	struct	s_map
 {
-	t_map_read	map_read;
-	t_color		color;
-	char		**map;
-	int			x_max;
-	int			y_max;
-	char		*n_tex;
-	char		*e_tex;
-	char		*s_tex;
-	char		*w_tex;
-	char		*f_col;
-	char		*c_col;
+	t_map_read		map_read;
+	t_color			color;
+	char			**map;
+	int				x_max;
+	int				y_max;
+	char			*n_tex;
+	t_minilx_img	img_n;
+	char			*e_tex;
+	t_minilx_img	img_e;
+	char			*s_tex;
+	t_minilx_img	img_s;
+	char			*w_tex;
+	t_minilx_img	img_w;
+	char			*f_col;
+	char			*c_col;
 }	t_map;
 
 typedef	struct	s_data
@@ -203,6 +215,7 @@ int	key_hook(int keycode, void *param);
 
 // mlx/utils.c
 void	img_mlx_pixel_put(t_minilx_img *img, int x, int y, int color);
+void	img_get_pixel_color(t_minilx_img *img, int x, int y, unsigned int *color);
 int		create_trgb(int t, int r, int g, int b);
 
 #endif // CUB3D_H

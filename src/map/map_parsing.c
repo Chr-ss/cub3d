@@ -12,6 +12,32 @@
 
 #include "../../include/cub3D.h"
 
+void	map_parse_meta_open_tex(t_data *data)
+{
+	int	temp;
+
+	temp = open(data->map.n_tex, O_RDONLY);
+	if (temp >= 0)
+		close(temp);
+	else
+		error("Error, unable to open NORTH texture.", data);
+	temp = open(data->map.e_tex, O_RDONLY);
+	if (temp >= 0)
+		close(temp);
+	else
+		error("Error, unable to open EAST texture.", data);
+	temp = open(data->map.s_tex, O_RDONLY);
+	if (temp >= 0)
+		close(temp);
+	else
+		error("Error, unable to open SOUTH texture.", data);
+	temp = open(data->map.w_tex, O_RDONLY);
+	if (temp >= 0)
+		close(temp);
+	else
+		error("Error, unable to open WEST texture.", data);
+}
+
 void	map_parse_wallcheck(t_data *data, char **map, int y, int x)
 {
 	if (y == 0 || (y && map[y - 1][x] == ' '))
@@ -67,6 +93,7 @@ void	map_parse_meta(t_data *data)
 		error("Error, missing floor color", data);
 	if (!data->map.c_col)
 		error("Error, missing ceiling color", data);
+	map_parse_meta_open_tex(data);
 }
 
 void	map_parse(t_data *data, char **map)
