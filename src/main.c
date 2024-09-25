@@ -162,7 +162,7 @@ void	draw_texture(t_data *data, int x, float line_height)
 		}
 	}
 
-}
+// }
 
 void	ray_caster(t_data *data, t_minilx *milx)
 {
@@ -263,7 +263,6 @@ int	main(int argc, char **argv)
 	map_init(&data, &data.map);
 	map_parse(&data, data.map.map);
 	map_print(&data, &data.map); //I do not like the name
-
 	data.milx.mlx = mlx_init();
 	if (!data.milx.mlx)
 		return (free_all(&data), EXIT_FAILURE); //maybe do it somewhere else or free something
