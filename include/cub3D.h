@@ -26,6 +26,40 @@
 // minilibx
 # include "../lib/minilibx/mlx.h"
 
+// WSL: W 119, A 97, S 115, D 100
+// MAC: W 13, A 0, S 1, D 2, ESC 53
+// KEY:124 KEY:125 KEY:126 KEY:123
+// if (keycode == 119 || keycode == 13 || keycode == 126 || keycode == 65362)
+// else if (keycode == 115 || keycode == 1 || keycode == 125 || keycode == 65364)
+
+// KEYS
+# ifndef LINUX
+#  define LINUX 0
+#  define KEY_W 13
+#  define KEY_A 0
+#  define KEY_S 1
+#  define KEY_D 2
+#  define KEY_ARROW_LEFT 123
+#  define KEY_ARROW_RIGHT 124
+#  define KEY_ARROW_UP 126
+#  define KEY_ARROW_DOWN 125
+#  define ESC 53
+# elif
+#  define LINUX 1
+#  define KEY_W 119
+#  define KEY_A 97
+#  define KEY_S 115
+#  define KEY_D 100
+#  define KEY_ARROW_LEFT 65361
+#  define KEY_ARROW_RIGHT 65363
+#  define KEY_ARROW_UP 65362
+#  define KEY_ARROW_DOWN 65364
+#  define ESC 0xff1b
+# endif
+
+
+
+
 # define X 0
 # define Y 1
 
@@ -34,8 +68,8 @@
 # define MINI_MAP_BORDER 3
 # define TILE_SIZE MINI_MAP / 10
 
-# define STEP_SIZE 0.1
-# define TURN_STEP 0.1
+# define STEP_SIZE 0.016
+# define TURN_STEP 0.01
 
 # define X 0
 # define Y 1
@@ -140,12 +174,24 @@ typedef	struct	s_map
 	char			*c_col;
 }	t_map;
 
+typedef	struct	s_keys
+{
+	bool	forward;
+	bool	back;
+	bool	strafe_left;
+	bool	strafe_right;
+	bool	turn_left;
+	bool	turn_right;
+	bool	exit;
+}	t_keys;
+
 typedef	struct	s_data
 {
 	t_map		map;
 	t_player	player;
 	t_raycaster	ray;
 	t_minilx	milx;
+	t_keys		keys;
 }	t_data;
 
 // marcos

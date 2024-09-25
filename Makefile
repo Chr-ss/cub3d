@@ -4,22 +4,24 @@ CC			=	cc
 CFLAGS		=	-Wall -Werror -Wextra -g #-fsanitize=address # -MMD  # -Ofast
 
 SRCDIR		=	src
-SRC			=	$(shell find $(SRCDIR) -iname "*.c")
+SRC			:=	$(shell find $(SRCDIR) -iname "*.c")
 
 OBJDIR		=	.build
 OBJ			=	$(SRC:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
-LIBXDIR	:=	lib/minilibx
+LIBXDIR		:=	lib/minilibx
 LIBFTDIR	:=	lib/libft
 LIBFT		:=	$(LIBFTDIR)/libft.a
+OS_UNAME	:=	$(shell uname -s)
 
-ifeq ($(shell uname -s),Linux)
+ifeq ($(OS_UNAME),Linux)
 	OS_TYPE		:=	LINUX
 	LIBXDIR_SUB	:=	lib/minilibx_linux
 	LIBX		:=	$(LIBXDIR)/libmlx_Linux.a
 	LIBXFLAGS	:=	-Lmlx_linux  -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
 	LIBXFLAGS_O	:=	-Imlx
-else ifeq ($(shell uname -s),Darwin)
+	CFLAGS		+= -D LINUX=1
+else ifeq ($(OS_UNAME),Darwin)
 	OS_TYPE		:= MACOS
 	LIBXDIR_SUB	:=	lib/minilibx-mac-osx
 	LIBX		:=	$(LIBXDIR)/libmlx.dylib
