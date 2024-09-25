@@ -1,7 +1,7 @@
-NO ./texture/noth
+NO ./texture/north.png
 SO ./texture/missing_file
-WE ./texture/west
-EA ./texture/east
+WE ./texture/west.png
+EA ./texture/east.png
 
 F 220,100,0
 C 225,30,0

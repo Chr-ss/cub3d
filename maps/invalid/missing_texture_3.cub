@@ -1,6 +1,6 @@
-NO ./texture/noth
-SO ./texture/south
-EA ./texture/east
+NO ./texture/north.png
+SO ./texture/south.png
+EA ./texture/east.png
 
 F 220,100,0
 C 225,30,0
