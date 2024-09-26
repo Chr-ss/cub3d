@@ -257,6 +257,7 @@ int	main(int argc, char **argv)
 	t_data		data;
 
 	ft_bzero(&data, sizeof(t_data));
+	printf("%d\n", create_trgb(100, 55, 55, 55));
 	if (argc <= 1)
 		error("Missing map.", &data);
 	else if (argc > 2)

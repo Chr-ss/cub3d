@@ -44,7 +44,7 @@
 #  define KEY_ARROW_UP 126
 #  define KEY_ARROW_DOWN 125
 #  define ESC 53
-# elif
+# else
 #  define LINUX 1
 #  define KEY_W 119
 #  define KEY_A 97
@@ -57,16 +57,16 @@
 #  define ESC 0xff1b
 # endif
 
-
-
-
-# define X 0
-# define Y 1
-
+# define FOV 60
 # define MINI_MAP 300
 # define MINI_MAP_GRID 11
 # define MINI_MAP_BORDER 3
-# define TILE_SIZE MINI_MAP / 10
+# define VIEW_DISTANCE 120
+# define TILE_SIZE 30
+// create_trgb(0, 55, 55, 55)
+# define MINI_MAP_WALL_COLOR 3618615
+// create_trgb(100, 55, 55, 55)
+# define MINI_MAP_VIEW_COLOR 1681340215
 
 # define STEP_SIZE 0.016
 # define TURN_STEP 0.01
@@ -85,13 +85,11 @@
 # define SOUTH 2
 # define WEST 3
 
-# define TEXTURE_RES 64
-
+// MATH
 #ifndef M_PI
 # define M_PI 3.14159265358979323846
 #endif
-
-# define FOV 60
+# define RAD 0.01745329251
 
 typedef	struct s_raycaster
 {
