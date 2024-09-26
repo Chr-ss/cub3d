@@ -234,6 +234,8 @@ int	main(int argc, char **argv)
 	t_data		data;
 
 	ft_bzero(&data, sizeof(t_data));
+	data.mouse_x = 0;
+	data.mouse_y = 0;
 	if (argc <= 1)
 		error("Missing map.", &data);
 	else if (argc > 2)

@@ -88,6 +88,7 @@
 # define WEST 3
 
 # define TEXTURE_RES 64
+# define MOUSE_SENSITIVITY 4
 
 #ifndef M_PI
 # define M_PI 3.14159265358979323846
@@ -194,6 +195,8 @@ typedef	struct	s_data
 	t_raycaster	ray;
 	t_minilx	milx;
 	t_keys		keys;
+	int			mouse_x;
+	int			mouse_y;
 }	t_data;
 
 // marcos

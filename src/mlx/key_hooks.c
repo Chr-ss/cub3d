@@ -49,10 +49,7 @@ t_raycaster	collision(t_data *data, float dir_x, float dir_y)
 	return (ray);
 }
 
-double
-
-
-int	is_not_wall(t_data *data, float x, float y, int direction)
+int	is_not_wall(t_data *data, int direction)
 {
 	t_raycaster	ray_forward;
 	t_raycaster	ray_backwards;
@@ -87,7 +84,7 @@ void	key_hook_move(void *param)
 	{
 		new_x = data->player.pos[X] + (data->player.direct[X] * STEP_SIZE);
 		new_y = data->player.pos[Y] + (data->player.direct[Y] * STEP_SIZE);
-		if (is_not_wall(data, new_x, new_y, FORWARD))
+		if (is_not_wall(data, FORWARD))
 		{
 			data->player.pos[X] = new_x;
 			data->player.pos[Y] = new_y;
@@ -97,7 +94,7 @@ void	key_hook_move(void *param)
 	{
 		new_x = data->player.pos[X] - (data->player.direct[X] * STEP_SIZE);
 		new_y = data->player.pos[Y] - (data->player.direct[Y] * STEP_SIZE);
-		if (is_not_wall(data, new_x, new_y, BACKWARD))
+		if (is_not_wall(data, BACKWARD))
 		{
 			data->player.pos[X] = new_x;
 			data->player.pos[Y] = new_y;
@@ -111,7 +108,7 @@ void	key_hook_move(void *param)
 		temp_y /= sqrt(temp_x * temp_x + temp_y * temp_y);
 		new_x = data->player.pos[X] + (temp_x * STEP_SIZE);
 		new_y = data->player.pos[Y] + (temp_y * STEP_SIZE);
-		if (is_not_wall(data, new_x, new_y, LEFT))
+		if (is_not_wall(data, LEFT))
 		{
 			data->player.pos[X] = new_x;
 			data->player.pos[Y] = new_y;
@@ -125,7 +122,7 @@ void	key_hook_move(void *param)
 		temp_y /= sqrt(temp_x * temp_x + temp_y * temp_y);
 		new_x = data->player.pos[X] + (temp_x * STEP_SIZE);
 		new_y = data->player.pos[Y] + (temp_y * STEP_SIZE);
-		if (is_not_wall(data, new_x, new_y, RIGHT))
+		if (is_not_wall(data, RIGHT))
 		{
 			data->player.pos[X] = new_x;
 			data->player.pos[Y] = new_y;
