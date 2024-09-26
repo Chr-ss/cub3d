@@ -44,7 +44,8 @@
 #  define KEY_ARROW_UP 126
 #  define KEY_ARROW_DOWN 125
 #  define ESC 53
-# else
+# define STEP_SIZE 0.06
+# define TURN_STEP 0.02
 # else
 #  define LINUX 1
 #  define KEY_W 119
@@ -56,6 +57,8 @@
 #  define KEY_ARROW_UP 65362
 #  define KEY_ARROW_DOWN 65364
 #  define ESC 0xff1b
+# define STEP_SIZE 0.1
+# define TURN_STEP 0.1
 # endif
 
 # define FORWARD 1
@@ -64,24 +67,31 @@
 # define RIGHT 4
 
 # define FOV 60
-# define MINI_MAP 300
-# define MINI_MAP_GRID 11
-# define MINI_MAP_BORDER 3
-# define VIEW_DISTANCE 120
-# define TILE_SIZE 30
-// create_trgb(0, 55, 55, 55)
-# define MINI_MAP_WALL_COLOR 3618615
-// create_trgb(100, 55, 55, 55)
-# define MINI_MAP_VIEW_COLOR 1681340215
 
-# define STEP_SIZE 0.1
-# define TURN_STEP 0.1
+
+// MINI_MAP
+# define MINI_MAP 300
+# define MM_BORDER_SIZE 3
+# define MM_PLAYER_SIZE 10
+# define MM_TILE_SIZE 30
+# define VIEW_DISTANCE 120
+// create_trgb(0, 20, 80, 200)
+# define MM_PLAYER_COLOR 1331400
+// create_trgb(0, 55, 55, 55)
+# define MM_BORDER_COLOR 3618615
+// create_trgb(0, 55, 55, 55)
+# define MM_WALL_COLOR 3618615
+// create_trgb(100, 55, 55, 55)
+# define MM_VIEW_COLOR 1681340215
+
+
+
+// MLX IMAGE
+# define DRAW 0
+# define DISPLAY 1
 
 # define X 0
 # define Y 1
-
-# define DRAW 0
-# define DISPLAY 1
 
 # define LR 0
 # define TB 1
@@ -92,10 +102,10 @@
 # define WEST 3
 
 // MATH
+# define RAD 0.01745329251
 #ifndef M_PI
 # define M_PI 3.14159265358979323846
 #endif
-# define RAD 0.01745329251
 
 typedef	struct s_raycaster
 {
@@ -247,7 +257,6 @@ void	draw_minimap_clear(t_minilx *milx);
 void	draw_minimap_tiles(t_data *data, t_minilx *milx, int tile_size);
 
 // minimap/hooks_image.c
-int		draw_minimap_switch_img(void *param);
 int		draw_minimap(void *param);
 
 // mlx/hooks.c
@@ -259,15 +268,11 @@ void	init_image(t_data *data);
 
 // mlx/key_hooks.c
 int		is_wall(t_data *data, float x, float y);
-int		key_hook_ad(int keycode, void *param);
-int		key_hook_ws(int keycode, void *param);
-int		key_hook_esc(int keycode, void *param);
-int		key_hook_esc_mac(int keycode, void *param);
 int		key_hook(int keycode, void *param);
 
 // mlx/utils.c
-void	img_mlx_pixel_put(t_minilx_img *img, int x, int y, int color);
-void	img_get_pixel_color(t_minilx_img *img, int x, int y, unsigned int *color);
+void			img_mlx_pixel_put(t_minilx_img *img, int x, int y, int color);
+unsigned int	img_get_pixel_color(t_minilx_img *img, int x, int y);
 int		create_trgb(int t, int r, int g, int b);
 
 #endif // CUB3D_H

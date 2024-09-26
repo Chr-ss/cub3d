@@ -89,7 +89,7 @@ void	draw_texture_line(t_data *data, int x, int texture, float line_height)
 	{
 		while (line_pos < line_height)
 		{
-			img_get_pixel_color(&data->map.img_n, (int)(data->map.img_n.max_x * data->ray.texture_perc), (int)(data->map.img_n.max_y * ((float)line_pos / line_height)), &wall_color);
+			wall_color = img_get_pixel_color(&data->map.img_n, (int)(data->map.img_n.max_x * data->ray.texture_perc), (int)(data->map.img_n.max_y * ((float)line_pos / line_height)));
 			// printf("x_max:%d * perc:%f X:%d color:%u\n", (int)data->map.img_n.max_x, data->ray.texture_perc, (int)(data->map.img_n.max_x * data->ray.texture_perc), wall_color);
 			// printf("Y_max:%d * (pos:%d / screenY:%d) Y:%d color:%u\n", (int)data->map.img_n.max_y, start_y + line_pos, data->milx.screen_y, (int)(data->map.img_n.max_y * ((float)(start_y + line_pos) / data->milx.screen_y)), wall_color);
 			// printf("Y:%d color:%u\n", (int)(data->map.img_n.max_y * ((float)(start_y + line_pos) / data->milx.screen_y)), wall_color);
@@ -101,7 +101,7 @@ void	draw_texture_line(t_data *data, int x, int texture, float line_height)
 	{
 		while (line_pos < line_height)
 		{
-			img_get_pixel_color(&data->map.img_e, data->map.img_e.max_x * data->ray.texture_perc, (int)(data->map.img_e.max_y * (float)line_pos / (float)line_height), &wall_color);
+			wall_color = img_get_pixel_color(&data->map.img_e, data->map.img_e.max_x * data->ray.texture_perc, (int)(data->map.img_e.max_y * (float)line_pos / (float)line_height));
 			// printf("color:%u\n", wall_color);
 			img_mlx_pixel_put(&data->milx.big[DRAW], x, start_y + line_pos, wall_color);
 			line_pos++;
@@ -111,7 +111,7 @@ void	draw_texture_line(t_data *data, int x, int texture, float line_height)
 	{
 		while (line_pos < line_height)
 		{
-			img_get_pixel_color(&data->map.img_s, data->map.img_s.max_x * data->ray.texture_perc,  (int)(data->map.img_s.max_y * (float)line_pos / (float)line_height), &wall_color);
+			wall_color = img_get_pixel_color(&data->map.img_s, data->map.img_s.max_x * data->ray.texture_perc,  (int)(data->map.img_s.max_y * (float)line_pos / (float)line_height));
 			// printf("color:%u\n", wall_color);
 			img_mlx_pixel_put(&data->milx.big[DRAW], x, start_y + line_pos, wall_color);
 			line_pos++;
@@ -121,7 +121,7 @@ void	draw_texture_line(t_data *data, int x, int texture, float line_height)
 	{
 		while (line_pos < line_height)
 		{
-			img_get_pixel_color(&data->map.img_w, data->map.img_w.max_x * data->ray.texture_perc,  (int)(data->map.img_w.max_y * (float)line_pos / (float)line_height), &wall_color);
+			wall_color = img_get_pixel_color(&data->map.img_w, data->map.img_w.max_x * data->ray.texture_perc,  (int)(data->map.img_w.max_y * (float)line_pos / (float)line_height));
 			// printf("color:%u\n", wall_color);
 			img_mlx_pixel_put(&data->milx.big[DRAW], x, start_y + line_pos, wall_color);
 			line_pos++;
@@ -185,7 +185,7 @@ void	ray_caster(t_data *data, t_minilx *milx)
 		ray.r_pos[Y] = ray.r_start[Y];
 		ray.wall_found = false;
 		plane_scale = (float)2 * ((float)x / (float)milx->screen_x) - (float)1;
-		plane_magnitude = tan((float)(FOV / 2) * (float)(M_PI / 180));
+		plane_magnitude = tan((float)(FOV / 2) * (float)RAD);
 		ray.direction[X] = player.direct[X] + (player.plane[X] * plane_magnitude) * plane_scale;
 		ray.direction[Y] = player.direct[Y] + (player.plane[Y] * plane_magnitude) * plane_scale;
 		ray.step_size[X] = sqrt(1 + (ray.direction[Y] / ray.direction[X]) * (ray.direction[Y] / ray.direction[X]));
@@ -212,19 +212,12 @@ void	ray_caster(t_data *data, t_minilx *milx)
 				ray.wall_found = true;
 		}
 		float	line_heigth = (float)milx->screen_y / (float)(ray.final_distance * cos((float)(M_PI/180) * (float)(FOV/2)));//* cos(M_PI/180 * FOV/2 * plane_scale));
-		// if (line_heigth > milx->screen_y)
-		// 	line_heigth = milx->screen_y;
-		// int	start_y =  milx->screen_y / 2 - line_heigth / 2;
 		ray.intersect[X] = ray.direction[X] * ray.final_distance + ray.r_start[X];
 		ray.intersect[Y] = ray.direction[Y] * ray.final_distance + ray.r_start[Y];
 		data->ray = ray;
-		if (x % 300 == 1)
-			draw_pov_line(&milx->mini[DRAW], MINI_MAP / 2, MINI_MAP / 2, ray.direction[X], ray.direction[Y], ray.final_distance * TILE_SIZE, create_trgb(0, 255, 0, 0));
 		draw_line(milx, x, 0, (milx->screen_y - line_heigth) / 2, create_trgb(2, 220, 100, 0)); //sky
-		// draw_line(milx, x, start_y, line_heigth, wall_color); //walls
 		draw_line(milx, x, milx->screen_y / 2 + line_heigth / 2, (milx->screen_y - line_heigth) / 2, create_trgb(2, 0, 102, 102)); //floor
 		draw_texture(data, x, line_heigth);
-		// get_intersect(ray, x, ray.direction[X] * ray.final_distance + ray.r_start[X], ray.direction[Y] * ray.final_distance + ray.r_start[Y]);
 		x++;
 	}
 }
@@ -234,7 +227,8 @@ int	main(int argc, char **argv)
 	t_data		data;
 
 	ft_bzero(&data, sizeof(t_data));
-	printf("%d\n", create_trgb(100, 55, 55, 55));
+	// printf("%d\n", create_trgb(0, 20, 80, 200));
+	// printf("%d\n", create_trgb(0, 55, 55, 55));
 	if (argc <= 1)
 		error("Missing map.", &data);
 	else if (argc > 2)

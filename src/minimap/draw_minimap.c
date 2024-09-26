@@ -12,27 +12,27 @@
 
 #include "../../include/cub3D.h"
 
-void draw_fov_lines(t_minilx_img *img, int x0, int y0, float vx, float vy)
+void draw_fov_lines(t_minilx_img *img, float vx, float vy)
 {
 	float	magnitude;
 	float	x;
 	float	y;
 	int		i;
-	unsigned int	get_color;
 
 	magnitude = sqrt(vx * vx + vy * vy);
 	vx /= magnitude;
 	vy /= magnitude;
-	x = x0;
-	y = y0;
+	x = MINI_MAP / 2;
+	y = MINI_MAP / 2;
 	i = 0;
-	get_color = 0;
 	while (i < VIEW_DISTANCE)
 	{
-		img_get_pixel_color(img, (int)round(x), (int)round(y), &get_color);
-		if (get_color == MINI_MAP_WALL_COLOR)
+		// if (img_get_pixel_color(img, (int)round(x), (int)round(y)) == MM_WALL_COLOR)
+		// 	return ;
+		// img_mlx_pixel_put(img, (int)round(x), (int)round(y), MM_VIEW_COLOR);
+		if (img_get_pixel_color(img, (int)x, (int)y) == MM_WALL_COLOR)
 			return ;
-		img_mlx_pixel_put(img, (int)round(x), (int)round(y), MINI_MAP_VIEW_COLOR);
+		img_mlx_pixel_put(img, (int)x, (int)y, MM_VIEW_COLOR);
 		x += vx;
 		y += vy;
 		i++;
@@ -41,64 +41,23 @@ void draw_fov_lines(t_minilx_img *img, int x0, int y0, float vx, float vy)
 
 void	draw_minimap_view(t_data *data, t_minilx *milx)
 {
-	int	i;
-	float	vx;
-	float	vy;
-	
+	t_player	player;
+	float		vx;
+	float		vy;
+	int			i;
+
 	i = -(FOV / 2);
+	player = data->player;
 	while (i < (FOV / 2))
 	{
-		vx = data->player.direct[X] * cos(i * M_PI / 180) - data->player.direct[Y] * sin(i * M_PI / 180);
-		vy = data->player.direct[X] * sin(i * M_PI / 180) + data->player.direct[Y] * cos(i * M_PI / 180);
-		draw_fov_lines(&milx->mini[DRAW], MINI_MAP / 2, MINI_MAP / 2, vx, vy);
+		vx = player.direct[X] * cos(i * RAD) - player.direct[Y] * sin(i * RAD);
+		vy = player.direct[X] * sin(i * RAD) + player.direct[Y] * cos(i * RAD);
+		draw_fov_lines(&milx->mini[DRAW], vx, vy);
 		i++;
 	}
 }
 
-void draw_fov_lines(t_minilx_img *img, int x0, int y0, float vx, float vy)
-{
-	float	magnitude;
-	float	x;
-	float	y;
-	int		i;
-	unsigned int	get_color;
-
-	magnitude = sqrt(vx * vx + vy * vy);
-	vx /= magnitude;
-	vy /= magnitude;
-	x = x0;
-	y = y0;
-	i = 0;
-	get_color = 0;
-	while (i < VIEW_DISTANCE)
-	{
-		img_get_pixel_color(img, (int)round(x), (int)round(y), &get_color);
-		if (get_color == MINI_MAP_WALL_COLOR)
-			return ;
-		img_mlx_pixel_put(img, (int)round(x), (int)round(y), MINI_MAP_VIEW_COLOR);
-		x += vx;
-		y += vy;
-		i++;
-	}
-}
-
-void	draw_minimap_view(t_data *data, t_minilx *milx)
-{
-	int	i;
-	float	vx;
-	float	vy;
-	
-	i = -(FOV / 2);
-	while (i < (FOV / 2))
-	{
-		vx = data->player.direct[X] * cos(i * M_PI / 180) - data->player.direct[Y] * sin(i * M_PI / 180);
-		vy = data->player.direct[X] * sin(i * M_PI / 180) + data->player.direct[Y] * cos(i * M_PI / 180);
-		draw_fov_lines(&milx->mini[DRAW], MINI_MAP / 2, MINI_MAP / 2, vx, vy);
-		i++;
-	}
-}
-
-int	draw_minimap(void *param) //change this to draw minimap and to draw big map
+int	draw_minimap(void *param)
 {
 	t_data		*data;
 	t_minilx	*milx;
@@ -106,12 +65,9 @@ int	draw_minimap(void *param) //change this to draw minimap and to draw big map
 	data = (t_data *) param;
 	milx = &data->milx;
 	draw_minimap_clear(milx);
-	draw_minimap_tiles(data, milx, TILE_SIZE);
-	draw_minimap_player(milx, create_trgb(0, 20, 80, 200), 10);
-	draw_minimap_border(milx, create_trgb(0, 55, 55, 55), MINI_MAP_BORDER);
+	draw_minimap_tiles(data, milx, MM_TILE_SIZE);
+	draw_minimap_player(milx, MM_PLAYER_COLOR, MM_PLAYER_SIZE);
+	draw_minimap_border(milx, MM_BORDER_COLOR, MM_BORDER_SIZE);
 	draw_minimap_view(data, milx);
-	switch_img(data, milx->big);
-	switch_img(data, milx->mini);
-	// draw_minimap_switch_img(data);
 	return (0);
 }

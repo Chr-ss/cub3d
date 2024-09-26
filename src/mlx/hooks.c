@@ -23,6 +23,7 @@ int	finish_mlx(t_minilx *milx)
 // remove when not needed:
 void	key_hook_move(void *param);
 void	key_hook_turn(void *param);
+void	key_hook_strafe(void *param);
 
 void	switch_img(t_data *data, t_minilx_img *img)
 {
@@ -34,17 +35,35 @@ void	switch_img(t_data *data, t_minilx_img *img)
 	mlx_put_image_to_window(data->milx.mlx, data->milx.mlx_window, img[DISPLAY].img, 0, 0);
 }
 
+#include <sys/time.h>
+
+size_t	get_curr_time(void)
+{
+	struct timeval	timeofday;
+
+	gettimeofday(&timeofday, NULL);
+	return (timeofday.tv_sec * 1000 + timeofday.tv_usec / 1000);
+}
+
 int	render(void *param)
 {
-	t_data	*data;
+	t_data		*data;
+	size_t		time;
 
+	time = get_curr_time();
 	data = (t_data*) param;
 	if (data->keys.exit)
 		finish_mlx(&data->milx);
 	key_hook_move(param);
+	key_hook_strafe(param);
 	key_hook_turn(param);
-	// ray_caster(data, &data->milx);
-	draw_minimap(param); //change this to draw minimap and bigmap
+	draw_minimap(param);
+	ray_caster(data, &data->milx);
+	switch_img(data, data->milx.big);
+	switch_img(data, data->milx.mini);
+	time = get_curr_time() - time;
+	time = 60000 / time;
+	mlx_string_put(data->milx.mlx, data->milx.mlx_window, data->milx.screen_x - 200, 20, create_trgb(0, 255, 255, 255), ft_itoa(time));
 	return (0);
 }
 
