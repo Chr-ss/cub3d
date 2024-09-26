@@ -44,7 +44,7 @@
 #  define KEY_ARROW_UP 126
 #  define KEY_ARROW_DOWN 125
 #  define ESC 53
-# elif
+# else
 #  define LINUX 1
 #  define KEY_W 119
 #  define KEY_A 97
@@ -57,8 +57,10 @@
 #  define ESC 0xff1b
 # endif
 
-
-
+# define FORWARD 1
+# define BACKWARD 2
+# define LEFT 3
+# define RIGHT 4
 
 # define X 0
 # define Y 1
@@ -68,8 +70,8 @@
 # define MINI_MAP_BORDER 3
 # define TILE_SIZE MINI_MAP / 10
 
-# define STEP_SIZE 0.016
-# define TURN_STEP 0.01
+# define STEP_SIZE 0.1
+# define TURN_STEP 0.1
 
 # define X 0
 # define Y 1
@@ -203,6 +205,8 @@ typedef	struct	s_data
 # define READBUF 1024
 
 
+void	ray_caster(t_data *data, t_minilx *milx);
+void	switch_img(t_data *data, t_minilx_img *img);
 
 // map/map_init_utils.c
 int		check_extension(char *str);
@@ -257,7 +261,7 @@ int		key_hook_ad(int keycode, void *param);
 int		key_hook_ws(int keycode, void *param);
 int		key_hook_esc(int keycode, void *param);
 int		key_hook_esc_mac(int keycode, void *param);
-int	key_hook(int keycode, void *param);
+int		key_hook(int keycode, void *param);
 
 // mlx/utils.c
 void	img_mlx_pixel_put(t_minilx_img *img, int x, int y, int color);

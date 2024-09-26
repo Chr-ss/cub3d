@@ -21,21 +21,17 @@ int	finish_mlx(t_minilx *milx)
 }
 
 // remove when not needed:
-void	ray_caster(t_data *data, t_minilx *milx);
 void	key_hook_move(void *param);
 void	key_hook_turn(void *param);
 
-int	ray_switch_img(void *param)
+void	switch_img(t_data *data, t_minilx_img *img)
 {
 	t_minilx_img	buffer;
-	t_data			*data;
 
-	data = (t_data *) param;
-	buffer = data->milx.big[DRAW];
-	data->milx.big[DRAW] = data->milx.big[DISPLAY];
-	data->milx.big[DISPLAY] = buffer;
-	mlx_put_image_to_window(data->milx.mlx, data->milx.mlx_window, data->milx.big[DISPLAY].img, 0, 0);
-	return (0);
+	buffer = img[DRAW];
+	img[DRAW] = img[DISPLAY];
+	img[DISPLAY] = buffer;
+	mlx_put_image_to_window(data->milx.mlx, data->milx.mlx_window, img[DISPLAY].img, 0, 0);
 }
 
 int	render(void *param)
@@ -47,9 +43,8 @@ int	render(void *param)
 		finish_mlx(&data->milx);
 	key_hook_move(param);
 	key_hook_turn(param);
-	ray_caster(data, &data->milx);
-	ray_switch_img(param);
-	draw_minimap(param);
+	// ray_caster(data, &data->milx);
+	draw_minimap(param); //change this to draw minimap and bigmap
 	return (0);
 }
 

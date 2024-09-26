@@ -12,20 +12,7 @@
 
 #include "../../include/cub3D.h"
 
-int	draw_minimap_switch_img(void *param)
-{
-	t_minilx_img	buffer;
-	t_data			*data;
-
-	data = (t_data *) param;
-	buffer = data->milx.mini[DRAW];
-	data->milx.mini[DRAW] = data->milx.mini[DISPLAY];
-	data->milx.mini[DISPLAY] = buffer;
-	mlx_put_image_to_window(data->milx.mlx, data->milx.mlx_window, data->milx.mini[DISPLAY].img, 0, 0);
-	return (0);
-}
-
-int	draw_minimap(void *param)
+int	draw_minimap(void *param) //change this to draw minimap and to draw big map
 {
 	t_data		*data;
 	t_minilx	*milx;
@@ -36,6 +23,9 @@ int	draw_minimap(void *param)
 	draw_minimap_tiles(data, milx, TILE_SIZE);
 	draw_minimap_player(milx, create_trgb(0, 20, 80, 200), 10);
 	draw_minimap_border(milx, create_trgb(0, 55, 55, 55), MINI_MAP_BORDER);
-	draw_minimap_switch_img(data);
+	ray_caster(data, &data->milx);
+	switch_img(data, milx->big);
+	switch_img(data, milx->mini);
+	// draw_minimap_switch_img(data);
 	return (0);
 }

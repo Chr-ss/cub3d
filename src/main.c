@@ -171,7 +171,6 @@ void	ray_caster(t_data *data, t_minilx *milx)
 	int			x;
 	long double		plane_scale;
 	float		plane_magnitude;
-	// int			wall_color;
 	
 	x = 0;
 	ft_bzero(&ray, sizeof(t_raycaster));
@@ -179,16 +178,12 @@ void	ray_caster(t_data *data, t_minilx *milx)
 	player.plane[X] = -player.direct[Y];
 	player.plane[Y] = player.direct[X];
 	ray.r_start[X] = player.pos[X];
-	ray.r_start[Y] = player.pos[Y];
-
-	// x = milx->screen_x / 2; // one line
-	// while(x == (milx->screen_x / 2)) //  
-	while(x < milx->screen_x) //  x < milx->screen_x
+	ray.r_start[Y] = player.pos[Y]; 
+	while(x < milx->screen_x)
 	{
 		ray.r_pos[X] = ray.r_start[X];
 		ray.r_pos[Y] = ray.r_start[Y];
 		ray.wall_found = false;
-		// plane_scale = (float)2 * ((float)x / (float)milx->screen_x) - (float)1;
 		plane_scale = (float)2 * ((float)x / (float)milx->screen_x) - (float)1;
 		plane_magnitude = tan((float)(FOV / 2) * (float)(M_PI / 180));
 		ray.direction[X] = player.direct[X] + (player.plane[X] * plane_magnitude) * plane_scale;
@@ -213,27 +208,9 @@ void	ray_caster(t_data *data, t_minilx *milx)
 				ray.wall_direction = TB;
 				
 			}
-			// if (ray.r_pos[X] >= 0 && ray.r_pos[Y] >= 0 && ray.r_pos[X] < data->map.x_max && ray.r_pos[Y] < data->map.y_max)
-			// {
 			if (data->map.map[ray.r_pos[Y]][ray.r_pos[X]] == '1')
-			{
 				ray.wall_found = true;
-			}
-			// }
-			// else 
-			// {
-			// 	ray.wall_found = true;
-			// 	if (ray.r_pos[X] >= 0)
-			// 		ray.r_pos[X] = 0;
-			// 	if (ray.r_pos[Y] >= 0)
-			// 		ray.r_pos[Y] = 0;
-			// 	if (ray.r_pos[X] < data->map.x_max)
-			// 		ray.r_pos[X] = data->map.x_max;
-			// 	if (ray.r_pos[Y] < data->map.y_max)
-			// 		ray.r_pos[Y] = data->map.y_max;
-			// }
 		}
-		// float	line_heigth = milx->screen_y / ray.final_distance;
 		float	line_heigth = (float)milx->screen_y / (float)(ray.final_distance * cos((float)(M_PI/180) * (float)(FOV/2)));//* cos(M_PI/180 * FOV/2 * plane_scale));
 		// if (line_heigth > milx->screen_y)
 		// 	line_heigth = milx->screen_y;
@@ -241,7 +218,7 @@ void	ray_caster(t_data *data, t_minilx *milx)
 		ray.intersect[X] = ray.direction[X] * ray.final_distance + ray.r_start[X];
 		ray.intersect[Y] = ray.direction[Y] * ray.final_distance + ray.r_start[Y];
 		data->ray = ray;
-		if (x % 120 == 1)
+		if (x % 300 == 1)
 			draw_pov_line(&milx->mini[DRAW], MINI_MAP / 2, MINI_MAP / 2, ray.direction[X], ray.direction[Y], ray.final_distance * TILE_SIZE, create_trgb(0, 255, 0, 0));
 		draw_line(milx, x, 0, (milx->screen_y - line_heigth) / 2, create_trgb(2, 220, 100, 0)); //sky
 		// draw_line(milx, x, start_y, line_heigth, wall_color); //walls
@@ -264,10 +241,10 @@ int	main(int argc, char **argv)
 	data.map.map_read.filename = argv[1];
 	map_init(&data, &data.map);
 	map_parse(&data, data.map.map);
-	map_print(&data, &data.map); //I do not like the name
+	map_print(&data, &data.map);
 	data.milx.mlx = mlx_init();
 	if (!data.milx.mlx)
-		return (free_all(&data), EXIT_FAILURE); //maybe do it somewhere else or free something
+		return (free_all(&data), EXIT_FAILURE);
 	mlx_get_screen_size(data.milx.mlx, &data.milx.screen_x, &data.milx.screen_y);
 	// data.milx.screen_x = 800;
 	// data.milx.screen_y = 620;
@@ -277,6 +254,6 @@ int	main(int argc, char **argv)
 	init_image(&data);
 	hooks_mlx(&data);
 	mlx_loop(data.milx.mlx);
-	free_all(&data); //it should go here?/
+	free_all(&data);
 	return (0);
 }

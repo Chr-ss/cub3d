@@ -17,11 +17,8 @@ void	step_direction(t_raycaster *ray);
 t_raycaster	collision(t_data *data, float dir_x, float dir_y)
 {
 	t_raycaster	ray;
-	// int			plane[2];
 
 	ray = data->ray;
-	// plane[X] = -dir_y;
-	// plane[Y] = dir_x;
 	ray.r_start[X] = data->player.pos[X];
 	ray.r_start[Y] = data->player.pos[Y];
 	ray.r_pos[X] = ray.r_start[X];
@@ -46,41 +43,35 @@ t_raycaster	collision(t_data *data, float dir_x, float dir_y)
 			ray.final_distance = ray.length[Y];
 			ray.length[Y] += ray.step_size[Y];
 		}
-		// printf("here\n");
 		if (data->map.map[ray.r_pos[Y]][ray.r_pos[X]] == '1')
-		{
-			// printf("no segmentation fauls\n");
 			ray.wall_found = true;
-		}
 	}
 	return (ray);
 }
 
-int	is_wall(t_data *data, float x, float y)
+double
+
+
+int	is_not_wall(t_data *data, float x, float y, int direction)
 {
-	// int 		map_x;
-	// int 		map_y;
-	t_raycaster	ray;
+	t_raycaster	ray_forward;
+	t_raycaster	ray_backwards;
+	t_raycaster	ray_left;
+	t_raycaster	ray_right;
 	
-	// map_x = x;
-	// map_y = y;
-	(void)x;
-	(void)y;
-	ray = collision(data, data->player.direct[X], data->player.direct[Y]);
-	// Map brounds check, includeing x=1, y=1, x=max or y=max as they have to be walls
-	// if (x > data->map.x_max || x < 1 || y < 1 || y > data->map.y_max)
-	// 	return (1);
-	// if (data->map.map[map_y][map_x] == '1' || data->map.map[map_y][map_x] == ' ')
-	// 	return (1);
-	// printf("not wall--> final distance: %f \n", ray.final_distance);
-	if (data->player.direct[Y] >= 0 && data->player.direct[X] <= 0 && (ray.final_distance < STEP_SIZE ))
-	{
-		// printf("collision--> final distance: %f \n",ray.final_distance);
-		return (1);
-	}
-	// if (data->player.direct[Y] > 0 && data->player.direct[X] <= 0 && (ray.final_distance < STEP_SIZE))
-	// 	return (1);
-	return (0);
+	ray_forward = collision(data, data->player.direct[X], data->player.direct[Y]);
+	ray_backwards = collision(data, -data->player.direct[X], -data->player.direct[Y]);
+	ray_left = collision(data, data->player.direct[X] * cos(-90 * (M_PI / 180)) - data->player.direct[Y] * sin(-90 * (M_PI / 180)), data->player.direct[X] * sin(-90 * M_PI / 180) + data->player.direct[Y] * cos(-90 * M_PI / 180));
+	ray_right = collision(data, data->player.direct[X] * cos(90 * M_PI / 180) - data->player.direct[Y] * sin(90 * M_PI / 180), data->player.direct[X] * sin(90 * M_PI / 180) + data->player.direct[Y] * cos(90 * M_PI / 180));
+	if (ray_forward.final_distance < STEP_SIZE * 8 && direction == FORWARD)
+		return (0);
+	if (ray_backwards.final_distance < STEP_SIZE * 8 && direction == BACKWARD)
+		return (0);
+	if (ray_left.final_distance < STEP_SIZE * 8 && direction == LEFT)
+		return (0);
+	if (ray_right.final_distance < STEP_SIZE * 8 && direction == RIGHT)
+		return (0);
+	return (1);
 }
 
 void	key_hook_move(void *param)
@@ -96,7 +87,7 @@ void	key_hook_move(void *param)
 	{
 		new_x = data->player.pos[X] + (data->player.direct[X] * STEP_SIZE);
 		new_y = data->player.pos[Y] + (data->player.direct[Y] * STEP_SIZE);
-		if (!is_wall(data, new_x, new_y))
+		if (is_not_wall(data, new_x, new_y, FORWARD))
 		{
 			data->player.pos[X] = new_x;
 			data->player.pos[Y] = new_y;
@@ -106,7 +97,7 @@ void	key_hook_move(void *param)
 	{
 		new_x = data->player.pos[X] - (data->player.direct[X] * STEP_SIZE);
 		new_y = data->player.pos[Y] - (data->player.direct[Y] * STEP_SIZE);
-		if (!is_wall(data, new_x, new_y))
+		if (is_not_wall(data, new_x, new_y, BACKWARD))
 		{
 			data->player.pos[X] = new_x;
 			data->player.pos[Y] = new_y;
@@ -120,7 +111,7 @@ void	key_hook_move(void *param)
 		temp_y /= sqrt(temp_x * temp_x + temp_y * temp_y);
 		new_x = data->player.pos[X] + (temp_x * STEP_SIZE);
 		new_y = data->player.pos[Y] + (temp_y * STEP_SIZE);
-		if (!is_wall(data, new_x, new_y))
+		if (is_not_wall(data, new_x, new_y, LEFT))
 		{
 			data->player.pos[X] = new_x;
 			data->player.pos[Y] = new_y;
@@ -134,7 +125,7 @@ void	key_hook_move(void *param)
 		temp_y /= sqrt(temp_x * temp_x + temp_y * temp_y);
 		new_x = data->player.pos[X] + (temp_x * STEP_SIZE);
 		new_y = data->player.pos[Y] + (temp_y * STEP_SIZE);
-		if (!is_wall(data, new_x, new_y))
+		if (is_not_wall(data, new_x, new_y, RIGHT))
 		{
 			data->player.pos[X] = new_x;
 			data->player.pos[Y] = new_y;
