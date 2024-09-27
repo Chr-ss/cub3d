@@ -27,12 +27,10 @@ void draw_fov_lines(t_minilx_img *img, float vx, float vy)
 	i = 0;
 	while (i < VIEW_DISTANCE)
 	{
-		// if (img_get_pixel_color(img, (int)round(x), (int)round(y)) == MM_WALL_COLOR)
-		// 	return ;
-		// img_mlx_pixel_put(img, (int)round(x), (int)round(y), MM_VIEW_COLOR);
 		if (img_get_pixel_color(img, (int)x, (int)y) == MM_WALL_COLOR)
 			return ;
-		img_mlx_pixel_put(img, (int)x, (int)y, MM_VIEW_COLOR);
+		img_mlx_pixel_put(img, (int)x, (int)y, color_fraction(MM_VIEW_COLOR, \
+			create_trgb(0, 255, 255, 255), ((float)i / (float)VIEW_DISTANCE)));
 		x += vx;
 		y += vy;
 		i++;
@@ -65,9 +63,9 @@ int	draw_minimap(void *param)
 	data = (t_data *) param;
 	milx = &data->milx;
 	draw_minimap_clear(milx);
-	draw_minimap_tiles(data, milx, MM_TILE_SIZE);
+	draw_minimap_tiles(data);
+	draw_minimap_view(data, milx);
 	draw_minimap_player(milx, MM_PLAYER_COLOR, MM_PLAYER_SIZE);
 	draw_minimap_border(milx, MM_BORDER_COLOR, MM_BORDER_SIZE);
-	draw_minimap_view(data, milx);
 	return (0);
 }

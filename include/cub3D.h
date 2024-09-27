@@ -68,6 +68,14 @@
 
 # define FOV 60
 
+// create_trgb(0, 255, 0, 0)
+# define RED 16711680
+// create_trgb(0, 0, 255, 0)
+# define BLUE 65280
+// create_trgb(0, 0, 0, 255)
+# define GREEN 255
+// create_trgb(0, 255, 255, 255)
+# define WHITE 16777215
 
 // MINI_MAP
 # define MINI_MAP 300
@@ -81,9 +89,7 @@
 # define MM_BORDER_COLOR 3618615
 // create_trgb(0, 55, 55, 55)
 # define MM_WALL_COLOR 3618615
-// create_trgb(100, 55, 55, 55)
-# define MM_VIEW_COLOR 1681340215
-
+# define MM_VIEW_COLOR RED
 
 
 // MLX IMAGE
@@ -111,15 +117,20 @@ typedef	struct s_raycaster
 {
 	float	direction[2];
 	float	r_start[2];
-	int		r_pos[2];
 	float	length[2];
 	float	step_size[2];
 	float	step[2];
 	float	intersect[2];
 	float	final_distance;
-	bool	wall_found;
+	float	texture_perc;
+	float	plane_magnitude;
+	float	plane_scale;
+	int		r_pos[2];
+	int		x;
+	int		line_height;
 	int		wall_direction;
-	float		texture_perc;
+	int		wall_color;
+	bool	wall_found;
 }	t_raycaster;
 
 
@@ -254,7 +265,7 @@ void	draw_minimap_border(t_minilx *milx, int color, int size);
 void	draw_minimap_clear(t_minilx *milx);
 
 // minimap/draw_tiles.c
-void	draw_minimap_tiles(t_data *data, t_minilx *milx, int tile_size);
+void	draw_minimap_tiles(t_data *data);
 
 // minimap/hooks_image.c
 int		draw_minimap(void *param);
@@ -267,12 +278,17 @@ void	hooks_mlx(t_data *data);
 void	init_image(t_data *data);
 
 // mlx/key_hooks.c
-int		is_wall(t_data *data, float x, float y);
-int		key_hook(int keycode, void *param);
+// int		is_wall(t_data *data, float x, float y);
+// int		key_hook(int keycode, void *param);
 
 // mlx/utils.c
 void			img_mlx_pixel_put(t_minilx_img *img, int x, int y, int color);
 unsigned int	img_get_pixel_color(t_minilx_img *img, int x, int y);
-int		create_trgb(int t, int r, int g, int b);
+int				create_trgb(int t, int r, int g, int b);
+uint32_t		color_fraction(uint32_t c1, uint32_t c2, float fraction); 
+
+void	draw_texture(t_data *data);
+void	draw_texture_line(t_data *data, int texture);
+
 
 #endif // CUB3D_H

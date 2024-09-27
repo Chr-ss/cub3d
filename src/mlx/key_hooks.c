@@ -34,7 +34,7 @@ int	collision(t_data *data, float dir_x, float dir_y)
 	t_raycaster	ray;
 
 	collision_ray_init(data, &ray, dir_x, dir_y);
-	while(ray.final_distance < (STEP_SIZE * 2))
+	while(ray.final_distance < (STEP_SIZE * 3))
 	{
 		if(ray.length[X] < ray.length[Y])
 		{

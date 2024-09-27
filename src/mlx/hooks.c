@@ -42,7 +42,7 @@ size_t	get_curr_time(void)
 	struct timeval	timeofday;
 
 	gettimeofday(&timeofday, NULL);
-	return (timeofday.tv_sec * 1000 + timeofday.tv_usec / 1000);
+	return (timeofday.tv_sec * 1000000 + timeofday.tv_usec);
 }
 
 int	render(void *param)
@@ -62,7 +62,7 @@ int	render(void *param)
 	switch_img(data, data->milx.big);
 	switch_img(data, data->milx.mini);
 	time = get_curr_time() - time;
-	time = 60000 / time;
+	time = 60000000 / time;
 	mlx_string_put(data->milx.mlx, data->milx.mlx_window, data->milx.screen_x - 200, 20, create_trgb(0, 255, 255, 255), ft_itoa(time));
 	return (0);
 }

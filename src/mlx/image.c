@@ -46,5 +46,4 @@ void	init_image(t_data *data)
 	data->map.img_s.addr = mlx_get_data_addr(data->map.img_s.img, &data->map.img_s.bits_per_pixel, &data->map.img_s.line_length, &data->map.img_s.endian);
 	data->map.img_w.img = mlx_xpm_file_to_image(data->milx.mlx, data->map.w_tex, &data->map.img_w.max_x, &data->map.img_w.max_y);
 	data->map.img_w.addr = mlx_get_data_addr(data->map.img_w.img, &data->map.img_w.bits_per_pixel, &data->map.img_w.line_length, &data->map.img_w.endian);
-	printf("north_mx:%d, north_my:%d\n", data->map.img_n.max_x, data->map.img_n.max_y);
 }
