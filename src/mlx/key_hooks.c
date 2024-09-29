@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   key_hooks.c                                        :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: crasche <crasche@student.codam.nl>           +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/09/08 20:38:21 by crasche       #+#    #+#                 */
-/*   Updated: 2024/09/08 20:44:17 by crasche       ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   key_hooks.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/08 20:38:21 by crasche           #+#    #+#             */
+/*   Updated: 2024/09/29 17:08:51 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,27 @@
 
 void	step_direction(t_raycaster *ray);
 
-t_raycaster	collision(t_data *data, float dir_x, float dir_y)
+void	collision_ray_init(t_data *data, t_raycaster *ray, float dir_x, float dir_y)
+{
+	ft_bzero(ray, sizeof(t_raycaster));
+	ray->r_start[X] = data->player.pos[X];
+	ray->r_start[Y] = data->player.pos[Y];
+	ray->r_pos[X] = ray->r_start[X];
+	ray->r_pos[Y] = ray->r_start[Y];
+	ray->direction[X] = dir_x;
+	ray->direction[Y] = dir_y;
+	ray->step_size[X] = sqrt(1 + (ray->direction[Y] / ray->direction[X]) * (ray->direction[Y] / ray->direction[X]));
+	ray->step_size[Y] = sqrt(1 + (ray->direction[X] / ray->direction[Y]) * (ray->direction[X] / ray->direction[Y]));
+	ray->wall_found = false;
+	step_direction(ray);
+}
+
+int	collision(t_data *data, float dir_x, float dir_y)
 {
 	t_raycaster	ray;
 
-	ray = data->ray;
-	ray.r_start[X] = data->player.pos[X];
-	ray.r_start[Y] = data->player.pos[Y];
-	ray.r_pos[X] = ray.r_start[X];
-	ray.r_pos[Y] = ray.r_start[Y];
-	ray.direction[X] = dir_x;
-	ray.direction[Y] = dir_y;
-	ray.step_size[X] = sqrt(1 + (ray.direction[Y] / ray.direction[X]) * (ray.direction[Y] / ray.direction[X]));
-	ray.step_size[Y] = sqrt(1 + (ray.direction[X] / ray.direction[Y]) * (ray.direction[X] / ray.direction[Y]));
-	ray.wall_found = false;
-	step_direction(&ray);
-	while(!ray.wall_found)
+	collision_ray_init(data, &ray, dir_x, dir_y);
+	while(ray.final_distance < (STEP_SIZE * 3))
 	{
 		if(ray.length[X] < ray.length[Y])
 		{
@@ -44,89 +49,70 @@ t_raycaster	collision(t_data *data, float dir_x, float dir_y)
 			ray.length[Y] += ray.step_size[Y];
 		}
 		if (data->map.map[ray.r_pos[Y]][ray.r_pos[X]] == '1')
-			ray.wall_found = true;
+			break ;
 	}
-	return (ray);
+	if (ray.final_distance < (STEP_SIZE * 2))
+		return (1);
+	else 
+		return (0);
 }
 
-int	is_not_wall(t_data *data, int direction)
+int	is_not_wall(t_data *data, float vx, float vy, int direction)
 {
-	t_raycaster	ray_forward;
-	t_raycaster	ray_backwards;
-	t_raycaster	ray_left;
-	t_raycaster	ray_right;
-	
-	ray_forward = collision(data, data->player.direct[X], data->player.direct[Y]);
-	ray_backwards = collision(data, -data->player.direct[X], -data->player.direct[Y]);
-	ray_left = collision(data, data->player.direct[X] * cos(-90 * (M_PI / 180)) - data->player.direct[Y] * sin(-90 * (M_PI / 180)), data->player.direct[X] * sin(-90 * M_PI / 180) + data->player.direct[Y] * cos(-90 * M_PI / 180));
-	ray_right = collision(data, data->player.direct[X] * cos(90 * M_PI / 180) - data->player.direct[Y] * sin(90 * M_PI / 180), data->player.direct[X] * sin(90 * M_PI / 180) + data->player.direct[Y] * cos(90 * M_PI / 180));
-	if (ray_forward.final_distance < STEP_SIZE * 8 && direction == FORWARD)
+	if (direction == FORWARD && collision(data, vx, vy))
 		return (0);
-	if (ray_backwards.final_distance < STEP_SIZE * 8 && direction == BACKWARD)
+	if (direction == BACKWARD && collision(data, vx, vy))
 		return (0);
-	if (ray_left.final_distance < STEP_SIZE * 8 && direction == LEFT)
+	if (direction == LEFT && collision(data, vx, vy))
 		return (0);
-	if (ray_right.final_distance < STEP_SIZE * 8 && direction == RIGHT)
+	if (direction == RIGHT && collision(data, vx, vy))
 		return (0);
 	return (1);
+}
+
+void	key_hook_strafe(void *param)
+{
+	t_data	*data;
+	float temp_x;
+	float temp_y;
+
+	data = (t_data *)param;
+	temp_x = data->player.direct[X] * cos(-90 * RAD) - data->player.direct[Y] * sin(-90 * RAD);
+	temp_y = data->player.direct[X] * sin(-90 * RAD) + data->player.direct[Y] * cos(-90 * RAD);
+	temp_x /= sqrt(temp_x * temp_x + temp_y * temp_y);
+	temp_y /= sqrt(temp_x * temp_x + temp_y * temp_y);
+	if (data->keys.strafe_left && is_not_wall(data, temp_x, temp_y, LEFT))
+	{
+		data->player.pos[X] += (temp_x * STEP_SIZE);
+		data->player.pos[Y] += (temp_y * STEP_SIZE);
+	}
+	temp_x = data->player.direct[X] * cos(90 * RAD) - data->player.direct[Y] * sin(90 * RAD);
+	temp_y = data->player.direct[X] * sin(90 * RAD) + data->player.direct[Y] * cos(90 * RAD);
+	temp_x /= sqrt(temp_x * temp_x + temp_y * temp_y);
+	temp_y /= sqrt(temp_x * temp_x + temp_y * temp_y);
+	if (data->keys.strafe_right && is_not_wall(data, temp_x, temp_y, RIGHT))
+	{
+		data->player.pos[X] += (temp_x * STEP_SIZE);
+		data->player.pos[Y] += (temp_y * STEP_SIZE);
+	}
 }
 
 void	key_hook_move(void *param)
 {
 	t_data	*data;
 	t_keys	keys;
-	float	new_x;
-	float	new_y;
 
 	data = (t_data *)param;
 	keys = data->keys;
-	if (keys.forward)
+	if (keys.forward && is_not_wall(data, data->player.direct[X], data->player.direct[Y], FORWARD))
 	{
-		new_x = data->player.pos[X] + (data->player.direct[X] * STEP_SIZE);
-		new_y = data->player.pos[Y] + (data->player.direct[Y] * STEP_SIZE);
-		if (is_not_wall(data, FORWARD))
-		{
-			data->player.pos[X] = new_x;
-			data->player.pos[Y] = new_y;
-		}
+		data->player.pos[X] += (data->player.direct[X] * STEP_SIZE);
+		data->player.pos[Y] += (data->player.direct[Y] * STEP_SIZE);
 	}
-	else if (keys.back)
+	else if (keys.back && is_not_wall(data, -data->player.direct[X], -data->player.direct[Y], BACKWARD))
 	{
-		new_x = data->player.pos[X] - (data->player.direct[X] * STEP_SIZE);
-		new_y = data->player.pos[Y] - (data->player.direct[Y] * STEP_SIZE);
-		if (is_not_wall(data, BACKWARD))
-		{
-			data->player.pos[X] = new_x;
-			data->player.pos[Y] = new_y;
-		}
-	}
-	if (keys.strafe_left)
-	{
-		float temp_x = data->player.direct[X] * cos(-90 * M_PI / 180) - data->player.direct[Y] * sin(-90 * M_PI / 180);
-		float temp_y = data->player.direct[X] * sin(-90 * M_PI / 180) + data->player.direct[Y] * cos(-90 * M_PI / 180);
-		temp_x /= sqrt(temp_x * temp_x + temp_y * temp_y);
-		temp_y /= sqrt(temp_x * temp_x + temp_y * temp_y);
-		new_x = data->player.pos[X] + (temp_x * STEP_SIZE);
-		new_y = data->player.pos[Y] + (temp_y * STEP_SIZE);
-		if (is_not_wall(data, LEFT))
-		{
-			data->player.pos[X] = new_x;
-			data->player.pos[Y] = new_y;
-		}
-	}
-	else if (keys.strafe_right)
-	{
-		float temp_x = data->player.direct[X] * cos(90 * M_PI / 180) - data->player.direct[Y] * sin(90 * M_PI / 180);
-		float temp_y = data->player.direct[X] * sin(90 * M_PI / 180) + data->player.direct[Y] * cos(90 * M_PI / 180);
-		temp_x /= sqrt(temp_x * temp_x + temp_y * temp_y);
-		temp_y /= sqrt(temp_x * temp_x + temp_y * temp_y);
-		new_x = data->player.pos[X] + (temp_x * STEP_SIZE);
-		new_y = data->player.pos[Y] + (temp_y * STEP_SIZE);
-		if (is_not_wall(data, RIGHT))
-		{
-			data->player.pos[X] = new_x;
-			data->player.pos[Y] = new_y;
-		}
+		data->player.pos[X] -= (data->player.direct[X] * STEP_SIZE);
+		data->player.pos[Y] -= (data->player.direct[Y] * STEP_SIZE);
 	}
 }
 

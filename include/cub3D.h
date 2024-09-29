@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:49:31 by crasche           #+#    #+#             */
-/*   Updated: 2024/09/17 19:16:05 by andmadri         ###   ########.fr       */
+/*   Updated: 2024/09/29 17:10:03 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@
 #  define KEY_ARROW_UP 126
 #  define KEY_ARROW_DOWN 125
 #  define ESC 53
+# define STEP_SIZE 0.06
+# define TURN_STEP 0.02
 # else
 #  define LINUX 1
 #  define KEY_W 119
@@ -55,6 +57,8 @@
 #  define KEY_ARROW_UP 65362
 #  define KEY_ARROW_DOWN 65364
 #  define ESC 0xff1b
+# define STEP_SIZE 0.1
+# define TURN_STEP 0.1
 # endif
 
 # define FORWARD 1
@@ -62,22 +66,38 @@
 # define LEFT 3
 # define RIGHT 4
 
-# define X 0
-# define Y 1
+# define FOV 60
 
+// create_trgb(0, 255, 0, 0)
+# define RED 16711680
+// create_trgb(0, 0, 255, 0)
+# define BLUE 65280
+// create_trgb(0, 0, 0, 255)
+# define GREEN 255
+// create_trgb(0, 255, 255, 255)
+# define WHITE 16777215
+
+// MINI_MAP
 # define MINI_MAP 300
-# define MINI_MAP_GRID 11
-# define MINI_MAP_BORDER 3
-# define TILE_SIZE MINI_MAP / 10
+# define MM_BORDER_SIZE 3
+# define MM_PLAYER_SIZE 10
+# define MM_TILE_SIZE 30
+# define VIEW_DISTANCE 120
+// create_trgb(0, 20, 80, 200)
+# define MM_PLAYER_COLOR 1331400
+// create_trgb(0, 55, 55, 55)
+# define MM_BORDER_COLOR 3618615
+// create_trgb(0, 55, 55, 55)
+# define MM_WALL_COLOR 3618615
+# define MM_VIEW_COLOR RED
 
-# define STEP_SIZE 0.1
-# define TURN_STEP 0.1
 
-# define X 0
-# define Y 1
-
+// MLX IMAGE
 # define DRAW 0
 # define DISPLAY 1
+
+# define X 0
+# define Y 1
 
 # define LR 0
 # define TB 1
@@ -87,28 +107,32 @@
 # define SOUTH 2
 # define WEST 3
 
-# define TEXTURE_RES 64
+// MATH
+# define RAD 0.01745329251
 # define MOUSE_SENSITIVITY 4
 
 #ifndef M_PI
 # define M_PI 3.14159265358979323846
 #endif
 
-# define FOV 60
-
 typedef	struct s_raycaster
 {
 	float	direction[2];
 	float	r_start[2];
-	int		r_pos[2];
 	float	length[2];
 	float	step_size[2];
 	float	step[2];
 	float	intersect[2];
 	float	final_distance;
-	bool	wall_found;
+	float	texture_perc;
+	float	plane_magnitude;
+	float	plane_scale;
+	int		r_pos[2];
+	int		x;
+	int		line_height;
 	int		wall_direction;
-	float		texture_perc;
+	int		wall_color;
+	bool	wall_found;
 }	t_raycaster;
 
 
@@ -245,10 +269,9 @@ void	draw_minimap_border(t_minilx *milx, int color, int size);
 void	draw_minimap_clear(t_minilx *milx);
 
 // minimap/draw_tiles.c
-void	draw_minimap_tiles(t_data *data, t_minilx *milx, int tile_size);
+void	draw_minimap_tiles(t_data *data);
 
 // minimap/hooks_image.c
-int		draw_minimap_switch_img(void *param);
 int		draw_minimap(void *param);
 
 // mlx/hooks.c
@@ -259,16 +282,17 @@ void	hooks_mlx(t_data *data);
 void	init_image(t_data *data);
 
 // mlx/key_hooks.c
-int		is_wall(t_data *data, float x, float y);
-int		key_hook_ad(int keycode, void *param);
-int		key_hook_ws(int keycode, void *param);
-int		key_hook_esc(int keycode, void *param);
-int		key_hook_esc_mac(int keycode, void *param);
-int		key_hook(int keycode, void *param);
+// int		is_wall(t_data *data, float x, float y);
+// int		key_hook(int keycode, void *param);
 
 // mlx/utils.c
-void	img_mlx_pixel_put(t_minilx_img *img, int x, int y, int color);
-void	img_get_pixel_color(t_minilx_img *img, int x, int y, unsigned int *color);
-int		create_trgb(int t, int r, int g, int b);
+void			img_mlx_pixel_put(t_minilx_img *img, int x, int y, int color);
+unsigned int	img_get_pixel_color(t_minilx_img *img, int x, int y);
+int				create_trgb(int t, int r, int g, int b);
+uint32_t		color_fraction(uint32_t c1, uint32_t c2, float fraction); 
+
+void	draw_texture(t_data *data);
+void	draw_texture_line(t_data *data, int texture);
+
 
 #endif // CUB3D_H
