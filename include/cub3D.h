@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:49:31 by crasche           #+#    #+#             */
-/*   Updated: 2024/09/29 17:10:03 by andmadri         ###   ########.fr       */
+/*   Updated: 2024/09/29 18:36:58 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 // external functions:
 # include <math.h>
 # include <stdlib.h>
+# include <stdint.h>
 # include <stdio.h>
 # include <unistd.h>
 # include <string.h>
@@ -109,7 +110,8 @@
 
 // MATH
 # define RAD 0.01745329251
-# define MOUSE_SENSITIVITY 4
+# define MOUSE_SENSITIVITY 5
+# define MOUSE_OFFSET 50
 
 #ifndef M_PI
 # define M_PI 3.14159265358979323846

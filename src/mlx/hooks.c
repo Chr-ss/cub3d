@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 20:38:21 by crasche           #+#    #+#             */
-/*   Updated: 2024/09/29 17:07:41 by andmadri         ###   ########.fr       */
+/*   Updated: 2024/09/29 18:36:21 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,32 +72,16 @@ int	mouse_move(int x, int y, t_data *data)
 	int	delta_x;
 
 	delta_x = x - data->mouse_x;
-	(void)y;
-	// printf("direction of y: %i\n", y);
-	if (abs(delta_x) < MOUSE_SENSITIVITY)
+	data->keys.turn_left = false;
+	data->keys.turn_right = false;
+	if (x >= data->milx.screen_x - MOUSE_OFFSET|| x <= MOUSE_OFFSET)
+		mlx_mouse_move(data->milx.mlx, data->milx.mlx_window, data->milx.screen_x / 2, y);
+	if (abs(delta_x) >= MOUSE_SENSITIVITY)
 	{
-		// data->keys.turn_right = false;
-		// data->keys.turn_left = false;
-		printf("no movement\n");
-		return (0);
-	}
-	if (delta_x > 0)
-	{
-		// data->player.direct[X] = data->player.direct[X] * cos(TURN_STEP) - data->player.direct[Y] * sin(TURN_STEP);
-		// data->player.direct[Y] = data->player.direct[X] * sin(TURN_STEP) + data->player.direct[Y] * cos(TURN_STEP);
-		// data->player.direct[X] /= sqrt(data->player.direct[X] * data->player.direct[X] + data->player.direct[Y] * data->player.direct[Y]);
-		// data->player.direct[Y] /= sqrt(data->player.direct[X] * data->player.direct[X] + data->player.direct[Y] * data->player.direct[Y]);
-		data->keys.turn_right = true;
-		printf("right\n");
-	}
-	else if (delta_x < 0)
-	{
-		// data->player.direct[X] = data->player.direct[X] * cos(-TURN_STEP) - data->player.direct[Y] * sin(-TURN_STEP);
-		// data->player.direct[Y] = data->player.direct[X] * sin(-TURN_STEP) + data->player.direct[Y] * cos(-TURN_STEP);
-		// data->player.direct[X] /= sqrt(data->player.direct[X] * data->player.direct[X] + data->player.direct[Y] * data->player.direct[Y]);
-		// data->player.direct[Y] /= sqrt(data->player.direct[X] * data->player.direct[X] + data->player.direct[Y] * data->player.direct[Y]);
-		data->keys.turn_left = true;
-		printf("left\n");
+		if (delta_x > 0)
+			data->keys.turn_right = true;
+		else if (delta_x <= 0)
+			data->keys.turn_left = true;
 	}
 	data->mouse_x = x;
 	return(0);
@@ -147,9 +131,8 @@ int	key_released(int key, void *param)
 
 void	hooks_mlx(t_data *data)
 {
-	data->keys.turn_left = false;
-	data->keys.turn_right = false;
 	mlx_loop_hook(data->milx.mlx, render, (void *)data);
+	mlx_mouse_hide(data->milx.mlx, data->milx.mlx_window);
 	mlx_hook(data->milx.mlx_window, 6, 1L<<6, mouse_move, data);
 	mlx_hook(data->milx.mlx_window, 2, 1L<<0,  key_pressed, &data->keys);
 	mlx_hook(data->milx.mlx_window, 3, 1L<<1,  key_released, &data->keys);

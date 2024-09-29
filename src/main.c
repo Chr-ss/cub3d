@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:49:00 by crasche           #+#    #+#             */
-/*   Updated: 2024/09/17 19:32:07 by andmadri         ###   ########.fr       */
+/*   Updated: 2024/09/29 17:49:17 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ int	main(int argc, char **argv)
 	data.map.map_read.filename = argv[1];
 	map_init(&data, &data.map);
 	map_parse(&data, data.map.map);
-	// map_print(&data, &data.map);
 	data.milx.mlx = mlx_init();
 	if (!data.milx.mlx)
 		return (free_all(&data), EXIT_FAILURE);
