@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   hooks.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/08 20:38:21 by crasche           #+#    #+#             */
-/*   Updated: 2024/09/17 11:02:31 by andmadri         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   hooks.c                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: andmadri <andmadri@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/09/08 20:38:21 by crasche       #+#    #+#                 */
+/*   Updated: 2024/09/29 18:36:22 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,7 @@ size_t	get_curr_time(void)
 int	render(void *param)
 {
 	t_data		*data;
-	size_t		time;
 
-	time = get_curr_time();
 	data = (t_data*) param;
 	if (data->keys.exit)
 		finish_mlx(&data->milx);
@@ -61,9 +59,10 @@ int	render(void *param)
 	ray_caster(data, &data->milx);
 	switch_img(data, data->milx.big);
 	switch_img(data, data->milx.mini);
-	time = get_curr_time() - time;
-	time = 60000000 / time;
-	mlx_string_put(data->milx.mlx, data->milx.mlx_window, data->milx.screen_x - 200, 20, create_trgb(0, 255, 255, 255), ft_itoa(time));
+	data->frame_time = get_curr_time() - data->frame_time;
+	data->frame_time = 60000000 / data->frame_time;
+	mlx_string_put(data->milx.mlx, data->milx.mlx_window, data->milx.screen_x - 200, 20, create_trgb(0, 255, 255, 255), ft_itoa(data->frame_time));
+	data->frame_time = get_curr_time();
 	return (0);
 }
 

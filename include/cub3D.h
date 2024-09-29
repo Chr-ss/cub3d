@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cub3D.h                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/05 13:49:31 by crasche           #+#    #+#             */
-/*   Updated: 2024/09/17 19:16:05 by andmadri         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   cub3D.h                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: andmadri <andmadri@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/08/05 13:49:31 by crasche       #+#    #+#                 */
+/*   Updated: 2024/09/29 18:34:50 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <unistd.h>
 # include <string.h>
 # include <stdbool.h>
+# include <stdint.h>
 
 // libft
 # include "../lib/libft/include/libft.h"
@@ -217,6 +218,7 @@ typedef	struct	s_data
 	t_raycaster	ray;
 	t_minilx	milx;
 	t_keys		keys;
+	size_t		frame_time;
 }	t_data;
 
 // marcos
@@ -285,7 +287,7 @@ void	init_image(t_data *data);
 void			img_mlx_pixel_put(t_minilx_img *img, int x, int y, int color);
 unsigned int	img_get_pixel_color(t_minilx_img *img, int x, int y);
 int				create_trgb(int t, int r, int g, int b);
-uint32_t		color_fraction(uint32_t c1, uint32_t c2, float fraction); 
+uint32_t		color_fraction(uint32_t c1, uint32_t c2, float fraction);
 
 void	draw_texture(t_data *data);
 void	draw_texture_line(t_data *data, int texture);
