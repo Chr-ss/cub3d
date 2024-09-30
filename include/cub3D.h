@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:49:31 by crasche           #+#    #+#             */
-/*   Updated: 2024/09/29 18:36:58 by andmadri         ###   ########.fr       */
+/*   Updated: 2024/09/30 19:33:54 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,6 +237,11 @@ typedef	struct	s_data
 void	ray_caster(t_data *data, t_minilx *milx);
 void	switch_img(t_data *data, t_minilx_img *img);
 
+//src/mlx/wall_collison.c
+int		is_not_wall(t_data *data, float vx, float vy, int direction);
+int		collision(t_data *data, float dir_x, float dir_y);
+void	collision_ray_init(t_data *data, t_raycaster *ray, float x, float y);
+
 // map/map_init_utils.c
 int		check_extension(char *str);
 void	map_clear(t_data *data, t_map *map);
@@ -292,6 +297,7 @@ void			img_mlx_pixel_put(t_minilx_img *img, int x, int y, int color);
 unsigned int	img_get_pixel_color(t_minilx_img *img, int x, int y);
 int				create_trgb(int t, int r, int g, int b);
 uint32_t		color_fraction(uint32_t c1, uint32_t c2, float fraction); 
+void	draw_line(t_minilx *milx, int x, int start_y, int line_height, int color);
 
 void	draw_texture(t_data *data);
 void	draw_texture_line(t_data *data, int texture);

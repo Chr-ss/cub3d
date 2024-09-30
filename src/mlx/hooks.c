@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 20:38:21 by crasche           #+#    #+#             */
-/*   Updated: 2024/09/29 18:36:21 by andmadri         ###   ########.fr       */
+/*   Updated: 2024/09/30 19:02:25 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,13 @@ void	key_hook_strafe(void *param);
 void	switch_img(t_data *data, t_minilx_img *img)
 {
 	t_minilx_img	buffer;
+	t_minilx		milx;
 
+	milx = data->milx;
 	buffer = img[DRAW];
 	img[DRAW] = img[DISPLAY];
 	img[DISPLAY] = buffer;
-	mlx_put_image_to_window(data->milx.mlx, data->milx.mlx_window, img[DISPLAY].img, 0, 0);
+	mlx_put_image_to_window(milx.mlx, milx.mlx_window, img[DISPLAY].img, 0, 0);
 }
 
 #include <sys/time.h>
