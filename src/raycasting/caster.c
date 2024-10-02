@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   caster.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/08 20:38:21 by crasche           #+#    #+#             */
-/*   Updated: 2024/09/30 19:34:01 by andmadri         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   caster.c                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: andmadri <andmadri@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/09/08 20:38:21 by crasche       #+#    #+#                 */
+/*   Updated: 2024/10/02 20:25:39 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	ray_caster_init(t_raycaster	*ray, t_player *player)
 	player->plane[X] = -player->direct[Y];
 	player->plane[Y] = player->direct[X];
 	ray->r_start[X] = player->pos[X];
-	ray->r_start[Y] = player->pos[Y]; 
+	ray->r_start[Y] = player->pos[Y];
 	ray->plane_magnitude = tan((float)(FOV / 2) * RAD);
 }
 
@@ -87,7 +87,7 @@ void	ray_caster(t_data *data, t_minilx *milx)
 	t_player	player;
 	int			start_y;
 	int			start_x;
-	
+
 	player = data->player;
 	ray_caster_init(&ray, &player);
 	while(ray.x < milx->screen_x)
@@ -101,8 +101,8 @@ void	ray_caster(t_data *data, t_minilx *milx)
 		data->ray = ray;
 		start_x = (milx->screen_y / 2) + (ray.line_height / 2);
 		start_y = (milx->screen_y - ray.line_height) / 2;
-		draw_line(milx, ray.x, 0, start_y, create_trgb(2, 220, 100, 0));
-		draw_line(milx, ray.x, start_x, start_y, create_trgb(2, 0, 102, 102));
+		draw_line(milx, ray.x, 0, start_y + 1, create_trgb(2, 220, 100, 0));
+		draw_line(milx, ray.x, start_x, start_y - 1, create_trgb(2, 0, 102, 102));
 		draw_texture(data);
 		ray.x++;
 	}

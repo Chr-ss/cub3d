@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/05 13:49:00 by crasche           #+#    #+#             */
-/*   Updated: 2024/10/02 13:20:46 by andmadri         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   main.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: andmadri <andmadri@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/08/05 13:49:00 by crasche       #+#    #+#                 */
+/*   Updated: 2024/10/02 20:21:11 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,25 +17,27 @@ int	init_mlx_struct(t_data *data, t_minilx *milx)
 	milx->mlx = mlx_init();
 	if (!milx->mlx)
 		return (free_all(data), EXIT_FAILURE);
-	mlx_get_screen_size(milx->mlx, &milx->screen_x, &milx->screen_y);
-	// milx->screen_x = 800;
-	// milx->screen_y = 620;
+	// mlx_get_screen_size(milx->mlx, &milx->screen_x, &milx->screen_y);
+	// milx->screen_x = 1920;
+	// milx->screen_y = 1080;
+	milx->screen_x = 1280;
+	milx->screen_y = 720;
+	// milx->screen_x = 720;
+	// milx->screen_y = 360;
 	milx->mlx_window = mlx_new_window(milx->mlx, milx->screen_x, \
 	milx->screen_y, "CUBE3D");
 	if (!milx->mlx_window)
 		return (free_all(data), EXIT_FAILURE);
+	init_image(data);
 	return (EXIT_SUCCESS);
 }
+
 
 int	main(int argc, char **argv)
 {
 	t_data		data;
 
 	ft_bzero(&data, sizeof(t_data));
-	data.keys.left_step = -1;
-	data.keys.right_step = 1;
-	data.mouse_x = 0;
-	data.mouse_y = 0;
 	if (argc <= 1)
 		error("Missing map.", &data);
 	else if (argc > 2)
@@ -45,7 +47,6 @@ int	main(int argc, char **argv)
 	map_parse(&data, data.map.map);
 	if (init_mlx_struct(&data, &data.milx) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	init_image(&data);
 	hooks_mlx(&data);
 	mlx_loop(data.milx.mlx);
 	free_all(&data);

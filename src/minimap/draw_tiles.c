@@ -6,7 +6,7 @@
 /*   By: crasche <crasche@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/08 20:38:21 by crasche       #+#    #+#                 */
-/*   Updated: 2024/09/08 20:44:17 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/02 20:26:54 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ void	draw_minimap_tiles_draw(t_data *data, int x, int y)
 	if(((float)map_x + x)/MM_TILE_SIZE >= 0 && ((float)map_y + y)/MM_TILE_SIZE >= 0 && (map_x + x)/MM_TILE_SIZE < data->map.x_max && (map_y + y)/MM_TILE_SIZE < data->map.y_max)
 	{
 		if	(data->map.map[(map_y + y)/MM_TILE_SIZE][(map_x + x)/MM_TILE_SIZE] == '1')
-			img_mlx_pixel_put(&(data->milx.mini[DRAW]), x, y, MM_WALL_COLOR);
+			img_mlx_pixel_put(&(data->milx.mini), x, y, MM_WALL_COLOR);
 		else if	(data->map.map[(map_y + y)/MM_TILE_SIZE][(map_x + x+1)/MM_TILE_SIZE] == '1')
-			img_mlx_pixel_put(&(data->milx.mini[DRAW]), x, y, MM_WALL_COLOR);
+			img_mlx_pixel_put(&(data->milx.mini), x, y, MM_WALL_COLOR);
 		else if (data->map.map[(map_y + y)/MM_TILE_SIZE][(map_x + x)/MM_TILE_SIZE] == '0')
-			img_mlx_pixel_put(&(data->milx.mini[DRAW]), x, y, WHITE);
+			img_mlx_pixel_put(&(data->milx.mini), x, y, WHITE);
 		else
-			img_mlx_pixel_put(&(data->milx.mini[DRAW]), x, y, create_trgb(0, 0, 0, 0));
+			img_mlx_pixel_put(&(data->milx.mini), x, y, create_trgb(0, 0, 0, 0));
 	}
 }
 

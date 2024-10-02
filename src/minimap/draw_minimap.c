@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   draw_minimap.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/08 20:38:21 by crasche           #+#    #+#             */
-/*   Updated: 2024/09/17 19:32:20 by andmadri         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   draw_minimap.c                                     :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: andmadri <andmadri@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/09/08 20:38:21 by crasche       #+#    #+#                 */
+/*   Updated: 2024/10/02 20:33:32 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3D.h"
 
-void draw_fov_lines(t_minilx_img *img, float vx, float vy)
+void draw_fov_lines(t_mlx_img *img, float vx, float vy)
 {
 	float	magnitude;
 	float	x;
@@ -50,7 +50,7 @@ void	draw_minimap_view(t_data *data, t_minilx *milx)
 	{
 		vx = player.direct[X] * cos(i * RAD) - player.direct[Y] * sin(i * RAD);
 		vy = player.direct[X] * sin(i * RAD) + player.direct[Y] * cos(i * RAD);
-		draw_fov_lines(&milx->mini[DRAW], vx, vy);
+		draw_fov_lines(&milx->mini, vx, vy);
 		i++;
 	}
 }

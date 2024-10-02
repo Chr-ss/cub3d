@@ -6,7 +6,7 @@
 /*   By: crasche <crasche@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/08 20:38:21 by crasche       #+#    #+#                 */
-/*   Updated: 2024/09/08 20:44:17 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/02 20:26:42 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	draw_texture_north(t_data *data)
 			color_y = round(data->map.img_n.max_y * ((float)line_pos / (float)data->ray.line_height));
 			data->ray.wall_color = img_get_pixel_color(&data->map.img_n, color_x, color_y);
 		}
-		img_mlx_pixel_put(&data->milx.big[DRAW], data->ray.x, start_y + line_pos, data->ray.wall_color);
+		img_mlx_pixel_put(&data->milx.big, data->ray.x, start_y + line_pos, data->ray.wall_color);
 		line_pos++;
 	}
 }
@@ -56,7 +56,7 @@ void	draw_texture_east(t_data *data)
 			color_y = round((data->map.img_e.max_y * (float)line_pos / (float)data->ray.line_height));
 			data->ray.wall_color = img_get_pixel_color(&data->map.img_e, color_x, color_y);
 		}
-		img_mlx_pixel_put(&data->milx.big[DRAW], data->ray.x, start_y + line_pos, data->ray.wall_color);
+		img_mlx_pixel_put(&data->milx.big, data->ray.x, start_y + line_pos, data->ray.wall_color);
 		line_pos++;
 	}
 }
@@ -80,7 +80,7 @@ void	draw_texture_south(t_data *data)
 			color_y = round((data->map.img_s.max_y * (float)line_pos / (float)data->ray.line_height));
 			data->ray.wall_color = img_get_pixel_color(&data->map.img_s, color_x, color_y);
 		}
-		img_mlx_pixel_put(&data->milx.big[DRAW], data->ray.x, start_y + line_pos, data->ray.wall_color);
+		img_mlx_pixel_put(&data->milx.big, data->ray.x, start_y + line_pos, data->ray.wall_color);
 		line_pos++;
 	}
 }
@@ -104,7 +104,7 @@ void	draw_texture_west(t_data *data)
 			color_y = round((data->map.img_w.max_y * (float)line_pos / (float)data->ray.line_height));
 			data->ray.wall_color = img_get_pixel_color(&data->map.img_w, color_x, color_y);
 		}
-		img_mlx_pixel_put(&data->milx.big[DRAW], data->ray.x, start_y + line_pos, data->ray.wall_color);
+		img_mlx_pixel_put(&data->milx.big, data->ray.x, start_y + line_pos, data->ray.wall_color);
 		line_pos++;
 	}
 }

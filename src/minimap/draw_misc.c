@@ -23,7 +23,7 @@ void	draw_minimap_border(t_minilx *milx, int color, int size)
 		x = MINI_MAP;
 		while (x < MINI_MAP + size)
 		{
-			img_mlx_pixel_put(&(milx->mini[DRAW]), x, y, color);
+			img_mlx_pixel_put(&milx->mini, x, y, color);
 			x++;
 		}
 		y++;
@@ -34,7 +34,7 @@ void	draw_minimap_border(t_minilx *milx, int color, int size)
 		x = 0;
 		while (x < MINI_MAP + size)
 		{
-			img_mlx_pixel_put(&(milx->mini[DRAW]), x, y, color);
+			img_mlx_pixel_put(&milx->mini, x, y, color);
 			x++;
 		}
 		y++;
@@ -45,7 +45,7 @@ void	draw_minimap_player_line(t_minilx *milx, int x_start, int x_end, int y, int
 {
 	while (x_start <= x_end)
 	{
-		img_mlx_pixel_put(&(milx->mini[DRAW]), x_start, y, color);
+		img_mlx_pixel_put(&milx->mini, x_start, y, color);
 		x_start++;
 	}
 }
@@ -84,7 +84,7 @@ void	draw_minimap_clear(t_minilx *milx)
 		x = 0;
 		while (x < MINI_MAP)
 		{
-			img_mlx_pixel_put(&(milx->mini[DRAW]), x, y, 0);
+			img_mlx_pixel_put(&milx->mini, x, y, 0);
 			x++;
 		}
 		y++;
