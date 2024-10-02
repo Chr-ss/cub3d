@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/05 13:49:31 by crasche       #+#    #+#                 */
-/*   Updated: 2024/09/29 18:34:50 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/02 16:02:18 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 // external functions:
 # include <math.h>
 # include <stdlib.h>
+# include <stdint.h>
 # include <stdio.h>
 # include <unistd.h>
 # include <string.h>
@@ -110,6 +111,9 @@
 
 // MATH
 # define RAD 0.01745329251
+# define MOUSE_SENSITIVITY 5
+# define MOUSE_OFFSET 50
+
 #ifndef M_PI
 # define M_PI 3.14159265358979323846
 #endif
@@ -202,12 +206,14 @@ typedef	struct	s_map
 
 typedef	struct	s_keys
 {
+	int		left_step;
+	int		right_step;
+	bool	turn_left;
+	bool	turn_right;
 	bool	forward;
 	bool	back;
 	bool	strafe_left;
 	bool	strafe_right;
-	bool	turn_left;
-	bool	turn_right;
 	bool	exit;
 }	t_keys;
 
@@ -218,7 +224,8 @@ typedef	struct	s_data
 	t_raycaster	ray;
 	t_minilx	milx;
 	t_keys		keys;
-	size_t		frame_time;
+	int			mouse_x;
+	int			mouse_y;
 }	t_data;
 
 // marcos
@@ -232,6 +239,11 @@ typedef	struct	s_data
 
 void	ray_caster(t_data *data, t_minilx *milx);
 void	switch_img(t_data *data, t_minilx_img *img);
+
+//src/mlx/wall_collison.c
+int		is_not_wall(t_data *data, float vx, float vy, int direction);
+int		collision(t_data *data, float dir_x, float dir_y);
+void	collision_ray_init(t_data *data, t_raycaster *ray, float x, float y);
 
 // map/map_init_utils.c
 int		check_extension(char *str);
@@ -288,6 +300,7 @@ void			img_mlx_pixel_put(t_minilx_img *img, int x, int y, int color);
 unsigned int	img_get_pixel_color(t_minilx_img *img, int x, int y);
 int				create_trgb(int t, int r, int g, int b);
 uint32_t		color_fraction(uint32_t c1, uint32_t c2, float fraction);
+void	draw_line(t_minilx *milx, int x, int start_y, int line_height, int color);
 
 void	draw_texture(t_data *data);
 void	draw_texture_line(t_data *data, int texture);

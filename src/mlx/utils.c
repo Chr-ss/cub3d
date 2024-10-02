@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   utils.c                                            :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: crasche <crasche@student.codam.nl>           +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/09/08 20:38:21 by crasche       #+#    #+#                 */
-/*   Updated: 2024/09/08 20:44:17 by crasche       ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/08 20:38:21 by crasche           #+#    #+#             */
+/*   Updated: 2024/09/30 19:33:42 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,31 @@ void	img_mlx_pixel_put(t_minilx_img *img, int x, int y, int color)
 
 	if (x >= 0 && y >= 0 && x < img->max_x && y < img->max_y)
 	{
-		dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
-		*(unsigned int*)dst = color;
+		dst = img->addr + (y * img->line_length + x * \
+		(img->bits_per_pixel / 8));
+		*(unsigned int *)dst = color;
+	}
+}
+
+void	draw_line(t_minilx *milx, int x, int start_y, int height, int color)
+{
+	int	y;
+
+	y = 0;
+	while(y < height)
+	{
+		img_mlx_pixel_put(&milx->big[DRAW], x, start_y + y, color);
+		y++;
 	}
 }
 
 unsigned int	img_get_pixel_color(t_minilx_img *img, int x, int y)
 {
 	if (x >= 0 && y >= 0 && x < img->max_x && y < img->max_y)
-		return (*(unsigned int*)(img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8))));
+	{
+		return (*(unsigned int *)(img->addr + (y * img->line_length + x * \
+		(img->bits_per_pixel / 8))));
+	}
 	return (0);
 }
 

@@ -1,28 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   caster.c                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: crasche <crasche@student.codam.nl>           +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/09/08 20:38:21 by crasche       #+#    #+#                 */
-/*   Updated: 2024/09/08 20:44:17 by crasche       ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   caster.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/08 20:38:21 by crasche           #+#    #+#             */
+/*   Updated: 2024/09/30 19:34:01 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3D.h"
-
-void	draw_line(t_minilx *milx, int x, int start_y, int line_height, int color)
-{
-	int	y;
-
-	y = 0;
-	while(y < line_height)
-	{
-			img_mlx_pixel_put(&milx->big[DRAW], x, start_y + y, color);
-		y++;
-	}
-}
 
 void	step_direction(t_raycaster *ray)
 {
@@ -66,8 +54,8 @@ void	ray_caster_calculations(t_data *data, t_raycaster *ray, t_player *player, i
 	ray->plane_scale = (float)2 * ((float)x / (float)data->milx.screen_x) - (float)1;
 	ray->direction[X] = player->direct[X] + (player->plane[X] * ray->plane_magnitude) * ray->plane_scale;
 	ray->direction[Y] = player->direct[Y] + (player->plane[Y] * ray->plane_magnitude) * ray->plane_scale;
-	ray->step_size[X] = sqrt(1 + (ray->direction[Y] / ray->direction[X]) * (ray->direction[Y] / ray->direction[X]));
-	ray->step_size[Y] = sqrt(1 + (ray->direction[X] / ray->direction[Y]) * (ray->direction[X] / ray->direction[Y]));
+	ray->step_size[X] = fabsf(1/ray->direction[X]);
+	ray->step_size[Y] = fabsf(1/ray->direction[Y]);
 	step_direction(ray);
 }
 
@@ -88,16 +76,18 @@ void	ray_caster_step(t_data *data, t_raycaster *ray)
 		ray->wall_direction = TB;
 	}
 	if (data->map.map[ray->r_pos[Y]][ray->r_pos[X]] == '1')
+	{
 		ray->wall_found = true;
+	}
 }
 
 void	ray_caster(t_data *data, t_minilx *milx)
 {
 	t_raycaster	ray;
 	t_player	player;
-	// int			x;
-	// float		line_height;
-
+	int			start_y;
+	int			start_x;
+	
 	player = data->player;
 	ray_caster_init(&ray, &player);
 	while(ray.x < milx->screen_x)
@@ -105,12 +95,14 @@ void	ray_caster(t_data *data, t_minilx *milx)
 		ray_caster_calculations(data, &ray, &player, ray.x);
 		while(!ray.wall_found)
 			ray_caster_step(data, &ray);
-		ray.line_height = (float)milx->screen_y / (float)(ray.final_distance * cos((float)(FOV/2) * RAD)); // (float)milx->screen_y / 
+		ray.line_height = (float)milx->screen_y / (float)ray.final_distance;
 		ray.intersect[X] = ray.direction[X] * ray.final_distance + ray.r_start[X];
 		ray.intersect[Y] = ray.direction[Y] * ray.final_distance + ray.r_start[Y];
 		data->ray = ray;
-		draw_line(milx, ray.x, 0, (milx->screen_y - ray.line_height) / 2, create_trgb(2, 220, 100, 0)); //sky
-		draw_line(milx, ray.x, milx->screen_y / 2 + ray.line_height / 2, (milx->screen_y - ray.line_height) / 2, create_trgb(2, 0, 102, 102)); //floor
+		start_x = (milx->screen_y / 2) + (ray.line_height / 2);
+		start_y = (milx->screen_y - ray.line_height) / 2;
+		draw_line(milx, ray.x, 0, start_y, create_trgb(2, 220, 100, 0));
+		draw_line(milx, ray.x, start_x, start_y, create_trgb(2, 0, 102, 102));
 		draw_texture(data);
 		ray.x++;
 	}
