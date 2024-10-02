@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/08 20:31:41 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/02 21:13:55 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/02 22:51:59 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,6 @@ static void	map_color_rgb_convert(t_data *data, t_color *color)
 
 void	map_color(t_data *data, t_color *color)
 {
-	int	i;
-
-	i = 0;
 	color->c_split = ft_split(color->c_col, ',');
 	color->f_split = ft_split(color->f_col, ',');
 	if (!color->c_split || !color->f_split)
