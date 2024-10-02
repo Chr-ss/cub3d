@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 20:38:21 by crasche           #+#    #+#             */
-/*   Updated: 2024/09/30 19:02:25 by andmadri         ###   ########.fr       */
+/*   Updated: 2024/10/02 15:56:13 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,17 +73,25 @@ int	mouse_move(int x, int y, t_data *data)
 {
 	int	delta_x;
 
+	(void)y;
 	delta_x = x - data->mouse_x;
 	data->keys.turn_left = false;
 	data->keys.turn_right = false;
-	if (x >= data->milx.screen_x - MOUSE_OFFSET|| x <= MOUSE_OFFSET)
-		mlx_mouse_move(data->milx.mlx, data->milx.mlx_window, data->milx.screen_x / 2, y);
+	// data->keys.left_step = -1;
+	// data->keys.right_step = 1;
+	mlx_mouse_move(data->milx.mlx, data->milx.mlx_window, data->milx.screen_x / 2, data->milx.screen_y / 2);
 	if (abs(delta_x) >= MOUSE_SENSITIVITY)
 	{
 		if (delta_x > 0)
+		{
 			data->keys.turn_right = true;
+			// data->keys.right_step = delta_x;
+		}
 		else if (delta_x <= 0)
+		{
 			data->keys.turn_left = true;
+			// data->keys.left_step = delta_x;
+		}
 	}
 	data->mouse_x = x;
 	return(0);
@@ -134,7 +142,7 @@ int	key_released(int key, void *param)
 void	hooks_mlx(t_data *data)
 {
 	mlx_loop_hook(data->milx.mlx, render, (void *)data);
-	mlx_mouse_hide(data->milx.mlx, data->milx.mlx_window);
+	// mlx_mouse_hide(data->milx.mlx, data->milx.mlx_window);
 	mlx_hook(data->milx.mlx_window, 6, 1L<<6, mouse_move, data);
 	mlx_hook(data->milx.mlx_window, 2, 1L<<0,  key_pressed, &data->keys);
 	mlx_hook(data->milx.mlx_window, 3, 1L<<1,  key_released, &data->keys);

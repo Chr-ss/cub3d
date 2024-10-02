@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:49:31 by crasche           #+#    #+#             */
-/*   Updated: 2024/09/30 19:33:54 by andmadri         ###   ########.fr       */
+/*   Updated: 2024/10/02 13:17:33 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,12 +205,14 @@ typedef	struct	s_map
 
 typedef	struct	s_keys
 {
+	int		left_step;
+	int		right_step;
+	bool	turn_left;
+	bool	turn_right;
 	bool	forward;
 	bool	back;
 	bool	strafe_left;
 	bool	strafe_right;
-	bool	turn_left;
-	bool	turn_right;
 	bool	exit;
 }	t_keys;
 

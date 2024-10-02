@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 20:38:21 by crasche           #+#    #+#             */
-/*   Updated: 2024/09/30 19:22:31 by andmadri         ###   ########.fr       */
+/*   Updated: 2024/10/02 13:24:19 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	key_hook_turn(void *param)
 	data = (t_data *)param;
 	keys = data->keys;
 	if (keys.turn_left)
-		rotate_vector(data->player.direct, &data->player.direct[X], &data->player.direct[X], -TURN_STEP);
+		rotate_vector(data->player.direct, &data->player.direct[X], &data->player.direct[Y], -TURN_STEP);
 	else if (keys.turn_right)
-		rotate_vector(data->player.direct, &data->player.direct[X], &data->player.direct[X], TURN_STEP);
+		rotate_vector(data->player.direct, &data->player.direct[X], &data->player.direct[Y], TURN_STEP);
 }

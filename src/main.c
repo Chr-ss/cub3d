@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:49:00 by crasche           #+#    #+#             */
-/*   Updated: 2024/09/30 19:03:44 by andmadri         ###   ########.fr       */
+/*   Updated: 2024/10/02 13:20:46 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ int	main(int argc, char **argv)
 	t_data		data;
 
 	ft_bzero(&data, sizeof(t_data));
+	data.keys.left_step = -1;
+	data.keys.right_step = 1;
 	data.mouse_x = 0;
 	data.mouse_y = 0;
 	if (argc <= 1)
