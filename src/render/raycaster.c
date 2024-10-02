@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   caster.c                                           :+:    :+:            */
+/*   raycaster.c                                        :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: andmadri <andmadri@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/08 20:38:21 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/02 20:25:39 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/02 22:38:56 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,26 +17,26 @@ void	step_direction(t_raycaster *ray)
 	if (ray->direction[X] >= 0)
 	{
 		ray->step[X] = 1;
-		ray->length[X] = (((float)ray->r_pos[X] + 1) - ray->r_start[X]) * ray->step_size[X];
+		ray->length[X] = ((ray->r_pos[X] + 1) - ray->r_start[X]) * ray->step_size[X];
 	}
 	else if (ray->direction[X] < 0)
 	{
 		ray->step[X] = -1;
-		ray->length[X] = (ray->r_start[X] - (float)ray->r_pos[X]) * ray->step_size[X];
+		ray->length[X] = (ray->r_start[X] - ray->r_pos[X]) * ray->step_size[X];
 	}
 	if (ray->direction[Y] >= 0)
 	{
 		ray->step[Y] = 1;
-		ray->length[Y] = (((float)ray->r_pos[Y] + 1) - ray->r_start[Y]) * ray->step_size[Y];
+		ray->length[Y] = ((ray->r_pos[Y] + 1) - ray->r_start[Y]) * ray->step_size[Y];
 	}
 	else if (ray->direction[Y] < 0)
 	{
 		ray->step[Y] = -1;
-		ray->length[Y] = (ray->r_start[Y] - (float)ray->r_pos[Y]) * ray->step_size[Y];
+		ray->length[Y] = (ray->r_start[Y] - ray->r_pos[Y]) * ray->step_size[Y];
 	}
 }
 
-void	ray_caster_init(t_raycaster	*ray, t_player *player)
+static void	ray_caster_init(t_raycaster	*ray, t_player *player)
 {
 	ft_bzero(ray, sizeof(t_raycaster));
 	player->plane[X] = -player->direct[Y];
@@ -46,7 +46,7 @@ void	ray_caster_init(t_raycaster	*ray, t_player *player)
 	ray->plane_magnitude = tan((float)(FOV / 2) * RAD);
 }
 
-void	ray_caster_calculations(t_data *data, t_raycaster *ray, t_player *player, int x)
+static void	ray_caster_calculations(t_data *data, t_raycaster *ray, t_player *player, int x)
 {
 	ray->r_pos[X] = ray->r_start[X];
 	ray->r_pos[Y] = ray->r_start[Y];
@@ -59,7 +59,7 @@ void	ray_caster_calculations(t_data *data, t_raycaster *ray, t_player *player, i
 	step_direction(ray);
 }
 
-void	ray_caster_step(t_data *data, t_raycaster *ray)
+static void	ray_caster_step(t_data *data, t_raycaster *ray)
 {
 	if(ray->length[X] < ray->length[Y])
 	{
@@ -101,8 +101,8 @@ void	ray_caster(t_data *data, t_minilx *milx)
 		data->ray = ray;
 		start_x = (milx->screen_y / 2) + (ray.line_height / 2);
 		start_y = (milx->screen_y - ray.line_height) / 2;
-		draw_line(milx, ray.x, 0, start_y + 1, create_trgb(2, 220, 100, 0));
-		draw_line(milx, ray.x, start_x, start_y - 1, create_trgb(2, 0, 102, 102));
+		draw_line(milx, ray.x, 0, start_y + 1, data->map.c_col);
+		draw_line(milx, ray.x, start_x, start_y - 1, data->map.f_col);
 		draw_texture(data);
 		ray.x++;
 	}

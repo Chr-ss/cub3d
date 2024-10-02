@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/08 20:38:21 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/02 20:35:31 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/02 22:18:28 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,17 @@ void	img_mlx_pixel_put(t_mlx_img *img, int x, int y, int color)
 	}
 }
 
+int	img_get_pixel_color(t_mlx_img *img, int x, int y)
+{
+	if (x >= 0 && y >= 0 && x < img->max_x && y < img->max_y)
+	{
+		return (*(unsigned int *)(img->addr + (y * img->line_length + x * 4)));
+		// return (*(unsigned int *)(img->addr + (y * img->line_length + x * \
+		// (img->bits_per_pixel / 8))));
+	}
+	return (0);
+}
+
 void	draw_line(t_minilx *milx, int x, int start_y, int height, int color)
 {
 	int	y;
@@ -42,18 +53,7 @@ void	draw_line(t_minilx *milx, int x, int start_y, int height, int color)
 	}
 }
 
-unsigned int	img_get_pixel_color(t_mlx_img *img, int x, int y)
-{
-	if (x >= 0 && y >= 0 && x < img->max_x && y < img->max_y)
-	{
-		return (*(unsigned int *)(img->addr + (y * img->line_length + x * 4)));
-		// return (*(unsigned int *)(img->addr + (y * img->line_length + x * \
-		// (img->bits_per_pixel / 8))));
-	}
-	return (0);
-}
-
-uint32_t	color_fraction(uint32_t c1, uint32_t c2, float fraction)
+int	color_fraction(int c1, int c2, float fraction)
 {
 	int	r;
 	int	g;

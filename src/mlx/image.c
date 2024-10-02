@@ -6,13 +6,13 @@
 /*   By: crasche <crasche@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/08 20:38:21 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/02 20:35:13 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/02 22:07:17 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3D.h"
 
-void	init_image_set_size(t_mlx_img *img, int max_x, int max_y)
+static void	init_image_set_size(t_mlx_img *img, int max_x, int max_y)
 {
 	img->max_x = max_x;
 	img->max_y = max_y;

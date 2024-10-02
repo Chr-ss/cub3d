@@ -20,7 +20,6 @@ ifeq ($(OS_UNAME),Linux)
 	LIBX		:=	$(LIBXDIR)/libmlx_Linux.a
 	LIBXFLAGS	:=	-Lmlx_linux  -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
 	LIBXFLAGS_O	:=	-Imlx
-	CFLAGS		+= -D LINUX=1
 else ifeq ($(OS_UNAME),Darwin)
 	OS_TYPE		:= MACOS
 	LIBXDIR_SUB	:=	lib/minilibx-mac-osx
@@ -28,6 +27,7 @@ else ifeq ($(OS_UNAME),Darwin)
 	LIBXFLAGS	:=	-L ./lib/minilibx -I /usr/local/include -L /usr/local/lib -framework OpenGL -framework AppKit -lmlx
 # LIBXFLAGS	:=	-L ./lib/minilibx -I /usr/local/bin -g -L /usr/local/bin/X11 -framework OpenGL -framework AppKit -lmlx
 	LIBXFLAGS_O	:=	-Imlx
+	CFLAGS		+= -D LINUX=0
 else
 	OS_TYPE		:= Linux
 	LIBXDIR_SUB	:=	lib/minilibx_linux

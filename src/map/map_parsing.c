@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   map_parsing.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/08 20:26:53 by crasche           #+#    #+#             */
-/*   Updated: 2024/09/16 11:57:28 by andmadri         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   map_parsing.c                                      :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: andmadri <andmadri@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/09/08 20:26:53 by crasche       #+#    #+#                 */
+/*   Updated: 2024/10/02 21:16:32 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3D.h"
 
-void	map_parse_meta_open_tex(t_data *data)
+static void	map_parse_meta_open_tex(t_data *data)
 {
 	int	temp;
 
@@ -38,7 +38,7 @@ void	map_parse_meta_open_tex(t_data *data)
 		error("Error, unable to open WEST texture.", data);
 }
 
-void	map_parse_wallcheck(t_data *data, char **map, int y, int x)
+static void	map_parse_wallcheck(t_data *data, char **map, int y, int x)
 {
 	if (y == 0 || (y && map[y - 1][x] == ' '))
 		error("Error, unclosed map", data);
@@ -50,7 +50,7 @@ void	map_parse_wallcheck(t_data *data, char **map, int y, int x)
 		error("Error, unclosed map", data);
 }
 
-void	map_parse_player(t_data *data, char **map, int x, int y)
+static void	map_parse_player(t_data *data, char **map, int x, int y)
 {
 	data->player.pos[X] = x + 0.5;
 	data->player.pos[Y] = y + 0.5;
@@ -79,7 +79,7 @@ void	map_parse_player(t_data *data, char **map, int x, int y)
 	map_parse_wallcheck(data, map, y, x);
 }
 
-void	map_parse_meta(t_data *data)
+static void	map_parse_meta(t_data *data)
 {
 	if (!data->map.n_tex)
 		error("Error, missing north texture", data);
@@ -89,9 +89,9 @@ void	map_parse_meta(t_data *data)
 		error("Error, missing south texture", data);
 	if (!data->map.w_tex)
 		error("Error, missing west texture", data);
-	if (!data->map.f_col)
+	if (!data->map.color.f_col)
 		error("Error, missing floor color", data);
-	if (!data->map.c_col)
+	if (!data->map.color.c_col)
 		error("Error, missing ceiling color", data);
 	map_parse_meta_open_tex(data);
 }

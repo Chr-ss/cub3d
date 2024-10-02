@@ -1,32 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   error_free.c                                       :+:    :+:            */
+/*   time.c                                             :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: crasche <crasche@student.codam.nl>           +#+                     */
+/*   By: andmadri <andmadri@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2024/09/08 20:27:39 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/02 21:54:25 by crasche       ########   odam.nl         */
+/*   Created: 2024/09/08 20:38:21 by crasche       #+#    #+#                 */
+/*   Updated: 2024/10/02 21:53:41 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3D.h"
 
-void	freenull(void **to_free)
+uint64_t	get_curr_time(void)
 {
-	free(*to_free);
-	*to_free = NULL;
-}
+	struct timeval	timeofday;
 
-void	free_all(t_data *data)
-{
-	freenull((void **) &data->map.map_read.read);
-}
-
-void	error(char *msg, t_data *data)
-{
-	if (msg)
-		perror(msg);
-	free_all(data);
-	exit(1);
+	gettimeofday(&timeofday, NULL);
+	return (timeofday.tv_sec * 1000000 + timeofday.tv_usec);
 }

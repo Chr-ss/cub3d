@@ -6,14 +6,13 @@
 /*   By: crasche <crasche@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/08 20:38:21 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/02 20:26:54 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/02 21:52:14 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3D.h"
 
-
-void	draw_minimap_tiles_draw(t_data *data, int x, int y)
+static void	draw_minimap_tiles_draw(t_data *data, int x, int y)
 {
 	int	map_x;
 	int	map_y;
@@ -28,8 +27,6 @@ void	draw_minimap_tiles_draw(t_data *data, int x, int y)
 			img_mlx_pixel_put(&(data->milx.mini), x, y, MM_WALL_COLOR);
 		else if (data->map.map[(map_y + y)/MM_TILE_SIZE][(map_x + x)/MM_TILE_SIZE] == '0')
 			img_mlx_pixel_put(&(data->milx.mini), x, y, WHITE);
-		else
-			img_mlx_pixel_put(&(data->milx.mini), x, y, create_trgb(0, 0, 0, 0));
 	}
 }
 
@@ -38,11 +35,11 @@ void	draw_minimap_tiles(t_data *data)
 	int	x;
 	int	y;
 
-	y = 0;
-	while (y < MINI_MAP)
+	y = MM_BORDER_SIZE;
+	while (y <= MINI_MAP - MM_BORDER_SIZE)
 	{
-		x = 0;
-		while (x < MINI_MAP)
+		x = MM_BORDER_SIZE;
+		while (x <= MINI_MAP - MM_BORDER_SIZE)
 		{
 			draw_minimap_tiles_draw(data, x, y);
 			x++;

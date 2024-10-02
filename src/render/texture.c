@@ -6,14 +6,13 @@
 /*   By: crasche <crasche@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/08 20:38:21 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/02 20:26:42 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/02 22:39:45 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3D.h"
 
-
-void	draw_texture_north(t_data *data)
+static void	draw_texture_north(t_data *data)
 {
 	int	start_y;
 	int line_pos;
@@ -37,7 +36,7 @@ void	draw_texture_north(t_data *data)
 	}
 }
 
-void	draw_texture_east(t_data *data)
+static void	draw_texture_east(t_data *data)
 {
 	int	start_y;
 	int line_pos;
@@ -61,7 +60,7 @@ void	draw_texture_east(t_data *data)
 	}
 }
 
-void	draw_texture_south(t_data *data)
+static void	draw_texture_south(t_data *data)
 {
 	int	start_y;
 	int line_pos;
@@ -85,7 +84,7 @@ void	draw_texture_south(t_data *data)
 	}
 }
 
-void	draw_texture_west(t_data *data)
+static void	draw_texture_west(t_data *data)
 {
 	int	start_y;
 	int line_pos;

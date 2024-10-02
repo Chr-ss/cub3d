@@ -6,13 +6,31 @@
 /*   By: andmadri <andmadri@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/08 20:38:21 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/02 20:33:32 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/02 21:50:28 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3D.h"
 
-void draw_fov_lines(t_mlx_img *img, float vx, float vy)
+static void	draw_minimap_clear(t_minilx *milx)
+{
+	int	x;
+	int	y;
+
+	y = MM_BORDER_SIZE;
+	while (y <= MINI_MAP - MM_BORDER_SIZE)
+	{
+		x = MM_BORDER_SIZE;
+		while (x <= MINI_MAP - MM_BORDER_SIZE)
+		{
+			img_mlx_pixel_put(&milx->mini, x, y, 0);
+			x++;
+		}
+		y++;
+	}
+}
+
+static void draw_fov_lines(t_mlx_img *img, float vx, float vy)
 {
 	float	magnitude;
 	float	x;
@@ -30,14 +48,14 @@ void draw_fov_lines(t_mlx_img *img, float vx, float vy)
 		if (img_get_pixel_color(img, (int)x, (int)y) == MM_WALL_COLOR)
 			return ;
 		img_mlx_pixel_put(img, (int)x, (int)y, color_fraction(MM_VIEW_COLOR, \
-			create_trgb(0, 255, 255, 255), ((float)i / (float)VIEW_DISTANCE)));
+			WHITE, ((float)i / (float)VIEW_DISTANCE)));
 		x += vx;
 		y += vy;
 		i++;
 	}
 }
 
-void	draw_minimap_view(t_data *data, t_minilx *milx)
+static void	draw_minimap_view(t_data *data, t_minilx *milx)
 {
 	t_player	player;
 	float		vx;
@@ -55,17 +73,14 @@ void	draw_minimap_view(t_data *data, t_minilx *milx)
 	}
 }
 
-int	draw_minimap(void *param)
+int	draw_minimap(t_data *data)
 {
-	t_data		*data;
 	t_minilx	*milx;
 
-	data = (t_data *) param;
 	milx = &data->milx;
 	draw_minimap_clear(milx);
 	draw_minimap_tiles(data);
 	draw_minimap_view(data, milx);
 	draw_minimap_player(milx, MM_PLAYER_COLOR, MM_PLAYER_SIZE);
-	draw_minimap_border(milx, MM_BORDER_COLOR, MM_BORDER_SIZE);
 	return (0);
 }

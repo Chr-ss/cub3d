@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   map_init.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/08 20:28:42 by crasche           #+#    #+#             */
-/*   Updated: 2024/09/29 17:38:27 by andmadri         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   map_init.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: andmadri <andmadri@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/09/08 20:28:42 by crasche       #+#    #+#                 */
+/*   Updated: 2024/10/02 21:15:39 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3D.h"
 
-void	map_fill(t_data *data, t_map *map)
+static void	map_fill(t_data *data, t_map *map)
 {
 	int		i;
 	char	*old;
@@ -38,7 +38,7 @@ void	map_fill(t_data *data, t_map *map)
 	}
 }
 
-void	map_meta(t_data *data, t_map *map)
+static void	map_meta(t_data *data, t_map *map)
 {
 	int	i;
 
@@ -54,9 +54,9 @@ void	map_meta(t_data *data, t_map *map)
 		else if (!ft_strncmp(map->map[i], "EA ", 3))
 			map_meta_copy(data, map->map[i], &map->e_tex, 2);
 		else if (!ft_strncmp(map->map[i], "F ", 2))
-			map_meta_copy(data, map->map[i], &map->f_col, 1);
+			map_meta_copy(data, map->map[i], &map->color.f_col, 1);
 		else if (!ft_strncmp(map->map[i], "C ", 2))
-			map_meta_copy(data, map->map[i], &map->c_col, 1);
+			map_meta_copy(data, map->map[i], &map->color.c_col, 1);
 		else
 		{
 			i++;
@@ -66,14 +66,14 @@ void	map_meta(t_data *data, t_map *map)
 	}
 }
 
-void	map_split(t_data *data, t_map *map)
+static void	map_split(t_data *data, t_map *map)
 {
 	map->map = ft_split(map->map_read.read, '\n');
 	if (!map->map)
 		error("Error, split map malloc", data);
 }
 
-void	map_read(t_data *data, t_map *map)
+static void	map_read(t_data *data, t_map *map)
 {
 	char	buf[READBUF + 1];
 	int		readbyt;
@@ -112,5 +112,6 @@ int	map_init(t_data *data, t_map *map)
 	map_meta(data, map);
 	map_clear(data, map);
 	map_fill(data, map);
+	map_color(data, &map->color);
 	return (0);
 }

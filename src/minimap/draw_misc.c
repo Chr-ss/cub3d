@@ -12,36 +12,7 @@
 
 #include "../../include/cub3D.h"
 
-void	draw_minimap_border(t_minilx *milx, int color, int size)
-{
-	int	x;
-	int	y;
-
-	y = 0;
-	while (y < MINI_MAP)
-	{
-		x = MINI_MAP;
-		while (x < MINI_MAP + size)
-		{
-			img_mlx_pixel_put(&milx->mini, x, y, color);
-			x++;
-		}
-		y++;
-	}
-	y = MINI_MAP;
-	while (y <= MINI_MAP + size)
-	{
-		x = 0;
-		while (x < MINI_MAP + size)
-		{
-			img_mlx_pixel_put(&milx->mini, x, y, color);
-			x++;
-		}
-		y++;
-	}
-}
-
-void	draw_minimap_player_line(t_minilx *milx, int x_start, int x_end, int y, int color)
+static void	draw_minimap_player_line(t_minilx *milx, int x_start, int x_end, int y, int color)
 {
 	while (x_start <= x_end)
 	{
@@ -73,20 +44,3 @@ void	draw_minimap_player(t_minilx *milx, int color, int radius)
 	}
 }
 
-void	draw_minimap_clear(t_minilx *milx)
-{
-	int	x;
-	int	y;
-
-	y = 0;
-	while (y < MINI_MAP)
-	{
-		x = 0;
-		while (x < MINI_MAP)
-		{
-			img_mlx_pixel_put(&milx->mini, x, y, 0);
-			x++;
-		}
-		y++;
-	}
-}

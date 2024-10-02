@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/05 13:49:31 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/02 16:02:18 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/02 22:43:32 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,33 +22,15 @@
 # include <string.h>
 # include <stdbool.h>
 # include <stdint.h>
+# include <sys/time.h>
 
 // libft
 # include "../lib/libft/include/libft.h"
 // minilibx
 # include "../lib/minilibx/mlx.h"
 
-// WSL: W 119, A 97, S 115, D 100
-// MAC: W 13, A 0, S 1, D 2, ESC 53
-// KEY:124 KEY:125 KEY:126 KEY:123
-// if (keycode == 119 || keycode == 13 || keycode == 126 || keycode == 65362)
-// else if (keycode == 115 || keycode == 1 || keycode == 125 || keycode == 65364)
-
 // KEYS
 # ifndef LINUX
-#  define LINUX 0
-#  define KEY_W 13
-#  define KEY_A 0
-#  define KEY_S 1
-#  define KEY_D 2
-#  define KEY_ARROW_LEFT 123
-#  define KEY_ARROW_RIGHT 124
-#  define KEY_ARROW_UP 126
-#  define KEY_ARROW_DOWN 125
-#  define ESC 53
-# define STEP_SIZE 0.06
-# define TURN_STEP 0.02
-# else
 #  define LINUX 1
 #  define KEY_W 119
 #  define KEY_A 97
@@ -59,8 +41,21 @@
 #  define KEY_ARROW_UP 65362
 #  define KEY_ARROW_DOWN 65364
 #  define ESC 0xff1b
-# define STEP_SIZE 0.1
-# define TURN_STEP 0.1
+# define STEP_SIZE 0.02
+# define TURN_STEP 0.03
+# else
+#  define LINUX 0
+#  define KEY_W 13
+#  define KEY_A 0
+#  define KEY_S 1
+#  define KEY_D 2
+#  define KEY_ARROW_LEFT 123
+#  define KEY_ARROW_RIGHT 124
+#  define KEY_ARROW_UP 126
+#  define KEY_ARROW_DOWN 125
+#  define ESC 53
+#  define STEP_SIZE 0.06
+#  define TURN_STEP 0.005
 # endif
 
 # define FORWARD 1
@@ -78,6 +73,8 @@
 # define GREEN 255
 // create_trgb(0, 255, 255, 255)
 # define WHITE 16777215
+// create_trgb(0, 0, 0, 0)
+# define BLACK 0
 
 // MINI_MAP
 # define MINI_MAP 300
@@ -98,6 +95,8 @@
 # define DRAW 0
 # define DISPLAY 1
 
+# define FPS 60
+
 # define X 0
 # define Y 1
 
@@ -108,6 +107,10 @@
 # define EAST 1
 # define SOUTH 2
 # define WEST 3
+
+# define R 0
+# define G 1
+# define B 2
 
 // MATH
 # define RAD 0.01745329251
@@ -139,7 +142,7 @@ typedef	struct s_raycaster
 }	t_raycaster;
 
 
-typedef	struct s_minilx_img
+typedef	struct s_mlx_img
 {
 	void	*img;
 	char	*addr;
@@ -150,16 +153,16 @@ typedef	struct s_minilx_img
 	int		max_x;
 	int		max_y;
 
-}	t_minilx_img;
+}	t_mlx_img;
 
 typedef	struct s_minilx
 {
-	void			*mlx;
-	void			*mlx_window;
-	int				screen_x;
-	int				screen_y;
-	t_minilx_img	mini[2];
-	t_minilx_img	big[2];
+	void		*mlx;
+	void		*mlx_window;
+	int			screen_x;
+	int			screen_y;
+	t_mlx_img	mini;
+	t_mlx_img	big;
 }	t_minilx;
 
 typedef	struct	s_payer
@@ -178,36 +181,39 @@ typedef	struct	s_map_read
 
 typedef struct s_color
 {
-	char	**floor;
-	char	**ceiling;
-	int		f[4];
-	int		c[4];
+	char	*c_col;
+	char	*f_col;
+	char	**c_split;
+	char	**f_split;
+	int		c[3];
+	int		f[3];
 }	t_color;
 
 
 typedef	struct	s_map
 {
-	t_map_read		map_read;
-	t_color			color;
-	char			**map;
-	int				x_max;
-	int				y_max;
-	char			*n_tex;
-	t_minilx_img	img_n;
-	char			*e_tex;
-	t_minilx_img	img_e;
-	char			*s_tex;
-	t_minilx_img	img_s;
-	char			*w_tex;
-	t_minilx_img	img_w;
-	char			*f_col;
-	char			*c_col;
+	t_map_read	map_read;
+	t_color		color;
+	char		**map;
+	int			x_max;
+	int			y_max;
+	char		*n_tex;
+	t_mlx_img	img_n;
+	char		*e_tex;
+	t_mlx_img	img_e;
+	char		*s_tex;
+	t_mlx_img	img_s;
+	char		*w_tex;
+	t_mlx_img	img_w;
+	int			f_col;
+	int			c_col;
 }	t_map;
 
 typedef	struct	s_keys
 {
-	int		left_step;
-	int		right_step;
+	int		mouse_step;
+	bool	mouse_left;
+	bool	mouse_right;
 	bool	turn_left;
 	bool	turn_right;
 	bool	forward;
@@ -224,6 +230,7 @@ typedef	struct	s_data
 	t_raycaster	ray;
 	t_minilx	milx;
 	t_keys		keys;
+	uint64_t	frame_time;
 	int			mouse_x;
 	int			mouse_y;
 }	t_data;
@@ -236,74 +243,44 @@ typedef	struct	s_data
 # define DYNSTR 8
 # define READBUF 1024
 
+// MAP
+int			check_extension(char *str);
+int			map_init(t_data *data, t_map *map);
+void		map_clear_line(t_data *data, t_map *map, int i);
+void		map_parse(t_data *data, char **map);
+void		map_clear(t_data *data, t_map *map);
+void		map_color(t_data *data, t_color *color);
+void		map_meta_copy(t_data *data, char *line, char **meta, int prefix);
 
-void	ray_caster(t_data *data, t_minilx *milx);
-void	switch_img(t_data *data, t_minilx_img *img);
+// MINIMAP
+void		draw_minimap_player(t_minilx *milx, int color, int radius);
+void		draw_minimap_tiles(t_data *data);
+int			draw_minimap(t_data *data);
 
-//src/mlx/wall_collison.c
-int		is_not_wall(t_data *data, float vx, float vy, int direction);
-int		collision(t_data *data, float dir_x, float dir_y);
-void	collision_ray_init(t_data *data, t_raycaster *ray, float x, float y);
+// MLX
+int			finish_mlx(t_minilx *milx);
+void		hooks_mlx(t_data *data);
+void		init_image(t_data *data);
+void		key_hook_strafe(t_data *data);
+void		key_hook_move(t_data *data);
+void		key_hook_turn(t_data *data);
+int			create_trgb(int t, int r, int g, int b);
+int			img_get_pixel_color(t_mlx_img *img, int x, int y);
+void		img_mlx_pixel_put(t_mlx_img *img, int x, int y, int color);
+int			color_fraction(int c1, int c2, float fraction);
+void		draw_line(t_minilx *milx, int x, int start_y, int height, int color);
+int			is_not_wall(t_data *data, float vx, float vy, int direction);
 
-// map/map_init_utils.c
-int		check_extension(char *str);
-void	map_clear(t_data *data, t_map *map);
-void	map_clear_line(t_data *data, t_map *map, int i);
-void	map_meta_copy(t_data *data, char *line, char **meta, int prefix);
+// RENDER
+void		step_direction(t_raycaster *ray);
+void		ray_caster(t_data *data, t_minilx *milx);
+int			render(t_data *data);
+void		draw_texture(t_data *data);
 
-// map/map_init.c
-int		map_init(t_data *data, t_map *map);
-void	map_read(t_data *data, t_map *map);
-void	map_split(t_data *data, t_map *map);
-void	map_meta(t_data *data, t_map *map);
-void	map_fill(t_data *data, t_map *map);
-
-// map/map_parsing.c
-void	map_parse(t_data *data, char **map);
-void	map_parse_meta(t_data *data);
-void	map_parse_player(t_data *data, char **map, int i, int j);
-void	map_parse_wallcheck(t_data *data, char **map, int i, int j);
-
-// map/map_print.c
-void	map_print(t_data *data, t_map *map);
-
-// utils/error_free.c
-void	freenull(void **to_free);
-void	error(char *msg, t_data *data);
-void	free_all(t_data *data);
-
-// minimap/draw_misc.c
-void	draw_minimap_player_line(t_minilx *milx, int x_start, int x_end, int y, int color);
-void	draw_minimap_player(t_minilx *milx, int color, int radius);
-void	draw_minimap_border(t_minilx *milx, int color, int size);
-void	draw_minimap_clear(t_minilx *milx);
-
-// minimap/draw_tiles.c
-void	draw_minimap_tiles(t_data *data);
-
-// minimap/hooks_image.c
-int		draw_minimap(void *param);
-
-// mlx/hooks.c
-int		finish_mlx(t_minilx *milx);
-void	hooks_mlx(t_data *data);
-
-// mlx/image.c
-void	init_image(t_data *data);
-
-// mlx/key_hooks.c
-// int		is_wall(t_data *data, float x, float y);
-// int		key_hook(int keycode, void *param);
-
-// mlx/utils.c
-void			img_mlx_pixel_put(t_minilx_img *img, int x, int y, int color);
-unsigned int	img_get_pixel_color(t_minilx_img *img, int x, int y);
-int				create_trgb(int t, int r, int g, int b);
-uint32_t		color_fraction(uint32_t c1, uint32_t c2, float fraction);
-void	draw_line(t_minilx *milx, int x, int start_y, int line_height, int color);
-
-void	draw_texture(t_data *data);
-void	draw_texture_line(t_data *data, int texture);
-
+// UTILS
+uint64_t	get_curr_time(void);
+void		error(char *msg, t_data *data);
+void		freenull(void **to_free);
+void		free_all(t_data *data);
 
 #endif // CUB3D_H

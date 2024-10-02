@@ -1,20 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   wall_collision.c                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/30 19:21:38 by andmadri          #+#    #+#             */
-/*   Updated: 2024/09/30 19:22:41 by andmadri         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   wall_collision.c                                   :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: andmadri <andmadri@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/09/30 19:21:38 by andmadri      #+#    #+#                 */
+/*   Updated: 2024/10/02 22:19:48 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3D.h"
 
-void	step_direction(t_raycaster *ray);
-
-void	collision_ray_init(t_data *data, t_raycaster *ray, float x, float y)
+static void	collision_ray_init(t_data *data, t_raycaster *ray, float x, float y)
 {
 	ft_bzero(ray, sizeof(t_raycaster));
 	ray->r_start[X] = data->player.pos[X];
@@ -29,7 +27,7 @@ void	collision_ray_init(t_data *data, t_raycaster *ray, float x, float y)
 	step_direction(ray);
 }
 
-int	collision(t_data *data, float dir_x, float dir_y)
+static int	collision(t_data *data, float dir_x, float dir_y)
 {
 	t_raycaster	ray;
 
