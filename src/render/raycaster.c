@@ -101,8 +101,8 @@ void	ray_caster(t_data *data, t_minilx *milx)
 		data->ray = ray;
 		start_x = (milx->screen_y / 2) + (ray.line_height / 2);
 		start_y = (milx->screen_y - ray.line_height) / 2;
+		draw_line(milx, ray.x, start_x - 1, start_y + 1, data->map.f_col);
 		draw_line(milx, ray.x, 0, start_y + 1, data->map.c_col);
-		draw_line(milx, ray.x, start_x, start_y - 1, data->map.f_col);
 		draw_texture(data);
 		ray.x++;
 	}
