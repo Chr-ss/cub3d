@@ -4,7 +4,7 @@ WE ./texture/west.xpm
 EA ./texture/east.xpm
 
 F 220,444,0
-C 225,30,0
+C 110,177,255
 
 111111
 100101
