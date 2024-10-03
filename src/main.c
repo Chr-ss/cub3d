@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/05 13:49:00 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/02 20:21:11 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/03 16:14:49 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int	main(int argc, char **argv)
 	t_data		data;
 
 	ft_bzero(&data, sizeof(t_data));
+	printf("%d\n", create_trgb(0, 148, 148, 148));
 	if (argc <= 1)
 		error("Missing map.", &data);
 	else if (argc > 2)

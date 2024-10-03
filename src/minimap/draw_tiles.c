@@ -6,7 +6,7 @@
 /*   By: crasche <crasche@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/08 20:38:21 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/02 21:52:14 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/03 16:13:14 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void	draw_minimap_tiles_draw(t_data *data, int x, int y)
 		else if	(data->map.map[(map_y + y)/MM_TILE_SIZE][(map_x + x+1)/MM_TILE_SIZE] == '1')
 			img_mlx_pixel_put(&(data->milx.mini), x, y, MM_WALL_COLOR);
 		else if (data->map.map[(map_y + y)/MM_TILE_SIZE][(map_x + x)/MM_TILE_SIZE] == '0')
-			img_mlx_pixel_put(&(data->milx.mini), x, y, WHITE);
+			img_mlx_pixel_put(&(data->milx.mini), x, y, MM_FLOOR_COLOR);
 	}
 }
 

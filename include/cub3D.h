@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/05 13:49:31 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/02 22:43:32 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/03 16:25:48 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@
 #  define KEY_ARROW_UP 65362
 #  define KEY_ARROW_DOWN 65364
 #  define ESC 0xff1b
-# define STEP_SIZE 0.02
-# define TURN_STEP 0.03
+# define STEP_SIZE 0.05
+# define TURN_STEP 0.05
 # else
 #  define LINUX 0
 #  define KEY_W 13
@@ -54,8 +54,8 @@
 #  define KEY_ARROW_UP 126
 #  define KEY_ARROW_DOWN 125
 #  define ESC 53
-# define STEP_SIZE 0.02
-# define TURN_STEP 0.03
+# define STEP_SIZE 0.05
+# define TURN_STEP 0.05
 # endif
 
 # define FORWARD 1
@@ -86,9 +86,13 @@
 # define MM_PLAYER_COLOR 1331400
 // create_trgb(0, 55, 55, 55)
 # define MM_BORDER_COLOR 3618615
-// create_trgb(0, 55, 55, 55)
-# define MM_WALL_COLOR 3618615
-# define MM_VIEW_COLOR RED
+// create_trgb(0, 91, 76, 61)
+# define MM_WALL_COLOR 5983293
+// create_trgb(0, 148, 148, 148)
+# define MM_FLOOR_COLOR 9737364
+// create_trgb(0, 110, 177, 255)
+# define MM_VOID_COLOR 7254527
+# define MM_VIEW_COLOR WHITE
 
 
 // MLX IMAGE
@@ -119,6 +123,10 @@
 
 #ifndef M_PI
 # define M_PI 3.14159265358979323846
+#endif
+
+#ifndef BONUS
+# define BONUS 0
 #endif
 
 typedef	struct s_raycaster

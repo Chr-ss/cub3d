@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/08 20:38:21 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/02 21:50:28 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/03 16:13:27 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void	draw_minimap_clear(t_minilx *milx)
 		x = MM_BORDER_SIZE;
 		while (x <= MINI_MAP - MM_BORDER_SIZE)
 		{
-			img_mlx_pixel_put(&milx->mini, x, y, 0);
+			img_mlx_pixel_put(&milx->mini, x, y, MM_VOID_COLOR);
 			x++;
 		}
 		y++;
@@ -48,7 +48,7 @@ static void draw_fov_lines(t_mlx_img *img, float vx, float vy)
 		if (img_get_pixel_color(img, (int)x, (int)y) == MM_WALL_COLOR)
 			return ;
 		img_mlx_pixel_put(img, (int)x, (int)y, color_fraction(MM_VIEW_COLOR, \
-			WHITE, ((float)i / (float)VIEW_DISTANCE)));
+			MM_FLOOR_COLOR, ((float)i / (float)VIEW_DISTANCE)));
 		x += vx;
 		y += vy;
 		i++;

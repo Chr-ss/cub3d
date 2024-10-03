@@ -45,6 +45,8 @@ SUBMOD		:=	$(LIBFTDIR)/Makefile	$(LIBXDIR_SUB)/Makefile
 # // the flag (-L) is for the path to the glfw library
 # // the flag (-o) is for the name of the executable file-lmlx_Linux
 
+bonus: CFLAGS		+= -D BONUS=1
+bonus: re
 
 all:		$(SUBMOD)	$(LIBX)	$(LIBFT)	$(NAME)
 
