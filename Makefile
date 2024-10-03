@@ -47,6 +47,8 @@ SUBMOD		:=	$(LIBFTDIR)/Makefile	$(LIBXDIR_SUB)/Makefile
 
 bonus: CFLAGS		+= -D BONUS=1
 bonus: re
+crazy: CFLAGS		+= -D BONUS=1 -D CRAZY=1
+crazy: re
 
 all:		$(SUBMOD)	$(LIBX)	$(LIBFT)	$(NAME)
 

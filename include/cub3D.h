@@ -129,6 +129,10 @@
 # define BONUS 0
 #endif
 
+#ifndef CRAZY
+# define CRAZY 0
+#endif
+
 typedef	struct s_raycaster
 {
 	float	direction[2];

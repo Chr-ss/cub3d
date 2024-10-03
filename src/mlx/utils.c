@@ -48,13 +48,15 @@ void	draw_line(t_minilx *milx, int x, int start_y, int height, int color)
 	y = 0;
 	while(y < height)
 	{
-		if (BONUS)
+		if (BONUS && !CRAZY)
 		{
 			if (!start_y)
 				img_mlx_pixel_put(&milx->big, x, start_y + y, color_fraction(color, WHITE, ((float)y / height)));
 			else
 				img_mlx_pixel_put(&milx->big, x, start_y + y, color_fraction(WHITE, color, ((float)(start_y + y - (milx->screen_y / 2)) / (milx->screen_y / 2))));
 		}
+		else if (CRAZY)
+			img_mlx_pixel_put(&milx->big, x, start_y + y, color_fraction(color, BLACK, ((float)milx->screen_y / (height - y))));
 		else
 			img_mlx_pixel_put(&milx->big, x, start_y + y, color);
 
