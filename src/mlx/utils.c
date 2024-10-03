@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/08 20:38:21 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/02 22:18:28 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/03 16:20:08 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	draw_line(t_minilx *milx, int x, int start_y, int height, int color)
 	y = 0;
 	while(y < height)
 	{
-		img_mlx_pixel_put(&milx->big, x, start_y + y, color);
+		img_mlx_pixel_put(&milx->big, x, start_y + y, color_fraction(color, WHITE, ((float)y / height)));
 		y++;
 	}
 }
