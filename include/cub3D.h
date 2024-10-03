@@ -54,8 +54,8 @@
 #  define KEY_ARROW_UP 126
 #  define KEY_ARROW_DOWN 125
 #  define ESC 53
-#  define STEP_SIZE 0.06
-#  define TURN_STEP 0.005
+# define STEP_SIZE 0.02
+# define TURN_STEP 0.03
 # endif
 
 # define FORWARD 1
@@ -63,7 +63,7 @@
 # define LEFT 3
 # define RIGHT 4
 
-# define FOV 60
+# define FOV 80
 
 // create_trgb(0, 255, 0, 0)
 # define RED 16711680
@@ -95,7 +95,7 @@
 # define DRAW 0
 # define DISPLAY 1
 
-# define FPS 60
+# define FPS 30
 
 # define X 0
 # define Y 1
