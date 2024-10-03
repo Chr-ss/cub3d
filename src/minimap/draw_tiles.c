@@ -19,13 +19,18 @@ static void	draw_minimap_tiles_draw(t_data *data, int x, int y)
 
 	map_x = data->player.pos[X] * MM_TILE_SIZE - (MINI_MAP / 2);
 	map_y = data->player.pos[Y] * MM_TILE_SIZE - (MINI_MAP / 2);
-	if(((float)map_x + x)/MM_TILE_SIZE >= 0 && ((float)map_y + y)/MM_TILE_SIZE >= 0 && (map_x + x)/MM_TILE_SIZE < data->map.x_max && (map_y + y)/MM_TILE_SIZE < data->map.y_max)
+	if (((float) map_x + x) / MM_TILE_SIZE >= 0 && ((float )map_y + y) / \
+		MM_TILE_SIZE >= 0 && (map_x + x) / MM_TILE_SIZE < data->map.x_max \
+		&& (map_y + y) / MM_TILE_SIZE < data->map.y_max)
 	{
-		if	(data->map.map[(map_y + y)/MM_TILE_SIZE][(map_x + x)/MM_TILE_SIZE] == '1')
+		if (data->map.map[(map_y + y) / MM_TILE_SIZE][(map_x + x) / \
+		MM_TILE_SIZE] == '1')
 			img_mlx_pixel_put(&(data->milx.mini), x, y, MM_WALL_COLOR);
-		else if	(data->map.map[(map_y + y)/MM_TILE_SIZE][(map_x + x+1)/MM_TILE_SIZE] == '1')
+		else if (data->map.map[(map_y + y) / MM_TILE_SIZE][(map_x + x + 1) \
+			/ MM_TILE_SIZE] == '1')
 			img_mlx_pixel_put(&(data->milx.mini), x, y, MM_WALL_COLOR);
-		else if (data->map.map[(map_y + y)/MM_TILE_SIZE][(map_x + x)/MM_TILE_SIZE] == '0')
+		else if (data->map.map[(map_y + y) / MM_TILE_SIZE][(map_x + x) \
+			/ MM_TILE_SIZE] == '0')
 			img_mlx_pixel_put(&(data->milx.mini), x, y, MM_FLOOR_COLOR);
 	}
 }

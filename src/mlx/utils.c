@@ -24,8 +24,6 @@ void	img_mlx_pixel_put(t_mlx_img *img, int x, int y, int color)
 	if (x >= 0 && y >= 0 && x < img->max_x && y < img->max_y)
 	{
 		dst = img->addr + (y * img->line_length + x * 4);
-		// dst = img->addr + (y * img->line_length + x * \
-		// (img->bits_per_pixel / 8));
 		*(unsigned int *)dst = color;
 	}
 }
@@ -33,35 +31,8 @@ void	img_mlx_pixel_put(t_mlx_img *img, int x, int y, int color)
 int	img_get_pixel_color(t_mlx_img *img, int x, int y)
 {
 	if (x >= 0 && y >= 0 && x < img->max_x && y < img->max_y)
-	{
 		return (*(unsigned int *)(img->addr + (y * img->line_length + x * 4)));
-		// return (*(unsigned int *)(img->addr + (y * img->line_length + x * \
-		// (img->bits_per_pixel / 8))));
-	}
 	return (0);
-}
-
-void	draw_line(t_minilx *milx, int x, int start_y, int height, int color)
-{
-	int	y;
-
-	y = 0;
-	while(y < height)
-	{
-		if (BONUS && !CRAZY)
-		{
-			if (!start_y)
-				img_mlx_pixel_put(&milx->big, x, start_y + y, color_fraction(color, WHITE, ((float)y / height)));
-			else
-				img_mlx_pixel_put(&milx->big, x, start_y + y, color_fraction(WHITE, color, ((float)(start_y + y - (milx->screen_y / 2)) / (milx->screen_y / 2))));
-		}
-		else if (CRAZY)
-			img_mlx_pixel_put(&milx->big, x, start_y + y, color_fraction(color, BLACK, ((float)milx->screen_y / (height - y))));
-		else
-			img_mlx_pixel_put(&milx->big, x, start_y + y, color);
-
-		y++;
-	}
 }
 
 int	color_fraction(int c1, int c2, float fraction)

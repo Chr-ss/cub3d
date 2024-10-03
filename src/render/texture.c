@@ -15,11 +15,11 @@
 static void	draw_texture_north(t_data *data)
 {
 	int	start_y;
-	int line_pos;
+	int	line_pos;
 	int	color_x;
 	int	color_y;
 
-	start_y =  data->milx.screen_y / 2 - round(data->ray.line_height / 2);
+	start_y = data->milx.screen_y / 2 - round(data->ray.line_height / 2);
 	line_pos = 0;
 	if (start_y < 0)
 		line_pos = -start_y;
@@ -44,11 +44,11 @@ static void	draw_texture_north(t_data *data)
 static void	draw_texture_east(t_data *data)
 {
 	int	start_y;
-	int line_pos;
+	int	line_pos;
 	int	color_x;
 	int	color_y;
 
-	start_y =  data->milx.screen_y / 2 - round(data->ray.line_height / 2);
+	start_y = data->milx.screen_y / 2 - round(data->ray.line_height / 2);
 	line_pos = 0;
 	if (start_y < 0)
 		line_pos = -start_y;
@@ -73,11 +73,11 @@ static void	draw_texture_east(t_data *data)
 static void	draw_texture_south(t_data *data)
 {
 	int	start_y;
-	int line_pos;
+	int	line_pos;
 	int	color_x;
 	int	color_y;
 
-	start_y =  data->milx.screen_y / 2 - round(data->ray.line_height / 2);
+	start_y = data->milx.screen_y / 2 - round(data->ray.line_height / 2);
 	line_pos = 0;
 	if (start_y < 0)
 		line_pos = -start_y;
@@ -102,11 +102,11 @@ static void	draw_texture_south(t_data *data)
 static void	draw_texture_west(t_data *data)
 {
 	int	start_y;
-	int line_pos;
+	int	line_pos;
 	int	color_x;
 	int	color_y;
 
-	start_y =  data->milx.screen_y / 2 - round(data->ray.line_height / 2);
+	start_y = data->milx.screen_y / 2 - round(data->ray.line_height / 2);
 	line_pos = 0;
 	if (start_y < 0)
 		line_pos = -start_y;
@@ -130,7 +130,7 @@ static void	draw_texture_west(t_data *data)
 
 void	draw_texture(t_data *data)
 {
-	if(data->ray.wall_direction == TB)
+	if (data->ray.wall_direction == TB)
 	{
 		data->ray.texture_perc = (data->ray.intersect[X] - (int)data->ray.intersect[X]);
 		if (data->ray.intersect[Y] > data->player.pos[Y])

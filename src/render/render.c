@@ -19,9 +19,13 @@ int	render(t_data *data)
 	key_hook_move(data);
 	key_hook_strafe(data);
 	key_hook_turn(data);
-	draw_minimap(data);
+	if (BONUS)
+		draw_minimap(data);
 	ray_caster(data, &data->milx);
-	mlx_put_image_to_window(data->milx.mlx, data->milx.mlx_window, data->milx.big.img, 0, 0);
-	mlx_put_image_to_window(data->milx.mlx, data->milx.mlx_window, data->milx.mini.img, 5, 5);
+	mlx_put_image_to_window(data->milx.mlx, data->milx.mlx_window, \
+		data->milx.big.img, 0, 0);
+	if (BONUS)
+		mlx_put_image_to_window(data->milx.mlx, data->milx.mlx_window, \
+			data->milx.mini.img, 5, 5);
 	return (0);
 }

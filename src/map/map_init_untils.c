@@ -12,7 +12,6 @@
 
 #include "../../include/cub3D.h"
 
-
 int	check_extension(char *str)
 {
 	int	i;

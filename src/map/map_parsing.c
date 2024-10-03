@@ -59,7 +59,7 @@ static void	map_parse_player(t_data *data, char **map, int x, int y)
 		data->player.direct[X] = 0;
 		data->player.direct[Y] = -1;
 	}
-	else if (map[y][x] =='S')
+	else if (map[y][x] == 'S')
 	{
 		data->player.direct[X] = 0;
 		data->player.direct[Y] = 1;
@@ -75,7 +75,6 @@ static void	map_parse_player(t_data *data, char **map, int x, int y)
 		data->player.direct[Y] = 0;
 	}
 	map[y][x] = '0';
-
 	map_parse_wallcheck(data, map, y, x);
 }
 

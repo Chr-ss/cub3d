@@ -32,7 +32,6 @@ int	init_mlx_struct(t_data *data, t_minilx *milx)
 	return (EXIT_SUCCESS);
 }
 
-
 int	main(int argc, char **argv)
 {
 	t_data		data;

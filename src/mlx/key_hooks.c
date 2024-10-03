@@ -47,12 +47,14 @@ void	key_hook_move(t_data *data)
 	t_keys	keys;
 
 	keys = data->keys;
-	if (keys.forward && is_not_wall(data, data->player.direct[X], data->player.direct[Y], FORWARD))
+	if (keys.forward && is_not_wall(data, data->player.direct[X], \
+		data->player.direct[Y], FORWARD))
 	{
 		data->player.pos[X] += (data->player.direct[X] * STEP_SIZE);
 		data->player.pos[Y] += (data->player.direct[Y] * STEP_SIZE);
 	}
-	else if (keys.back && is_not_wall(data, -data->player.direct[X], -data->player.direct[Y], BACKWARD))
+	else if (keys.back && is_not_wall(data, -data->player.direct[X], \
+		-data->player.direct[Y], BACKWARD))
 	{
 		data->player.pos[X] -= (data->player.direct[X] * STEP_SIZE);
 		data->player.pos[Y] -= (data->player.direct[Y] * STEP_SIZE);
@@ -61,13 +63,14 @@ void	key_hook_move(t_data *data)
 
 static void	mouse_hook(t_data *data)
 {
-	int x;
-	int y;
+	int	x;
+	int	y;
 
 	data->keys.mouse_right = false;
 	data->keys.mouse_left = false;
 	mlx_mouse_get_pos(data->milx.mlx, data->milx.mlx_window, &x, &y);
-	mlx_mouse_move(data->milx.mlx, data->milx.mlx_window, data->milx.screen_x / 2, data->milx.screen_y / 2);
+	mlx_mouse_move(data->milx.mlx, data->milx.mlx_window, /
+		data->milx.screen_x / 2, data->milx.screen_y / 2);
 	data->keys.mouse_step = x - data->milx.screen_x / 2;
 	if (data->keys.mouse_step > 0)
 		data->keys.mouse_right = true;
@@ -81,9 +84,14 @@ void	key_hook_turn(t_data *data)
 	t_keys	keys;
 
 	keys = data->keys;
-	mouse_hook(data);
+	if (BONUS)
+		mouse_hook(data);
 	if (keys.turn_left || keys.mouse_left)
-		rotate_vector(data->player.direct, &data->player.direct[X], &data->player.direct[Y], (-TURN_STEP + (data->keys.mouse_step * 0.001)));
+		rotate_vector(data->player.direct, &data->player.direct[X], \
+			&data->player.direct[Y], (-TURN_STEP + \
+			(data->keys.mouse_step * 0.001)));
 	else if (keys.turn_right || keys.mouse_right)
-		rotate_vector(data->player.direct, &data->player.direct[X], &data->player.direct[Y], (TURN_STEP + (data->keys.mouse_step * 0.001)));
+		rotate_vector(data->player.direct, &data->player.direct[X], \
+			&data->player.direct[Y], (TURN_STEP + \
+			(data->keys.mouse_step * 0.001)));
 }

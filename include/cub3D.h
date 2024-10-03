@@ -20,14 +20,22 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <string.h>
-# include <stdbool.h>
-# include <stdint.h>
 # include <sys/time.h>
 
 // libft
 # include "../lib/libft/include/libft.h"
 // minilibx
 # include "../lib/minilibx/mlx.h"
+
+// marcos
+# include <errno.h>
+# include <fcntl.h>
+# include <errno.h>
+# include <stdbool.h>
+# include <stdint.h>
+
+# define DYNSTR 8
+# define READBUF 1024
 
 // KEYS
 # ifndef LINUX
@@ -41,8 +49,8 @@
 #  define KEY_ARROW_UP 65362
 #  define KEY_ARROW_DOWN 65364
 #  define ESC 0xff1b
-# define STEP_SIZE 0.05
-# define TURN_STEP 0.05
+#  define STEP_SIZE 0.05
+#  define TURN_STEP 0.05
 # else
 #  define LINUX 0
 #  define KEY_W 13
@@ -54,8 +62,8 @@
 #  define KEY_ARROW_UP 126
 #  define KEY_ARROW_DOWN 125
 #  define ESC 53
-# define STEP_SIZE 0.05
-# define TURN_STEP 0.05
+#  define STEP_SIZE 0.05
+#  define TURN_STEP 0.05
 # endif
 
 # define FORWARD 1
@@ -94,7 +102,6 @@
 # define MM_VOID_COLOR 7254527
 # define MM_VIEW_COLOR WHITE
 
-
 // MLX IMAGE
 # define DRAW 0
 # define DISPLAY 1
@@ -121,19 +128,19 @@
 # define MOUSE_SENSITIVITY 5
 # define MOUSE_OFFSET 50
 
-#ifndef M_PI
-# define M_PI 3.14159265358979323846
-#endif
+# ifndef M_PI
+#  define M_PI 3.14159265358979323846
+# endif
 
-#ifndef BONUS
-# define BONUS 0
-#endif
+# ifndef BONUS
+#  define BONUS 0
+# endif
 
-#ifndef CRAZY
-# define CRAZY 0
-#endif
+# ifndef CRAZY
+#  define CRAZY 0
+# endif
 
-typedef	struct s_raycaster
+typedef struct s_raycaster
 {
 	float	direction[2];
 	float	r_start[2];
@@ -153,8 +160,7 @@ typedef	struct s_raycaster
 	bool	wall_found;
 }	t_raycaster;
 
-
-typedef	struct s_mlx_img
+typedef struct s_mlx_img
 {
 	void	*img;
 	char	*addr;
@@ -167,7 +173,7 @@ typedef	struct s_mlx_img
 
 }	t_mlx_img;
 
-typedef	struct s_minilx
+typedef struct s_minilx
 {
 	void		*mlx;
 	void		*mlx_window;
@@ -177,14 +183,14 @@ typedef	struct s_minilx
 	t_mlx_img	big;
 }	t_minilx;
 
-typedef	struct	s_payer
+typedef struct s_payer
 {
 	float	pos[2];
 	float	direct[2];
 	float	plane[2];
 }	t_player;
 
-typedef	struct	s_map_read
+typedef struct s_map_read
 {
 	char	*filename;
 	int		fd;
@@ -201,8 +207,7 @@ typedef struct s_color
 	int		f[3];
 }	t_color;
 
-
-typedef	struct	s_map
+typedef struct s_map
 {
 	t_map_read	map_read;
 	t_color		color;
@@ -221,7 +226,7 @@ typedef	struct	s_map
 	int			c_col;
 }	t_map;
 
-typedef	struct	s_keys
+typedef struct s_keys
 {
 	int		mouse_step;
 	bool	mouse_left;
@@ -235,7 +240,7 @@ typedef	struct	s_keys
 	bool	exit;
 }	t_keys;
 
-typedef	struct	s_data
+typedef struct s_data
 {
 	t_map		map;
 	t_player	player;
@@ -247,14 +252,6 @@ typedef	struct	s_data
 	int			mouse_y;
 }	t_data;
 
-// marcos
-# include <errno.h>
-# include <fcntl.h>
-# include <errno.h>
-
-# define DYNSTR 8
-# define READBUF 1024
-
 // MAP
 int			check_extension(char *str);
 int			map_init(t_data *data, t_map *map);
@@ -265,7 +262,7 @@ void		map_color(t_data *data, t_color *color);
 void		map_meta_copy(t_data *data, char *line, char **meta, int prefix);
 
 // MINIMAP
-void		draw_minimap_player(t_minilx *milx, int color, int radius);
+void		draw_minimap_player(t_minilx *milx, int radius);
 void		draw_minimap_tiles(t_data *data);
 int			draw_minimap(t_data *data);
 
@@ -280,7 +277,7 @@ int			create_trgb(int t, int r, int g, int b);
 int			img_get_pixel_color(t_mlx_img *img, int x, int y);
 void		img_mlx_pixel_put(t_mlx_img *img, int x, int y, int color);
 int			color_fraction(int c1, int c2, float fraction);
-void		draw_line(t_minilx *milx, int x, int start_y, int height, int color);
+void		draw_background(t_data *data, t_minilx *milx, t_raycaster ray);
 int			is_not_wall(t_data *data, float vx, float vy, int direction);
 
 // RENDER

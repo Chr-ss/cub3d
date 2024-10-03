@@ -12,30 +12,35 @@
 
 #include "../../include/cub3D.h"
 
-static void	draw_minimap_player_line(t_minilx *milx, int x_start, int x_end, int y, int color)
+static void	draw_minimap_player_line(t_minilx *milx, int x_start, \
+	int x_end, int y)
 {
 	while (x_start <= x_end)
 	{
-		img_mlx_pixel_put(&milx->mini, x_start, y, color);
+		img_mlx_pixel_put(&milx->mini, x_start, y, MM_PLAYER_COLOR);
 		x_start++;
 	}
 }
 
-void	draw_minimap_player(t_minilx *milx, int color, int radius)
+void	draw_minimap_player(t_minilx *milx, int radius)
 {
 	int	center;
-	int y;
-	int decision;
+	int	y;
+	int	decision;
 
 	center = MINI_MAP / 2;
 	decision = 1 - radius;
 	y = 0;
 	while (y <= radius)
 	{
-		draw_minimap_player_line(milx, center - radius, center + radius, center + y, color);
-		draw_minimap_player_line(milx, center - radius, center + radius, center - y, color);
-		draw_minimap_player_line(milx, center - y, center + y, center + radius, color);
-		draw_minimap_player_line(milx, center - y, center + y, center - radius, color);
+		draw_minimap_player_line(milx, center - radius, center + radius, \
+			center + y);
+		draw_minimap_player_line(milx, center - radius, center + radius, \
+			center - y);
+		draw_minimap_player_line(milx, center - y, center + y, \
+			center + radius);
+		draw_minimap_player_line(milx, center - y, center + y, \
+			center - radius);
 		y++;
 		if (decision <= 0)
 			decision += 2 * y + 1;
@@ -43,4 +48,3 @@ void	draw_minimap_player(t_minilx *milx, int color, int radius)
 			decision += 2 * (y - radius--) + 1;
 	}
 }
-

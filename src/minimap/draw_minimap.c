@@ -30,7 +30,7 @@ static void	draw_minimap_clear(t_minilx *milx)
 	}
 }
 
-static void draw_fov_lines(t_mlx_img *img, float vx, float vy)
+static void	draw_fov_lines(t_mlx_img *img, float vx, float vy)
 {
 	float	magnitude;
 	float	x;
@@ -81,6 +81,6 @@ int	draw_minimap(t_data *data)
 	draw_minimap_clear(milx);
 	draw_minimap_tiles(data);
 	draw_minimap_view(data, milx);
-	draw_minimap_player(milx, MM_PLAYER_COLOR, MM_PLAYER_SIZE);
+	draw_minimap_player(milx, MM_PLAYER_SIZE);
 	return (0);
 }
