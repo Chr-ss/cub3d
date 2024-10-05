@@ -106,7 +106,7 @@
 # define DRAW 0
 # define DISPLAY 1
 
-# define FPS 30
+# define FPS 30000000
 
 # define X 0
 # define Y 1
@@ -140,26 +140,6 @@
 #  define CRAZY 0
 # endif
 
-typedef struct s_raycaster
-{
-	float	direction[2];
-	float	r_start[2];
-	float	length[2];
-	float	step_size[2];
-	float	step[2];
-	float	intersect[2];
-	float	final_distance;
-	float	texture_perc;
-	float	plane_magnitude;
-	float	plane_scale;
-	int		r_pos[2];
-	int		x;
-	int		line_height;
-	int		wall_direction;
-	int		wall_color;
-	bool	wall_found;
-}	t_raycaster;
-
 typedef struct s_mlx_img
 {
 	void	*img;
@@ -170,8 +150,28 @@ typedef struct s_mlx_img
 	int		offset;
 	int		max_x;
 	int		max_y;
-
 }	t_mlx_img;
+
+typedef struct s_raycaster
+{
+	t_mlx_img	*img;
+	float		direction[2];
+	float		r_start[2];
+	float		length[2];
+	float		step_size[2];
+	float		step[2];
+	float		intersect[2];
+	float		final_distance;
+	float		texture_perc;
+	float		plane_magnitude;
+	float		plane_scale;
+	int			r_pos[2];
+	int			x;
+	int			line_height;
+	int			wall_direction;
+	int			wall_color;
+	bool		wall_found;
+}	t_raycaster;
 
 typedef struct s_minilx
 {
