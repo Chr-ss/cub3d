@@ -12,138 +12,68 @@
 
 #include "../../include/cub3D.h"
 
-static void	draw_texture_north(t_data *data)
+static int	repalce_texture_color(t_raycaster *ray, int x, int y, float prec)
 {
-	int	start_y;
-	int	line_pos;
-	int	color_x;
-	int	color_y;
-
-	start_y = data->milx.screen_y / 2 - round(data->ray.line_height / 2);
-	line_pos = 0;
-	if (start_y < 0)
-		line_pos = -start_y;
-	color_x = data->map.img_n.max_x * data->ray.texture_perc;
-	while (line_pos < data->ray.line_height && (start_y + line_pos) < data->milx.screen_y)
+	if (y != (int)(ray->img->max_y * prec))
 	{
-		if (color_y != (int)(data->map.img_e.max_y * (float)line_pos / (float)data->ray.line_height))
-		{
-			color_y = (int)data->map.img_n.max_y * ((float)line_pos / (float)data->ray.line_height);
-			data->ray.wall_color = img_get_pixel_color(&data->map.img_n, color_x, color_y);
-		}
-		else if (CRAZY)
-			data->ray.wall_color = color_fraction(data->ray.wall_color, WHITE, fmax(data->ray.final_distance, 1.1));
-		if (BONUS)
-			img_mlx_pixel_put(&data->milx.big, data->ray.x, start_y + line_pos, color_fraction(data->ray.wall_color, WHITE, fmin(data->ray.final_distance / 6, 1.0)));
-		else
-			img_mlx_pixel_put(&data->milx.big, data->ray.x, start_y + line_pos, data->ray.wall_color);
-		line_pos++;
+		y = (int)ray->img->max_y * prec;
+		ray->wall_color = img_get_pixel_color(ray->img, x, y);
+		return (y);
 	}
+	return (y);
 }
 
-static void	draw_texture_east(t_data *data)
+static void	draw_texture_lines(t_data *data, int s_y)
 {
-	int	start_y;
 	int	line_pos;
-	int	color_x;
-	int	color_y;
+	int	c_x;
+	int	c_y;
+	t_raycaster ray;
 
-	start_y = data->milx.screen_y / 2 - round(data->ray.line_height / 2);
+	ray = data->ray;
 	line_pos = 0;
-	if (start_y < 0)
-		line_pos = -start_y;
-	color_x = data->map.img_e.max_x * data->ray.texture_perc;
-	while (line_pos < data->ray.line_height && (start_y + line_pos) < data->milx.screen_y)
+	if (s_y < 0)
+		line_pos = -s_y;
+	c_x = data->map.img_n.max_x * ray.texture_perc;
+	while (line_pos < ray.line_height && (s_y + line_pos) < data->milx.screen_y)
 	{
-		if (color_y != (int)(data->map.img_e.max_y * (float)line_pos / (float)data->ray.line_height))
-		{
-			color_y = (int)(data->map.img_e.max_y * (float)line_pos / (float)data->ray.line_height);
-			data->ray.wall_color = img_get_pixel_color(&data->map.img_e, color_x, color_y);
-		}
-		else if (CRAZY)
-			data->ray.wall_color = color_fraction(data->ray.wall_color, WHITE, fmax(data->ray.final_distance, 1.1));
+		// if (c_y != (int)(data->map.img_e.max_y * (float)line_pos / (float)ray.line_height))
+		// {
+		// 	c_y = (int)data->map.img_n.max_y * ((float)line_pos / (float)ray.line_height);
+		// 	ray.wall_color = img_get_pixel_color(&data->map.img_n, c_x, c_y);
+		// }
+		c_y = repalce_texture_color(&ray, c_x, c_y, (float)line_pos / (float)ray.line_height);
+		if (CRAZY)
+			ray.wall_color = color_fraction(ray.wall_color, WHITE, fmax(ray.final_distance, 1.1));
 		if (BONUS)
-			img_mlx_pixel_put(&data->milx.big, data->ray.x, start_y + line_pos, color_fraction(data->ray.wall_color, WHITE, fmin(data->ray.final_distance / 6, 1.0)));
+			img_mlx_pixel_put(&data->milx.big, ray.x, s_y + line_pos, \
+			color_fraction(ray.wall_color, WHITE, fmin(ray.final_distance / 6, 1.0)));
 		else
-			img_mlx_pixel_put(&data->milx.big, data->ray.x, start_y + line_pos, data->ray.wall_color);
-		line_pos++;
-	}
-}
-
-static void	draw_texture_south(t_data *data)
-{
-	int	start_y;
-	int	line_pos;
-	int	color_x;
-	int	color_y;
-
-	start_y = data->milx.screen_y / 2 - round(data->ray.line_height / 2);
-	line_pos = 0;
-	if (start_y < 0)
-		line_pos = -start_y;
-	color_x = data->map.img_s.max_x * (1 - data->ray.texture_perc);
-	while (line_pos < data->ray.line_height && (start_y + line_pos) < data->milx.screen_y)
-	{
-		if (color_y != (int)(data->map.img_s.max_y * (float)line_pos / (float)data->ray.line_height))
-		{
-			color_y = (int)(data->map.img_s.max_y * (float)line_pos / (float)data->ray.line_height);
-			data->ray.wall_color = img_get_pixel_color(&data->map.img_s, color_x, color_y);
-		}
-		else if (CRAZY)
-			data->ray.wall_color = color_fraction(data->ray.wall_color, WHITE, fmax(data->ray.final_distance, 1.1));
-		if (BONUS)
-			img_mlx_pixel_put(&data->milx.big, data->ray.x, start_y + line_pos, color_fraction(data->ray.wall_color, WHITE, fmin(data->ray.final_distance / 6, 1.0)));
-		else
-			img_mlx_pixel_put(&data->milx.big, data->ray.x, start_y + line_pos, data->ray.wall_color);
-		line_pos++;
-	}
-}
-
-static void	draw_texture_west(t_data *data)
-{
-	int	start_y;
-	int	line_pos;
-	int	color_x;
-	int	color_y;
-
-	start_y = data->milx.screen_y / 2 - round(data->ray.line_height / 2);
-	line_pos = 0;
-	if (start_y < 0)
-		line_pos = -start_y;
-	color_x = data->map.img_w.max_x * data->ray.texture_perc;
-	while (line_pos < data->ray.line_height && (start_y + line_pos) < data->milx.screen_y)
-	{
-		if (color_y != (int)(data->map.img_w.max_y * (float)line_pos / (float)data->ray.line_height))
-		{
-			color_y = (int)(data->map.img_w.max_y * (float)line_pos / (float)data->ray.line_height);
-			data->ray.wall_color = img_get_pixel_color(&data->map.img_w, color_x, color_y);
-		}
-		else if (CRAZY)
-			data->ray.wall_color = color_fraction(data->ray.wall_color, WHITE, fmax(data->ray.final_distance, 1.1));
-		if (BONUS)
-			img_mlx_pixel_put(&data->milx.big, data->ray.x, start_y + line_pos, color_fraction(data->ray.wall_color, WHITE, fmin(data->ray.final_distance / 6, 1.0)));
-		else
-			img_mlx_pixel_put(&data->milx.big, data->ray.x, start_y + line_pos, data->ray.wall_color);
+			img_mlx_pixel_put(&data->milx.big, ray.x, s_y + line_pos, ray.wall_color);
 		line_pos++;
 	}
 }
 
 void	draw_texture(t_data *data)
-{
-	if (data->ray.wall_direction == TB)
+{	
+	t_raycaster	*ray;
+
+	ray = &data->ray;
+	if (ray->wall_direction == TB)
 	{
-		data->ray.texture_perc = (data->ray.intersect[X] - (int)data->ray.intersect[X]);
-		if (data->ray.intersect[Y] > data->player.pos[Y])
-			draw_texture_south(data);
+		ray->texture_perc = (ray->intersect[X] - (int)ray->intersect[X]);
+		if (ray->intersect[Y] > data->player.pos[Y])
+			ray->img = &data->map.img_s;
 		else
-			draw_texture_north(data);
+			ray->img = &data->map.img_n;
 	}
-	else if (data->ray.wall_direction == LR)
+	else if (ray->wall_direction == LR)
 	{
-		data->ray.texture_perc = (data->ray.intersect[Y] - (int)data->ray.intersect[Y]);
-		if (data->ray.intersect[X] > data->player.pos[X])
-			draw_texture_east(data);
+		ray->texture_perc = (ray->intersect[Y] - (int)ray->intersect[Y]);
+		if (ray->intersect[X] > data->player.pos[X])
+			ray->img = &data->map.img_w;
 		else
-			draw_texture_west(data);
+			ray->img = &data->map.img_e;
 	}
+	draw_texture_lines(data, data->milx.screen_y / 2 - round(ray->line_height / 2));
 }
