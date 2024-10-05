@@ -27,16 +27,16 @@ static int	update_frames(void *param)
 	data = (t_data *)param;
 	if (data->frame_time == 0)
 		data->frame_time = get_curr_time();
-	if (get_curr_time() - data->frame_time < (1000000 / FPS))
+	if (((get_curr_time() - data->frame_time) < (uint64_t)(1000000 / FPS)))
 		return (0);
+	data->fps = get_curr_time() - data->frame_time;
+	data->frame_time = get_curr_time();
 	render(data);
-	data->frame_time = get_curr_time() - data->frame_time;
-	data->frame_time = round((float)1000000 / data->frame_time);
+	data->fps = round((float)1000000 / data->fps);
 	if (BONUS)
 		mlx_string_put(data->milx.mlx, data->milx.mlx_window, \
 			data->milx.screen_x - 100, 20, RED, \
-			ft_itoa(data->frame_time));
-	data->frame_time = get_curr_time();
+			ft_itoa(data->fps));
 	return (0);
 }
 

@@ -248,6 +248,7 @@ typedef struct s_data
 	t_minilx	milx;
 	t_keys		keys;
 	uint64_t	frame_time;
+	int			fps;
 	int			mouse_x;
 	int			mouse_y;
 }	t_data;

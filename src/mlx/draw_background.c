@@ -23,18 +23,18 @@ void	draw_background(t_data *data, t_minilx *milx, t_raycaster ray)
 	{
 		if (BONUS && !CRAZY)
 		{
-			img_mlx_pixel_put(&milx->big, ray.x, i, color_fraction(data->map.c_col, WHITE, ((float)i / height)));
-			img_mlx_pixel_put(&milx->big, ray.x, milx->screen_y - i, color_fraction(data->map.f_col, WHITE, ((float)i / ((milx->screen_y / 2) + (ray.line_height / 2)))));
+			img_mlx_pixel_put(&milx->big, ray.x, i, \
+				color_fraction(data->map.c_col, WHITE, (fmin((float)i \
+				/ (milx->screen_y / 3), 1.0))));
+			img_mlx_pixel_put(&milx->big, ray.x, milx->screen_y - i, \
+				color_fraction(data->map.f_col, WHITE, (fmin((float)i \
+				/ (milx->screen_y / 2.5), 1.0))));
 		}
-		else if (CRAZY)
-		{
-			img_mlx_pixel_put(&milx->big, ray.x, i, color_fraction(data->map.c_col, BLACK, ((float)milx->screen_y / (height - i))));
-			img_mlx_pixel_put(&milx->big, ray.x, milx->screen_y - i, color_fraction(data->map.f_col, BLACK, ((float)milx->screen_y / (height - i))));
-		}
-		else
+		else if (!CRAZY)
 		{
 			img_mlx_pixel_put(&milx->big, ray.x, i, data->map.c_col);
-			img_mlx_pixel_put(&milx->big, ray.x, milx->screen_y - i, data->map.f_col);
+			img_mlx_pixel_put(&milx->big, ray.x, milx->screen_y - i, \
+				data->map.f_col);
 		}
 		i++;
 	}
