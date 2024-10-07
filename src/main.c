@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/05 13:49:00 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/07 20:23:28 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/07 20:27:08 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,11 @@ int	init_mlx_struct(t_data *data, t_minilx *milx)
 int	main(int argc, char **argv)
 {
 	t_data		data;
+
+// INVALID MAPS TO ADD:
+// maps with map over metadata
+// maps with empty line in map
+// multiple "," in colors
 
 	ft_bzero(&data, sizeof(t_data));
 	if (argc <= 1)
