@@ -6,7 +6,7 @@
 /*   By: crasche <crasche@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/08 20:38:21 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/07 14:28:48 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/07 18:42:28 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,42 +25,42 @@ static int	repalce_texture_color(t_raycaster *ray, int x, int y, float prec)
 
 static void	draw_texture_lines(t_data *data, int s_y)
 {
-	int	line_pos;
+	int	offset;
 	int	c_x;
 	int	c_y;
 	t_raycaster ray;
 
 	ray = data->ray;
-	line_pos = 0;
+	c_y = -1;
+	offset = 0;
 	if (s_y < 0)
-		line_pos = -s_y;
+		offset = -s_y;
 	c_x = data->map.img_n.max_x * ray.texture_perc;
-	while (line_pos < ray.line_height && (s_y + line_pos) < data->milx.screen_y)
+	while (offset < ray.line_height && (s_y + offset) < data->milx.screen_y)
 	{
-		// if (c_y != (int)(data->map.img_e.max_y * (float)line_pos / (float)ray.line_height))
-		c_y = repalce_texture_color(&ray, c_x, c_y, (float)line_pos / (float)ray.line_height);
+		c_y = repalce_texture_color(&ray, c_x, c_y, (float)offset / (float)ray.line_height);
 		if (CRAZY)
 			ray.wall_color = color_fraction(ray.wall_color, WHITE, fmax(ray.final_distance, 1.1));
 		if (BONUS)
-			img_mlx_pixel_put(&data->milx.big, ray.x, s_y + line_pos, \
+			img_mlx_pixel_put(&data->milx.big, ray.x, s_y + offset, \
 			color_fraction(ray.wall_color, WHITE, fmin(ray.final_distance / 6, 1.0)));
 		else
-			img_mlx_pixel_put(&data->milx.big, ray.x, s_y + line_pos, ray.wall_color);
-		line_pos++;
+			img_mlx_pixel_put(&data->milx.big, ray.x, s_y + offset, ray.wall_color);
+		offset++;
 	}
 }
 
 static void	decide_texutre_ns(t_data *data, t_raycaster *ray)
 {
-	if (ray->intersect[Y] > data->player.pos[Y])
+	if (ray->intersect[Y] < data->player.pos[Y])
 	{
 		ray->img = &data->map.img_s;
-		ray->texture_perc = (float)1 - (ray->intersect[X] - (int)ray->intersect[X]);
+		ray->texture_perc = ray->intersect[X] - (int)ray->intersect[X];
 	}
 	else
 	{
 		ray->img = &data->map.img_n;
-		ray->texture_perc = ray->intersect[X] - (int)ray->intersect[X];
+		ray->texture_perc = (float)1 - (ray->intersect[X] - (int)ray->intersect[X]);
 	}
 }
 
