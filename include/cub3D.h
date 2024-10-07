@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/05 13:49:31 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/03 16:25:48 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/07 14:34:39 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@
 #  define KEY_A 97
 #  define KEY_S 115
 #  define KEY_D 100
+#  define KEY_OPTION 65513
 #  define KEY_ARROW_LEFT 65361
 #  define KEY_ARROW_RIGHT 65363
 #  define KEY_ARROW_UP 65362
@@ -106,13 +107,13 @@
 # define DRAW 0
 # define DISPLAY 1
 
-# define FPS 30000000
+# define FPS 30
 
 # define X 0
 # define Y 1
 
-# define LR 0
-# define TB 1
+# define EW 0
+# define NS 1
 
 # define NORTH 0
 # define EAST 1
@@ -238,6 +239,7 @@ typedef struct s_keys
 	bool	strafe_left;
 	bool	strafe_right;
 	bool	exit;
+	bool	mouse;
 }	t_keys;
 
 typedef struct s_data

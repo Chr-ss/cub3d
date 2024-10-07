@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/08 20:38:21 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/02 22:38:56 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/07 14:06:55 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,14 +74,14 @@ static void	ray_caster_step(t_data *data, t_raycaster *ray)
 		ray->r_pos[X] += ray->step[X];
 		ray->final_distance = ray->length[X];
 		ray->length[X] += ray->step_size[X];
-		ray->wall_direction = LR;
+		ray->wall_direction = EW;
 	}
 	else
 	{
 		ray->r_pos[Y] += ray->step[Y];
 		ray->final_distance = ray->length[Y];
 		ray->length[Y] += ray->step_size[Y];
-		ray->wall_direction = TB;
+		ray->wall_direction = NS;
 	}
 	if (data->map.map[ray->r_pos[Y]][ray->r_pos[X]] == '1')
 	{

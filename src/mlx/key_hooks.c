@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/08 20:38:21 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/02 22:15:24 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/07 14:35:06 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static void	mouse_hook(t_data *data)
 	data->keys.mouse_right = false;
 	data->keys.mouse_left = false;
 	mlx_mouse_get_pos(data->milx.mlx, data->milx.mlx_window, &x, &y);
-	mlx_mouse_move(data->milx.mlx, data->milx.mlx_window, /
+	mlx_mouse_move(data->milx.mlx, data->milx.mlx_window, \
 		data->milx.screen_x / 2, data->milx.screen_y / 2);
 	data->keys.mouse_step = x - data->milx.screen_x / 2;
 	if (data->keys.mouse_step > 0)
@@ -84,7 +84,7 @@ void	key_hook_turn(t_data *data)
 	t_keys	keys;
 
 	keys = data->keys;
-	if (BONUS)
+	if (BONUS && keys.mouse)
 		mouse_hook(data);
 	if (keys.turn_left || keys.mouse_left)
 		rotate_vector(data->player.direct, &data->player.direct[X], \

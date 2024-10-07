@@ -6,7 +6,7 @@
 /*   By: crasche <crasche@student.codam.nl>           +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/08 20:38:21 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/03 16:44:31 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/07 14:28:48 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,6 @@ static void	draw_texture_lines(t_data *data, int s_y)
 	while (line_pos < ray.line_height && (s_y + line_pos) < data->milx.screen_y)
 	{
 		// if (c_y != (int)(data->map.img_e.max_y * (float)line_pos / (float)ray.line_height))
-		// {
-		// 	c_y = (int)data->map.img_n.max_y * ((float)line_pos / (float)ray.line_height);
-		// 	ray.wall_color = img_get_pixel_color(&data->map.img_n, c_x, c_y);
-		// }
 		c_y = repalce_texture_color(&ray, c_x, c_y, (float)line_pos / (float)ray.line_height);
 		if (CRAZY)
 			ray.wall_color = color_fraction(ray.wall_color, WHITE, fmax(ray.final_distance, 1.1));
@@ -54,26 +50,46 @@ static void	draw_texture_lines(t_data *data, int s_y)
 	}
 }
 
+static void	decide_texutre_ns(t_data *data, t_raycaster *ray)
+{
+	if (ray->intersect[Y] > data->player.pos[Y])
+	{
+		ray->img = &data->map.img_s;
+		ray->texture_perc = (float)1 - (ray->intersect[X] - (int)ray->intersect[X]);
+	}
+	else
+	{
+		ray->img = &data->map.img_n;
+		ray->texture_perc = ray->intersect[X] - (int)ray->intersect[X];
+	}
+}
+
+static void	decide_texutre_ew(t_data *data, t_raycaster *ray)
+{
+	if (ray->intersect[X] > data->player.pos[X])
+	{
+		ray->img = &data->map.img_w;
+		ray->texture_perc = ray->intersect[Y] - (int)ray->intersect[Y];
+	}
+	else
+	{
+		ray->img = &data->map.img_e;
+		ray->texture_perc = (float)1 - (ray->intersect[Y] - (int)ray->intersect[Y]);
+	}
+}
+
 void	draw_texture(t_data *data)
-{	
+{
 	t_raycaster	*ray;
 
 	ray = &data->ray;
-	if (ray->wall_direction == TB)
+	if (ray->wall_direction == NS)
 	{
-		ray->texture_perc = (ray->intersect[X] - (int)ray->intersect[X]);
-		if (ray->intersect[Y] > data->player.pos[Y])
-			ray->img = &data->map.img_s;
-		else
-			ray->img = &data->map.img_n;
+		decide_texutre_ns(data, ray);
 	}
-	else if (ray->wall_direction == LR)
+	else if (ray->wall_direction == EW)
 	{
-		ray->texture_perc = (ray->intersect[Y] - (int)ray->intersect[Y]);
-		if (ray->intersect[X] > data->player.pos[X])
-			ray->img = &data->map.img_w;
-		else
-			ray->img = &data->map.img_e;
+		decide_texutre_ew(data, ray);
 	}
 	draw_texture_lines(data, data->milx.screen_y / 2 - round(ray->line_height / 2));
 }
