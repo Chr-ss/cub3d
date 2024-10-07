@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/08 20:38:21 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/07 18:06:49 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/07 20:24:56 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	key_hook_turn(t_data *data)
 	t_keys	keys;
 
 	keys = data->keys;
-	if (BONUS && keys.mouse) //
+	if (BONUS && keys.mouse)
 		mouse_hook(data);
 	if (keys.turn_left || keys.mouse_left)
 		rotate_vector(data->player.direct, &data->player.direct[X], \
