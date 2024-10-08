@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   render.c                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: andmadri <andmadri@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/09/08 20:38:21 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/03 15:48:30 by crasche       ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   render.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/08 20:38:21 by crasche           #+#    #+#             */
+/*   Updated: 2024/10/08 13:08:50 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	render(t_data *data)
 {
 	if (data->keys.exit)
-		finish_mlx(&data->milx);
+		finish_mlx(data);
 	key_hook_move(data);
 	key_hook_strafe(data);
 	key_hook_turn(data);

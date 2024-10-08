@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   image.c                                            :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: crasche <crasche@student.codam.nl>           +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/09/08 20:38:21 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/02 22:07:17 by crasche       ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   image.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/08 20:38:21 by crasche           #+#    #+#             */
+/*   Updated: 2024/10/08 13:08:29 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,16 @@ static void	init_image_texture(t_data *data)
 
 void	init_image(t_data *data)
 {
-	data->milx.mini.img = mlx_new_image(data->milx.mlx, \
+	if (BONUS)
+	{
+		data->milx.mini.img = mlx_new_image(data->milx.mlx, \
 		MINI_MAP + MM_BORDER_SIZE, MINI_MAP + MM_BORDER_SIZE);
-	data->milx.mini.addr = mlx_get_data_addr(data->milx.mini.img, \
+		data->milx.mini.addr = mlx_get_data_addr(data->milx.mini.img, \
 		&data->milx.mini.bits_per_pixel, &data->milx.mini.line_length, \
 		&data->milx.mini.endian);
+		init_image_set_size(&data->milx.mini, MINI_MAP + MM_BORDER_SIZE, \
+		MINI_MAP + MM_BORDER_SIZE);
+	}
 	data->milx.big.img = mlx_new_image(data->milx.mlx, data->milx.screen_x, \
 		data->milx.screen_y);
 	data->milx.big.addr = mlx_get_data_addr(data->milx.big.img, \
@@ -56,7 +61,5 @@ void	init_image(t_data *data)
 		&data->milx.big.endian);
 	init_image_set_size(&data->milx.big, data->milx.screen_x, \
 		data->milx.screen_y);
-	init_image_set_size(&data->milx.mini, MINI_MAP + MM_BORDER_SIZE, \
-		MINI_MAP + MM_BORDER_SIZE);
 	init_image_texture(data);
 }

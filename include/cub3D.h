@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   cub3D.h                                            :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: andmadri <andmadri@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/08/05 13:49:31 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/07 18:06:05 by crasche       ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   cub3D.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/05 13:49:31 by crasche           #+#    #+#             */
+/*   Updated: 2024/10/08 13:19:33 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,7 +270,7 @@ void		draw_minimap_tiles(t_data *data);
 int			draw_minimap(t_data *data);
 
 // MLX
-int			finish_mlx(t_minilx *milx);
+int			finish_mlx(t_data *data);
 void		hooks_mlx(t_data *data);
 void		init_image(t_data *data);
 void		key_hook_strafe(t_data *data);
