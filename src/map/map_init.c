@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/08 20:28:42 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/08 16:25:06 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/08 17:08:49 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,36 @@ static void	map_read(t_data *data, t_map *map)
 	}
 }
 
+
+void	map_print(t_data *data, t_map *map)
+{
+	int	i;
+
+	i = 0;
+	if (map->n_tex)
+		printf("n_tex: %s\n", map->n_tex);
+	if (map->e_tex)
+		printf("e_tex: %s\n", map->e_tex);
+	if (map->s_tex)
+		printf("s_tex: %s\n", map->s_tex);
+	if (map->w_tex)
+		printf("w_tex: %s\n", map->w_tex);
+	if (map->f_col)
+		printf("f_col: %d\n", map->f_col);
+	if (map->c_col)
+		printf("c_col: %d\n", map->c_col);
+	printf("x_max: %d\n", map->x_max);
+	printf("y_max: %d\n", map->y_max);
+	printf("---MAP---\n");
+	while (map->map[i])
+	{
+		printf("%s$\n", map->map[i]);
+		i++;
+	}
+	printf("---END MAP---\n");
+	(void) data;
+}
+
 int	map_init(t_data *data, t_map *map)
 {
 	if (check_extension(map->map_read.filename))
@@ -108,6 +138,7 @@ int	map_init(t_data *data, t_map *map)
 	if (close(map->map_read.fd) == -1)
 		error("Error, unable to close map", data);
 	map_split(data, map);
+	map_print(data, map);
 	map_meta(data, map);
 	map_clear(data, map);
 	map_fill(data, map);

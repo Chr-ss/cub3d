@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/08 20:38:21 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/07 18:00:16 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/08 14:53:40 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	draw_background(t_data *data, t_minilx *milx, t_raycaster ray)
 				/ (milx->screen_y / 3), 1.0))));
 			img_mlx_pixel_put(&milx->big, ray.x, milx->screen_y - i, \
 				color_fraction(data->map.f_col, WHITE, (fmin((float)i \
-				/ (milx->screen_y / 2.5), 1.0))));
+				/ (milx->screen_y / 2.2), 1.0))));
 		}
 		else if (!CRAZY)
 		{

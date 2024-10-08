@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/05 13:49:31 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/07 18:06:05 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/08 16:44:33 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,6 +257,7 @@ typedef struct s_data
 
 // MAP
 int			check_extension(char *str);
+int			ft_atoi_rgb(const char *nptr);
 int			map_init(t_data *data, t_map *map);
 void		map_clear_line(t_data *data, t_map *map, int i);
 void		map_parse(t_data *data, char **map);

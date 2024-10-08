@@ -13,19 +13,19 @@ WHT="\x1B[37m"
 RESET="\x1B[0m"
 LINEP="\033[75G"
 
-maps=$(find $path -name "*")
+maps=$(find $path -name "*" | sort)
 
-x=1
+x=0
 for map in $maps
 do
 x=$((x+1))
-err_msg=$(timeout --preserve-status 1s $exe $map 2>&1 | tr -d '\n')
+err_msg=$(timeout --preserve-status 0.1s $exe $map 2>&1 | tr -d '\n')
 if [ -z "$err_msg" ];
 then
 err_msg="DID NOT FAIL"
-echo -e "${RED}${x}:${map}:${err_msg}${RESET}"
+echo -e "${RED}${x} : ${map} : ${err_msg}${RESET}"
 else
-echo -e "${GRN}${x}:${map}:${err_msg}${RESET}"
+echo -e "${GRN}${x} : ${map} : ${err_msg}${RESET}"
 fi
 
 done

@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/08 20:31:41 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/08 16:43:47 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/08 17:08:01 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	ft_atoi_rgb(const char *nptr)
 	}
 	while (ft_isdigit(*nptr) == 1)
 	{
-		if (((nbr * 10) + (*nptr++ - 48)) > 255)
+		if (((nbr * 10) + (*nptr - 48)) > 255)
 			return (-1);
 		nbr = (nbr * 10) + (*nptr++ - 48);
 	}
