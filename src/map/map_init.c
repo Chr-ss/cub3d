@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/08 20:28:42 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/02 21:15:39 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/08 16:25:06 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,10 @@ static void	map_meta(t_data *data, t_map *map)
 			map_meta_copy(data, map->map[i], &map->color.f_col, 1);
 		else if (!ft_strncmp(map->map[i], "C ", 2))
 			map_meta_copy(data, map->map[i], &map->color.c_col, 1);
+		else if (!ft_strncmp(map->map[i], "\0", 1))
+			;
 		else
-		{
-			i++;
-			continue ;
-		}
+			break ;
 		map_clear_line(data, map, i);
 	}
 }
