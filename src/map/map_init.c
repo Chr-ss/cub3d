@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 20:28:42 by crasche           #+#    #+#             */
-/*   Updated: 2024/10/08 16:01:17 by andmadri         ###   ########.fr       */
+/*   Updated: 2024/10/09 14:46:37 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,20 +57,12 @@ static void	map_meta(t_data *data, t_map *map)
 			map_meta_copy(data, map->map[i], &map->color.f_col, 1);
 		else if (!ft_strncmp(map->map[i], "C ", 2))
 			map_meta_copy(data, map->map[i], &map->color.c_col, 1);
+		else if (!ft_strncmp(map->map[i], "\0", 1))
+			;
 		else
-		{
-			i++;
-			continue ;
-		}
+			break ;
 		map_clear_line(data, map, i);
 	}
-}
-
-static void	map_split(t_data *data, t_map *map)
-{
-	map->map = ft_split(map->map_read.read, '\n');
-	if (!map->map)
-		error("Error, split map malloc", data);
 }
 
 static void	map_read(t_data *data, t_map *map)
@@ -97,6 +89,27 @@ static void	map_read(t_data *data, t_map *map)
 	}
 }
 
+static void	map_nl_check(t_data *data, t_map *map)
+{
+	int		i;
+	bool	inside_map;
+
+	i = 0;
+	inside_map = false;
+	if (!map->map_read.read)
+		error("Error, map_read.", data);
+	while (map->map_read.read[i])
+	{
+		if (!inside_map && map->map_read.read[i] == '\n' \
+			&& map->map_read.read[i + 1] == '1')
+			inside_map = true;
+		if (inside_map && map->map_read.read[i] == '\n' \
+			&& map->map_read.read[i + 1] == '\n')
+			error("Error, newline in map.", data);
+		i++;
+	}
+}
+
 int	map_init(t_data *data, t_map *map)
 {
 	if (check_extension(map->map_read.filename))
@@ -108,7 +121,10 @@ int	map_init(t_data *data, t_map *map)
 	map_read(data, map);
 	if (close(map->map_read.fd) == -1)
 		error("Error, unable to close map", data);
-	map_split(data, map);
+	map_nl_check(data, map);
+	map->map = ft_split(map->map_read.read, '\n');
+	if (!map->map)
+		error("Error, split map malloc", data);
 	map_meta(data, map);
 	map_clear(data, map);
 	map_fill(data, map);

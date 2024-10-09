@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/08 20:38:21 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/07 20:24:56 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/09 14:33:16 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,19 @@ void	key_hook_strafe(t_data *data)
 	rotate_vector(data->player.direct, &temp_x, &temp_y, angle);
 	if (data->keys.strafe_left && is_not_wall(data, temp_x, temp_y, LEFT))
 	{
-		data->player.pos[X] += (temp_x * STEP_SIZE);
-		data->player.pos[Y] += (temp_y * STEP_SIZE);
+		data->player.pos[X] += (temp_x * (STEP_SIZE + \
+			(STEP_SIZE * data->keys.shift)));
+		data->player.pos[Y] += (temp_y * (STEP_SIZE + \
+			(STEP_SIZE * data->keys.shift)));
 	}
 	angle = 90 * RAD;
 	rotate_vector(data->player.direct, &temp_x, &temp_y, angle);
 	if (data->keys.strafe_right && is_not_wall(data, temp_x, temp_y, RIGHT))
 	{
-		data->player.pos[X] += (temp_x * STEP_SIZE);
-		data->player.pos[Y] += (temp_y * STEP_SIZE);
+		data->player.pos[X] += (temp_x * (STEP_SIZE + \
+			(STEP_SIZE * data->keys.shift)));
+		data->player.pos[Y] += (temp_y * (STEP_SIZE + \
+			(STEP_SIZE * data->keys.shift)));
 	}
 }
 
@@ -50,14 +54,18 @@ void	key_hook_move(t_data *data)
 	if (keys.forward && is_not_wall(data, data->player.direct[X], \
 		data->player.direct[Y], FORWARD))
 	{
-		data->player.pos[X] += (data->player.direct[X] * STEP_SIZE);
-		data->player.pos[Y] += (data->player.direct[Y] * STEP_SIZE);
+		data->player.pos[X] += (data->player.direct[X] * \
+			(STEP_SIZE + (STEP_SIZE * data->keys.shift)));
+		data->player.pos[Y] += (data->player.direct[Y] * \
+			(STEP_SIZE + (STEP_SIZE * data->keys.shift)));
 	}
 	else if (keys.back && is_not_wall(data, -data->player.direct[X], \
 		-data->player.direct[Y], BACKWARD))
 	{
-		data->player.pos[X] -= (data->player.direct[X] * STEP_SIZE);
-		data->player.pos[Y] -= (data->player.direct[Y] * STEP_SIZE);
+		data->player.pos[X] -= (data->player.direct[X] * \
+			(STEP_SIZE + (STEP_SIZE * data->keys.shift)));
+		data->player.pos[Y] -= (data->player.direct[Y] * \
+			(STEP_SIZE + (STEP_SIZE * data->keys.shift)));
 	}
 }
 
@@ -89,9 +97,11 @@ void	key_hook_turn(t_data *data)
 	if (keys.turn_left || keys.mouse_left)
 		rotate_vector(data->player.direct, &data->player.direct[X], \
 			&data->player.direct[Y], (-TURN_STEP + \
-			(data->keys.mouse_step * 0.001)));
+			(data->keys.mouse_step * 0.001) - \
+			(TURN_STEP * data->keys.shift)));
 	else if (keys.turn_right || keys.mouse_right)
 		rotate_vector(data->player.direct, &data->player.direct[X], \
 			&data->player.direct[Y], (TURN_STEP + \
-			(data->keys.mouse_step * 0.001)));
+			(data->keys.mouse_step * 0.001) + (TURN_STEP * \
+			data->keys.shift)));
 }

@@ -6,11 +6,35 @@
 /*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 20:31:41 by crasche           #+#    #+#             */
-/*   Updated: 2024/10/08 15:51:53 by andmadri         ###   ########.fr       */
+/*   Updated: 2024/10/09 14:44:36 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3D.h"
+
+int	ft_atoi_rgb(const char *nptr)
+{
+	int	nbr;
+	int	sign;
+
+	nbr = 0;
+	sign = 1;
+	while ((9 <= *nptr && *nptr <= 13) || *nptr == 32)
+		nptr++;
+	if (*nptr == '-' || *nptr == '+')
+	{
+		if (*nptr == '-')
+			sign = -1;
+		nptr++;
+	}
+	while (ft_isdigit(*nptr) == 1)
+	{
+		if (((nbr * 10) + (*nptr - 48)) > 255)
+			return (-1);
+		nbr = (nbr * 10) + (*nptr++ - 48);
+	}
+	return (sign * nbr);
+}
 
 int	check_extension(char *str)
 {

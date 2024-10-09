@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/08 20:26:53 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/02 21:16:32 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/08 16:58:37 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,28 +52,18 @@ static void	map_parse_wallcheck(t_data *data, char **map, int y, int x)
 
 static void	map_parse_player(t_data *data, char **map, int x, int y)
 {
+	if (data->player.pos[X] || data->player.pos[X])
+		error("Error, duplicate player position.", data);
 	data->player.pos[X] = x + 0.5;
 	data->player.pos[Y] = y + 0.5;
 	if (map[y][x] == 'N')
-	{
-		data->player.direct[X] = 0;
 		data->player.direct[Y] = -1;
-	}
 	else if (map[y][x] == 'S')
-	{
-		data->player.direct[X] = 0;
 		data->player.direct[Y] = 1;
-	}
 	else if (map[y][x] == 'E')
-	{
 		data->player.direct[X] = 1;
-		data->player.direct[Y] = 0;
-	}
 	else if (map[y][x] == 'W')
-	{
 		data->player.direct[X] = -1;
-		data->player.direct[Y] = 0;
-	}
 	map[y][x] = '0';
 	map_parse_wallcheck(data, map, y, x);
 }

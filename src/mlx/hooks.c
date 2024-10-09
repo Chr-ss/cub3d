@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 20:38:21 by crasche           #+#    #+#             */
-/*   Updated: 2024/10/08 17:09:23 by andmadri         ###   ########.fr       */
+/*   Updated: 2024/10/09 14:46:26 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,8 @@ static int	key_pressed(int key, void *param)
 		keys->turn_right = true;
 	else if (key == ESC)
 		keys->exit = true;
+	else if (key == KEY_SHIFT)
+		keys->shift = true;
 	else if (key == KEY_OPTION)
 		keys->mouse = false;
 	return (0);
@@ -113,6 +115,8 @@ static int	key_released(int key, void *param)
 		keys->turn_left = false;
 	else if (key == KEY_ARROW_RIGHT)
 		keys->turn_right = false;
+	else if (key == KEY_SHIFT)
+		keys->shift = false;
 	else if (key == KEY_OPTION)
 		keys->mouse = true;
 	return (0);
