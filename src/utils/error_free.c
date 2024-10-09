@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 20:27:39 by crasche           #+#    #+#             */
-/*   Updated: 2024/10/08 15:56:03 by andmadri         ###   ########.fr       */
+/*   Updated: 2024/10/09 17:03:28 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,12 @@ void	free_dbl_array(char **array)
 void	free_all(t_data *data)
 {
 	freenull((void **) &data->map.map_read.read);
-	free(data->map.n_tex);
-	free(data->map.s_tex);
-	free(data->map.e_tex);
-	free(data->map.w_tex);
-	free(data->map.color.f_col);
-	free(data->map.color.c_col);
+	freenull((void **) &data->map.n_tex);
+	freenull((void **) &data->map.s_tex);
+	freenull((void **) &data->map.e_tex);
+	freenull((void **) &data->map.w_tex);
+	freenull((void **) &data->map.color.f_col);
+	freenull((void **) &data->map.color.c_col);
 	free_dbl_array(data->map.map);
 	free_dbl_array(data->map.color.f_split);
 	free_dbl_array(data->map.color.c_split);

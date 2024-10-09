@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:49:00 by crasche           #+#    #+#             */
-/*   Updated: 2024/10/09 14:44:01 by andmadri         ###   ########.fr       */
+/*   Updated: 2024/10/09 17:09:05 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	init_mlx_struct(t_data *data, t_minilx *milx)
 		finish_mlx(data);
 		return (EXIT_FAILURE);
 	}
-	init_image(data); //check this
+	init_image(data);
 	return (EXIT_SUCCESS);
 }
 
@@ -44,7 +44,7 @@ int	main(int argc, char **argv)
 	if (BONUS)
 		data.keys.mouse = true;
 	map_init(&data, &data.map);
-	map_parse(&data, data.map.map); //check this
+	map_parse(&data, data.map.map);
 	if (init_mlx_struct(&data, &data.milx) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	hooks_mlx(&data);

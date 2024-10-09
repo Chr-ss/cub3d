@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   map_parsing.c                                      :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: andmadri <andmadri@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/09/08 20:26:53 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/08 16:58:37 by crasche       ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   map_parsing.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/08 20:26:53 by crasche           #+#    #+#             */
+/*   Updated: 2024/10/09 17:08:51 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static void	map_parse_wallcheck(t_data *data, char **map, int y, int x)
 
 static void	map_parse_player(t_data *data, char **map, int x, int y)
 {
-	if (data->player.pos[X] || data->player.pos[X])
+	if (data->player.pos[X] || data->player.pos[Y])
 		error("Error, duplicate player position.", data);
 	data->player.pos[X] = x + 0.5;
 	data->player.pos[Y] = y + 0.5;
@@ -108,6 +108,6 @@ void	map_parse(t_data *data, char **map)
 		}
 		y++;
 	}
-	if (!data->player.pos[0])
+	if (!data->player.pos[X] || !data->player.pos[Y])
 		error("Error, missing player position", data);
 }
