@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/30 19:21:38 by andmadri      #+#    #+#                 */
-/*   Updated: 2024/10/02 22:19:48 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/09 14:36:41 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	collision(t_data *data, float dir_x, float dir_y)
 	t_raycaster	ray;
 
 	collision_ray_init(data, &ray, dir_x, dir_y);
-	while (ray.final_distance < (STEP_SIZE * 3))
+	while (ray.final_distance < (STEP_SIZE * 6))
 	{
 		if (ray.length[X] < ray.length[Y])
 		{

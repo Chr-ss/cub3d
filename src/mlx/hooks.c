@@ -1,40 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   hooks.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/08 20:38:21 by crasche           #+#    #+#             */
-/*   Updated: 2024/10/08 13:09:04 by andmadri         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   hooks.c                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: andmadri <andmadri@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/09/08 20:38:21 by crasche       #+#    #+#                 */
+/*   Updated: 2024/10/09 14:24:23 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3D.h"
-
-void	destroy_images(t_data *data, t_minilx *milx)
-{
-	mlx_destroy_image(milx->mlx, milx->big.img);
-	mlx_destroy_image(milx->mlx, data->map.img_n.img);
-	mlx_destroy_image(milx->mlx, data->map.img_s.img);
-	mlx_destroy_image(milx->mlx, data->map.img_e.img);
-	mlx_destroy_image(milx->mlx, data->map.img_w.img);
-	if (BONUS)
-		mlx_destroy_image(milx->mlx, milx->mini.img);
-}
-
-int	finish_mlx(t_data *data)
-{
-	t_minilx	milx;
-
-	milx = data->milx;
-	destroy_images(data, &milx);
-	mlx_destroy_window(milx.mlx, milx.mlx_window);
-	mlx_destroy_display(milx.mlx);
-	free(milx.mlx);
-	free_all(data);
-	exit(0);
-}
 
 static int	update_frames(void *param)
 {
@@ -75,6 +51,8 @@ static int	key_pressed(int key, void *param)
 		keys->turn_right = true;
 	else if (key == ESC)
 		keys->exit = true;
+	else if (key == KEY_SHIFT)
+		keys->shift = true;
 	else if (key == KEY_OPTION)
 		keys->mouse = false;
 	return (0);
@@ -97,6 +75,8 @@ static int	key_released(int key, void *param)
 		keys->turn_left = false;
 	else if (key == KEY_ARROW_RIGHT)
 		keys->turn_right = false;
+	else if (key == KEY_SHIFT)
+		keys->shift = false;
 	else if (key == KEY_OPTION)
 		keys->mouse = true;
 	return (0);

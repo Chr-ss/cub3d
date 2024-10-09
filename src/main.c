@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/05 13:49:00 by crasche           #+#    #+#             */
-/*   Updated: 2024/10/08 13:10:20 by andmadri         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   main.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: andmadri <andmadri@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/08/05 13:49:00 by crasche       #+#    #+#                 */
+/*   Updated: 2024/10/09 14:30:11 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3D.h"
 
+// mlx_get_screen_size(milx->mlx, &milx->screen_x, &milx->screen_y);
 int	init_mlx_struct(t_data *data, t_minilx *milx)
 {
 	milx->mlx = mlx_init();
 	if (!milx->mlx)
 		return (free_all(data), EXIT_FAILURE);
-	// mlx_get_screen_size(milx->mlx, &milx->screen_x, &milx->screen_y);
-	// milx->screen_x = 1920;
-	// milx->screen_y = 1080;
 	milx->screen_x = 1280;
 	milx->screen_y = 720;
 	milx->mlx_window = mlx_new_window(milx->mlx, milx->screen_x, \
@@ -33,11 +31,6 @@ int	init_mlx_struct(t_data *data, t_minilx *milx)
 int	main(int argc, char **argv)
 {
 	t_data		data;
-
-// INVALID MAPS TO ADD:
-// maps with map over metadata
-// maps with empty line in map
-// multiple "," in colors
 
 	ft_bzero(&data, sizeof(t_data));
 	if (argc <= 1)
