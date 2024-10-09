@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   main.c                                             :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: andmadri <andmadri@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/08/05 13:49:00 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/07 20:27:08 by crasche       ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/05 13:49:00 by crasche           #+#    #+#             */
+/*   Updated: 2024/10/08 13:10:20 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,5 @@ int	main(int argc, char **argv)
 		return (EXIT_FAILURE);
 	hooks_mlx(&data);
 	mlx_loop(data.milx.mlx);
-	free_all(&data);
 	return (0);
 }

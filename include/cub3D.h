@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/05 13:49:31 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/08 16:44:33 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/09 14:13:25 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,7 +271,7 @@ void		draw_minimap_tiles(t_data *data);
 int			draw_minimap(t_data *data);
 
 // MLX
-int			finish_mlx(t_minilx *milx);
+int			finish_mlx(t_data *data);
 void		hooks_mlx(t_data *data);
 void		init_image(t_data *data);
 void		key_hook_strafe(t_data *data);
