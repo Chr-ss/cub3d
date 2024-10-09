@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 20:27:39 by crasche           #+#    #+#             */
-/*   Updated: 2024/10/08 13:02:42 by andmadri         ###   ########.fr       */
+/*   Updated: 2024/10/08 15:56:03 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	free_dbl_array(char **array)
 	int	i;
 
 	i = 0;
-	while (array[i])
+	while (array && array[i])
 	{
 		free(array[i]);
 		i++;
@@ -49,7 +49,10 @@ void	free_all(t_data *data)
 void	error(char *msg, t_data *data)
 {
 	if (msg)
-		perror(msg);
+	{
+		write(STDERR_FILENO, msg, ft_strlen(msg));
+		write(STDERR_FILENO, "\n", 1);
+	}
 	free_all(data);
 	exit(1);
 }

@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 20:38:21 by crasche           #+#    #+#             */
-/*   Updated: 2024/10/08 13:09:04 by andmadri         ###   ########.fr       */
+/*   Updated: 2024/10/08 17:09:23 by andmadri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,17 @@
 
 void	destroy_images(t_data *data, t_minilx *milx)
 {
-	mlx_destroy_image(milx->mlx, milx->big.img);
-	mlx_destroy_image(milx->mlx, data->map.img_n.img);
-	mlx_destroy_image(milx->mlx, data->map.img_s.img);
-	mlx_destroy_image(milx->mlx, data->map.img_e.img);
-	mlx_destroy_image(milx->mlx, data->map.img_w.img);
-	if (BONUS)
+	if (milx->big.img)
+		mlx_destroy_image(milx->mlx, milx->big.img);
+	if (data->map.img_n.img)
+		mlx_destroy_image(milx->mlx, data->map.img_n.img);
+	if (data->map.img_s.img)
+		mlx_destroy_image(milx->mlx, data->map.img_s.img);
+	if (data->map.img_e.img)
+		mlx_destroy_image(milx->mlx, data->map.img_e.img);
+	if (data->map.img_w.img)
+		mlx_destroy_image(milx->mlx, data->map.img_w.img);
+	if (BONUS && milx->mini.img)
 		mlx_destroy_image(milx->mlx, milx->mini.img);
 }
 
@@ -28,10 +33,14 @@ int	finish_mlx(t_data *data)
 	t_minilx	milx;
 
 	milx = data->milx;
-	destroy_images(data, &milx);
-	mlx_destroy_window(milx.mlx, milx.mlx_window);
-	mlx_destroy_display(milx.mlx);
-	free(milx.mlx);
+	if (milx.mlx)
+		destroy_images(data, &milx);
+	if (milx.mlx && milx.mlx_window)
+		mlx_destroy_window(milx.mlx, milx.mlx_window);
+	if (milx.mlx)
+		mlx_destroy_display(milx.mlx);
+	if (milx.mlx)
+		free(milx.mlx);
 	free_all(data);
 	exit(0);
 }
@@ -39,8 +48,10 @@ int	finish_mlx(t_data *data)
 static int	update_frames(void *param)
 {
 	t_data	*data;
+	char	*str_itoa;
 
 	data = (t_data *)param;
+	str_itoa = NULL;
 	if (data->frame_time == 0)
 		data->frame_time = get_curr_time();
 	if (((get_curr_time() - data->frame_time) < (uint64_t)(1000000 / FPS)))
@@ -50,9 +61,14 @@ static int	update_frames(void *param)
 	render(data);
 	data->fps = round((float)1000000 / data->fps);
 	if (BONUS)
+	{
+		str_itoa = ft_itoa(data->fps);
+		if (!str_itoa)
+			error("Error malloc update_frames", data);
 		mlx_string_put(data->milx.mlx, data->milx.mlx_window, \
-			data->milx.screen_x - 100, 20, RED, \
-			ft_itoa(data->fps));
+		data->milx.screen_x - 100, 20, RED, str_itoa);
+		freenull((void **) &str_itoa);
+	}
 	return (0);
 }
 
@@ -102,11 +118,13 @@ static int	key_released(int key, void *param)
 	return (0);
 }
 
+
+// if (BONUS && data->keys.mouse && test)
+// 	mlx_mouse_hide(data->milx.mlx, data->milx.mlx_window);
+// mlx_mouse_hide causes leaks
 void	hooks_mlx(t_data *data)
 {
 	mlx_loop_hook(data->milx.mlx, update_frames, (void *)data);
-	if (BONUS && data->keys.mouse)
-		mlx_mouse_hide(data->milx.mlx, data->milx.mlx_window);
 	mlx_hook(data->milx.mlx_window, 2, 1L << 0, key_pressed, &data->keys);
 	mlx_hook(data->milx.mlx_window, 3, 1L << 1, key_released, &data->keys);
 	mlx_hook(data->milx.mlx_window, 17, 0L, finish_mlx, &data);
