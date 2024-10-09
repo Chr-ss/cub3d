@@ -28,10 +28,9 @@ static void	init_image_texture(t_data *data)
 		data->map.s_tex, &data->map.img_s.max_x, &data->map.img_s.max_y);
 	data->map.img_w.img = mlx_xpm_file_to_image(data->milx.mlx, \
 		data->map.w_tex, &data->map.img_w.max_x, &data->map.img_w.max_y);
-	if (!data->map.img_w.img || !data->map.img_e.img)
-		finish_mlx(data);
-	if (!data->map.img_n.img || !data->map.img_s.img)
-		finish_mlx(data);
+	if (!data->map.img_w.img || !data->map.img_e.img || \
+		!data->map.img_n.img || !data->map.img_s.img)
+		error("Error, unable to create libx image.", data);
 	data->map.img_e.addr = mlx_get_data_addr(data->map.img_e.img, \
 		&data->map.img_e.bits_per_pixel, &data->map.img_e.line_length, \
 		&data->map.img_e.endian);
