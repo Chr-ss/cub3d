@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/08 20:28:42 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/08 17:08:49 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/09 14:09:17 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,13 +65,6 @@ static void	map_meta(t_data *data, t_map *map)
 	}
 }
 
-static void	map_split(t_data *data, t_map *map)
-{
-	map->map = ft_split(map->map_read.read, '\n');
-	if (!map->map)
-		error("Error, split map malloc", data);
-}
-
 static void	map_read(t_data *data, t_map *map)
 {
 	char	buf[READBUF + 1];
@@ -96,34 +89,25 @@ static void	map_read(t_data *data, t_map *map)
 	}
 }
 
-
-void	map_print(t_data *data, t_map *map)
+static void	map_nl_check(t_data *data, t_map *map)
 {
-	int	i;
+	int		i;
+	bool	inside_map;
 
 	i = 0;
-	if (map->n_tex)
-		printf("n_tex: %s\n", map->n_tex);
-	if (map->e_tex)
-		printf("e_tex: %s\n", map->e_tex);
-	if (map->s_tex)
-		printf("s_tex: %s\n", map->s_tex);
-	if (map->w_tex)
-		printf("w_tex: %s\n", map->w_tex);
-	if (map->f_col)
-		printf("f_col: %d\n", map->f_col);
-	if (map->c_col)
-		printf("c_col: %d\n", map->c_col);
-	printf("x_max: %d\n", map->x_max);
-	printf("y_max: %d\n", map->y_max);
-	printf("---MAP---\n");
-	while (map->map[i])
+	inside_map = false;
+	if (!map->map_read.read)
+		error("Error, map_read.", data);
+	while (map->map_read.read[i])
 	{
-		printf("%s$\n", map->map[i]);
+		if (!inside_map && map->map_read.read[i] == '\n' \
+			&& map->map_read.read[i + 1] == '1')
+			inside_map = true;
+		if (inside_map && map->map_read.read[i] == '\n' \
+			&& map->map_read.read[i + 1] == '\n')
+			error("Error, newline in map.", data);
 		i++;
 	}
-	printf("---END MAP---\n");
-	(void) data;
 }
 
 int	map_init(t_data *data, t_map *map)
@@ -137,8 +121,10 @@ int	map_init(t_data *data, t_map *map)
 	map_read(data, map);
 	if (close(map->map_read.fd) == -1)
 		error("Error, unable to close map", data);
-	map_split(data, map);
-	map_print(data, map);
+	map_nl_check(data, map);
+	map->map = ft_split(map->map_read.read, '\n');
+	if (!map->map)
+		error("Error, split map malloc", data);
 	map_meta(data, map);
 	map_clear(data, map);
 	map_fill(data, map);
