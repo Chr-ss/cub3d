@@ -18,19 +18,8 @@ static void	init_image_set_size(t_mlx_img *img, int max_x, int max_y)
 	img->max_y = max_y;
 }
 
-static void	init_image_texture(t_data *data)
+static void	init_image_texture_addr(t_data *data)
 {
-	data->map.img_n.img = mlx_xpm_file_to_image(data->milx.mlx, \
-		data->map.n_tex, &data->map.img_n.max_x, &data->map.img_n.max_y);
-	data->map.img_e.img = mlx_xpm_file_to_image(data->milx.mlx, \
-		data->map.e_tex, &data->map.img_e.max_x, &data->map.img_e.max_y);
-	data->map.img_s.img = mlx_xpm_file_to_image(data->milx.mlx, \
-		data->map.s_tex, &data->map.img_s.max_x, &data->map.img_s.max_y);
-	data->map.img_w.img = mlx_xpm_file_to_image(data->milx.mlx, \
-		data->map.w_tex, &data->map.img_w.max_x, &data->map.img_w.max_y);
-	if (!data->map.img_w.img || !data->map.img_e.img || \
-		!data->map.img_n.img || !data->map.img_s.img)
-		error("Error, unable to create libx image.", data);
 	data->map.img_e.addr = mlx_get_data_addr(data->map.img_e.img, \
 		&data->map.img_e.bits_per_pixel, &data->map.img_e.line_length, \
 		&data->map.img_e.endian);
@@ -43,6 +32,25 @@ static void	init_image_texture(t_data *data)
 	data->map.img_w.addr = mlx_get_data_addr(data->map.img_w.img, \
 		&data->map.img_w.bits_per_pixel, &data->map.img_w.line_length, \
 		&data->map.img_w.endian);
+}
+
+static void	init_image_texture(t_data *data)
+{
+	data->map.img_n.img = mlx_xpm_file_to_image(data->milx.mlx, \
+		data->map.n_tex, &data->map.img_n.max_x, &data->map.img_n.max_y);
+	data->map.img_e.img = mlx_xpm_file_to_image(data->milx.mlx, \
+		data->map.e_tex, &data->map.img_e.max_x, &data->map.img_e.max_y);
+	data->map.img_s.img = mlx_xpm_file_to_image(data->milx.mlx, \
+		data->map.s_tex, &data->map.img_s.max_x, &data->map.img_s.max_y);
+	data->map.img_w.img = mlx_xpm_file_to_image(data->milx.mlx, \
+		data->map.w_tex, &data->map.img_w.max_x, &data->map.img_w.max_y);
+	if (!data->map.img_w.img || !data->map.img_e.img || \
+		!data->map.img_n.img || !data->map.img_s.img)
+	{
+		write(STDERR_FILENO, "Error, texture to libx img.\n", 28);
+		finish_mlx(data);
+	}
+	init_image_texture_addr(data);
 }
 
 void	init_image(t_data *data)
