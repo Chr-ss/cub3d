@@ -6,7 +6,7 @@
 /*   By: andmadri <andmadri@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/08/05 13:49:31 by crasche       #+#    #+#                 */
-/*   Updated: 2024/10/09 14:13:25 by crasche       ########   odam.nl         */
+/*   Updated: 2024/10/09 14:26:14 by crasche       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@
 #  define KEY_S 115
 #  define KEY_D 100
 #  define KEY_OPTION 65513
+#  define KEY_SHIFT 65505
 #  define KEY_ARROW_LEFT 65361
 #  define KEY_ARROW_RIGHT 65363
 #  define KEY_ARROW_UP 65362
@@ -170,7 +171,7 @@ typedef struct s_raycaster
 	int			x;
 	int			line_height;
 	int			wall_direction;
-	int			wall_color;
+	int			col;
 	bool		wall_found;
 }	t_raycaster;
 
@@ -240,6 +241,7 @@ typedef struct s_keys
 	bool	strafe_right;
 	bool	exit;
 	bool	mouse;
+	bool	shift;
 }	t_keys;
 
 typedef struct s_data
