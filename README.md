@@ -3,6 +3,12 @@ Inspired by Wolfenstein3D, this project goal was to render a "3D" dynamic view o
 
 ![Untitledvideo-MadewithClipchamp1-ezgif com-video-to-gif-converter (1)](https://github.com/user-attachments/assets/3d0c190c-501a-4ca4-b63b-d7ba127c09ff)
 
+
+## Contributors
+- [Andres Madrid Ucha](https://github.com/andmadri): Ray-Caster Algorithm
+- [Chr-ss](https:://github.com/Chr-ss): Parsing, Texture-handling 
+
+
 ## Build Instructions
 First git clone it in your root directory with the name CUBE3D
 ```bash
