@@ -6,12 +6,12 @@ Inspired by Wolfenstein3D, this project goal was to render a "3D" dynamic view o
 ## Build Instructions
 First git clone it in your root directory with the name CUBE3D
 ```bash
-git clone git@github.com:andmadri/CUBE3D.git CUBE3D
+git clone https://github.com/Chr-ss/cub3d.git
 ```
 
 Afterwards move to CUBE3D and run make all, once it's done, you need the executable `cub3D` and a map, all available maps are inside the maps/ folder:
 ```bash
-cd CUBE3D
+cd cub3d
 make all
 ...
 ./cub3D maps/long.cub
@@ -250,6 +250,9 @@ https://lodev.org/cgtutor/raycasting.html
 
 For those like me who are visual learners:
 https://youtu.be/NbSee-XM7WA?si=4jTq7rchhQz859RB
+
+MLX42 documentation
+https://harm-smits.github.io/42docs/libs/minilibx/getting_started.html
 
 
 
