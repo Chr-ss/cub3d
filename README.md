@@ -6,7 +6,7 @@ Inspired by Wolfenstein3D, this project goal was to render a "3D" dynamic view o
 
 ## Contributors
 - [Andres Madrid Ucha](https://github.com/andmadri): Ray-Caster Algorithm
-- [Chr-ss](https://github.com/Chr-ss)): Parsing, Texture-handling 
+- [Chr-ss](https://github.com/Chr-ss): Parsing, Texture-handling 
 
 
 ## Build Instructions
